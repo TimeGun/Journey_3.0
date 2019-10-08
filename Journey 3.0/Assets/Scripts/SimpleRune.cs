@@ -27,12 +27,16 @@ public class SimpleRune : MonoBehaviour
         if (!collidingObjects.Contains(other.gameObject))
         {
             collidingObjects.Add(other.gameObject);
+            if(other.GetComponent<SimpleGrower>())
+                other.GetComponent<SimpleGrower>().grow = true;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
         collidingObjects.Remove(other.gameObject);
+        if(other.GetComponent<SimpleGrower>())
+            other.GetComponent<SimpleGrower>().grow = false;
     }
 
     private void OnDrawGizmos()
