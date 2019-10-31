@@ -4,27 +4,33 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
+
+
+//Finds the closest item of interest in front of the player
+//Sets the look at target
 public class InterestFinder : MonoBehaviour
 {
     [SerializeField] private float radiusOfInterestVision;
     [SerializeField] private float distanceChecksPerSecond;
-    [SerializeField] private Transform[] transformsOfInterst;
+    [SerializeField] private float lookChangeSpeed;
     
-    [SerializeField]private List<Transform> closeItems = new List<Transform>();
-    [SerializeField]private List<Transform> infrontItems = new List<Transform>();
-
-    [SerializeField] private Transform lookTarget;
-
-    private Vector3 lockedPosition;
-
-    [SerializeField]private Rig LookRig;
-
     private bool newTargetFound;
 
-    private Coroutine reseter;
+    
+    [SerializeField] private Transform[] transformsOfInterst;
+    
+    [SerializeField] private Transform lookTarget;
+    [SerializeField] private Transform headPos;
 
-    [SerializeField]
-    private float lookChangeSpeed;
+    
+    private List<Transform> closeItems = new List<Transform>();
+    private List<Transform> infrontItems = new List<Transform>();
+
+    private Vector3 lockedPosition;
+    
+    private Coroutine resetCoroutine;
+    
+    [SerializeField] private Rig LookRig; 
     
 
     void Start()
@@ -36,7 +42,6 @@ public class InterestFinder : MonoBehaviour
 
     void Update()
     {
-        if(newTargetFound)
         lookTarget.position = lockedPosition;
     }
 
@@ -44,11 +49,10 @@ public class InterestFinder : MonoBehaviour
     {
         while (true)
         {
-            Transform[] closeTransforms = ReturnCloseInterests(transformsOfInterst);
+            Transform[] closeTransformsInFront = ReturnCloseInterestsInFront(transformsOfInterst);
 
-            Transform[] instrestsInfront = ReturnInterestsInfront(closeTransforms);
 
-            Transform potentialInterest = ClosestItem(instrestsInfront);
+            Transform potentialInterest = ClosestItem(closeTransformsInFront);
 
             if (potentialInterest != null)
             {
@@ -57,24 +61,24 @@ public class InterestFinder : MonoBehaviour
                     
                     newTargetFound = true;
 
-                    if (reseter != null)
+                    if (resetCoroutine != null)
                     {
-                        StopCoroutine(reseter);
+                        StopCoroutine(resetCoroutine);
                     }
 
-                    reseter = StartCoroutine(ResetRigWeight(potentialInterest.position));
+                    resetCoroutine = StartCoroutine(ResetRigWeight(potentialInterest.position));
                 }
             }
             else
             {
                 newTargetFound = false;
                 
-                if (reseter != null)
+                if (resetCoroutine != null)
                 {
-                    StopCoroutine(reseter);
+                    StopCoroutine(resetCoroutine);
                 }
                 
-                reseter = StartCoroutine(ResetRigWeight(Vector3.zero));
+                resetCoroutine = StartCoroutine(ResetRigWeight(Vector3.zero));
             }
 
             yield return new WaitForSeconds(1f / distanceChecksPerSecond);
@@ -87,7 +91,7 @@ public class InterestFinder : MonoBehaviour
         while (LookRig.weight > 0.1f)
         {
             yield return new WaitForEndOfFrame();
-            LookRig.weight = Mathf.Lerp(LookRig.weight, 0f, Time.deltaTime * lookChangeSpeed);
+            LookRig.weight = Mathf.MoveTowards(LookRig.weight, 0f, Time.deltaTime * (lookChangeSpeed/2f));
         }
 
         if (newTargetFound)
@@ -101,7 +105,7 @@ public class InterestFinder : MonoBehaviour
         }
     }
 
-    Transform [] ReturnCloseInterests(Transform[] interests)
+    Transform [] ReturnCloseInterestsInFront(Transform[] interests)
     {
         closeItems.Clear();
 
@@ -116,7 +120,12 @@ public class InterestFinder : MonoBehaviour
             }
         }
         
-        return closeItems.ToArray();
+        Transform[] instrestsInfront = ReturnInterestsInfront(closeItems.ToArray());
+
+        
+        
+        
+        return instrestsInfront;
     }
 
     Transform[] ReturnInterestsInfront(Transform[] interests)
@@ -161,5 +170,7 @@ public class InterestFinder : MonoBehaviour
     {
         Gizmos.color = new Color(1, 0, 0, 0.2f);
         Gizmos.DrawSphere(transform.position, radiusOfInterestVision);
+        Gizmos.color = new Color(0, 1f, 0, 1f);
+        Gizmos.DrawRay(headPos.position, headPos.forward.normalized * radiusOfInterestVision);
     }
 }
