@@ -9,8 +9,7 @@ using UnityEngine.iOS;
 /// 2. stop and face dircetion when input is absent
 /// </summary>
 ///
-[RequireComponent(typeof(Rigidbody))]
-
+[RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
     private Transform cam;
@@ -35,18 +34,17 @@ public class PlayerMovement : MonoBehaviour
     private Quaternion targetRotation;
 
 
-    private Vector3 forward;
     private RaycastHit hitInfo;
     [SerializeField]private bool grounded;
 
-    private Rigidbody _rb; 
+    private CharacterController _controller; 
     
     void Start()
     {
         if (cam == null)
             cam = Camera.main.transform;
 
-        _rb = GetComponent<Rigidbody>();
+        _controller = GetComponent<CharacterController>();
     }
 
     private void Update()
@@ -54,18 +52,9 @@ public class PlayerMovement : MonoBehaviour
 
         GetInput();
         CalculateDirection();
-        CalculateForward();
-        CalculateGroundAngle();
-        CheckGround();
-        ApplyGravity();
-        DrawDebugLines();
-
-        if (Mathf.Abs(input.x) < 0.1f && Mathf.Abs(input.y) < 0.1f)
-        {
-            _rb.velocity = new Vector3(0, _rb.velocity.y, 0);
-            return;
-        }
-
+        
+        if (Mathf.Abs(input.x) < 0.1f && Mathf.Abs(input.y) < 0.1f) return;
+        
         Rotate();
         Move();
     }
@@ -104,87 +93,7 @@ public class PlayerMovement : MonoBehaviour
     void Move()
     {
         if (groundAngle >= _maximumAngle) return;
-        _rb.velocity = new Vector3(0, _rb.velocity.y, 0);
-        _rb.velocity += forward * (_velocity * Time.deltaTime);
+        _controller.Move(transform.forward * (_velocity * Time.deltaTime));
     }
     
-    /// <summary>
-    /// If the player is not grounded, forward will be equal to transform forward
-    /// Use cross product to determine the new forward vector
-    /// </summary>
-    void CalculateForward()
-    {
-        if (!grounded)
-        {
-            forward = transform.forward;
-            return;
-        }
-
-        forward = Vector3.Cross(transform.right, hitInfo.normal);
-    }
-
-    /// <summary>
-    /// Vector 3 angle between the ground normal and the transform forward to determine the slop of the ground
-    /// </summary>
-    void CalculateGroundAngle()
-    {
-        if (!grounded)
-        {
-            groundAngle = 90f;
-            return;
-        }
-
-        groundAngle = Vector3.Angle(hitInfo.normal, transform.forward);
-    }
-
-    /// <summary>
-    /// Use a raycast to check if the player is on ground
-    /// </summary>
-    void CheckGround()
-    {
-        Vector3 infront = transform.TransformPoint(0, 0, _width);
-        
-        if(Physics.Raycast(infront, -Vector3.up, out hitInfo, _height + _heightPadding, ground))
-        {
-            //if (Vector3.Distance(transform.position, hitInfo.point) < _height)
-            //{
-            //    transform.position = Vector3.Lerp(transform.position, transform.position + Vector3.up * _height, 5f * Time.deltaTime);
-            //}
-
-            grounded = true;
-        }
-        else
-        {
-            grounded = false;
-        }
-    }
-    
-    /// <summary>
-    /// Apply gravity when the player isn't grounded 
-    /// </summary>
-    void ApplyGravity()
-    {
-        if (!grounded)
-        {
-            _rb.useGravity = true;
-        }
-        else
-        {
-            _rb.useGravity = false;
-        }
-    }
-
-    /// <summary>
-    /// For debugging the player
-    /// </summary>
-    void DrawDebugLines()
-    {
-        if (!_debug)
-        {
-            return;
-        }
-        Vector3 infront = transform.TransformPoint(0, 0, _width);
-        Debug.DrawLine(transform.position, transform.position + forward * _height * 2f, Color.blue);
-        Debug.DrawLine(infront, infront- Vector3.up * (_height + _heightPadding) , Color.green);
-    }
 }
