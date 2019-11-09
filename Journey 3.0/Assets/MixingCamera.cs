@@ -41,7 +41,7 @@ public class MixingCamera : MonoBehaviour
                     playerStartPos = followTarget.position;
                 }
             }
-            Debug.Log(playerStartPos);
+//            Debug.Log(playerStartPos);
             switch (axisToTrack)
             {
                 case (AxisEnum.X):

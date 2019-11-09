@@ -7,12 +7,15 @@ public class ChangeCameraWeight : MonoBehaviour
 {
     public GameObject cameraTrigger;
     private bool playerDetected;
+    private bool playerEntered;
     private int initialPriority1;
     private int initialPriority2;
     public int targetPriority1;
     public int targetPriority2;
     public GameObject targetCamera1;
     public GameObject targetCamera2;
+
+    private bool activated = false;
 
     
     // Start is called before the first frame update
@@ -38,30 +41,50 @@ public class ChangeCameraWeight : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
+        
+        playerEntered = cameraTrigger.GetComponent<DetectPlayer>().PlayerEntered;
+        Debug.Log("player entered" + playerEntered);
         playerDetected = cameraTrigger.GetComponent<DetectPlayer>().PlayerDetected;
+        if (playerEntered)
+        {
+            activated = true;
+        }
+        
+        
         if (playerDetected)
         {
-            Debug.Log("yurt1");
-            NewWeight();
+            if (activated)
+            {
+                NewWeight();
+                activated = false;
+            }
+            
         }
-        else
+        else if (playerDetected == false)
         {
-            OldWeight();
+         OldWeight();
         }
         
     }
 
     void NewWeight()
     {
+        
         targetCamera1.GetComponent<CinemachineVirtualCameraBase>().Priority = targetPriority1;
+        Debug.Log(targetPriority1);
         targetCamera2.GetComponent<CinemachineVirtualCameraBase>().Priority = targetPriority2;
+        Debug.Log(targetPriority2);
+    
+
     }
 
     void OldWeight()
     {
         targetCamera1.GetComponent<CinemachineVirtualCameraBase>().Priority = initialPriority1;
         targetCamera2.GetComponent<CinemachineVirtualCameraBase>().Priority = initialPriority2;
+        
     }
+
 }
