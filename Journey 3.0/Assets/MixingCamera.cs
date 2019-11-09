@@ -35,13 +35,13 @@ public class MixingCamera : MonoBehaviour
         {
             if (playerDetected)
             {
-                //Debug.Log("yurt2");
+                
                 if (playerStartPos == Vector3.zero)
                 {
                     playerStartPos = followTarget.position;
                 }
             }
-//            Debug.Log(playerStartPos);
+        
             switch (axisToTrack)
             {
                 case (AxisEnum.X):
