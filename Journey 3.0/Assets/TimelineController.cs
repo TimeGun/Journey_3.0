@@ -24,7 +24,7 @@ public class TimelineController : MonoBehaviour
         playerDetected = cameraTrigger.GetComponent<DetectPlayer>().PlayerDetected;
         if (playerDetected)
         {
-            Debug.Log("yurt");
+            //Debug.Log("yurt");
             SetCamera();
         }
     }
