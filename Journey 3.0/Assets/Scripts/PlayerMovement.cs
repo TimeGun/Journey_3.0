@@ -15,29 +15,22 @@ public class PlayerMovement : MonoBehaviour
     private Transform cam;
     
     
-    [SerializeField] private float _velocity = 5f;
+    [SerializeField] private float _speed = 5f;
     [SerializeField] private float _turnSpeed = 10f;
-    [SerializeField] private float _height = 0.5f;
-    [SerializeField] private float _width = 0.5f;
-    [SerializeField] private float _heightPadding = 0.05f;
-    [SerializeField] private float _maximumAngle = 0.05f;
-    [SerializeField] private bool _debug;
-
-    [SerializeField] private LayerMask ground;
-    
-    
+    [SerializeField] private float _gravity = 20f;
 
     private Vector2 input;
     private float angle;
-    private float groundAngle;
 
     private Quaternion targetRotation;
 
 
     private RaycastHit hitInfo;
-    [SerializeField]private bool grounded;
+    private CharacterController _controller;
 
-    private CharacterController _controller; 
+    private Vector3 movementDirection;
+
+    public bool grounded;
     
     void Start()
     {
@@ -49,14 +42,18 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-
         GetInput();
-        CalculateDirection();
         
-        if (Mathf.Abs(input.x) < 0.1f && Mathf.Abs(input.y) < 0.1f) return;
+        if (_controller.isGrounded)
+        {
+            movementDirection = new Vector3(input.x, 0.0f, input.y);
+            movementDirection *= _speed;
+        }
+
         
-        Rotate();
-        Move();
+        movementDirection.y -= _gravity * Time.deltaTime;
+
+        _controller.Move(movementDirection * Time.deltaTime);
     }
 
     /// <summary>
@@ -92,8 +89,10 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     void Move()
     {
-        if (groundAngle >= _maximumAngle) return;
-        _controller.Move(transform.forward * (_velocity * Time.deltaTime));
+        if (!_controller.isGrounded) return;
+
+        movementDirection = transform.forward * _speed;
+
     }
     
 }
