@@ -19,8 +19,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _gravity = 20f;
     [SerializeField] private float _jumpSpeed = 10f;
 
-        [SerializeField] private bool _jump;
-    
+    [SerializeField] private bool _jump;
+
 
     private Vector2 _input;
     private float _angle;
@@ -36,19 +36,24 @@ public class PlayerMovement : MonoBehaviour
 
     private InputMaster _controls;
 
+    private void Awake()
+    {
+        _controls = new InputMaster();
+
+        _controls.PlayerFreeMovement.Movement.performed += ctx => _input = ctx.ReadValue<Vector2>();
+        _controls.PlayerFreeMovement.Movement.canceled += ctx => _input = Vector2.zero;
+    }
+
     void Start()
     {
         if (cam == null)
             cam = Camera.main.transform;
 
         _controller = GetComponent<CharacterController>();
+        
+        
     }
 
-    private void Awake()
-    {
-        _controls = new InputMaster();
-        _controls.Player.Movement.performed += ctx => _input = ctx.ReadValue<Vector2>();
-    }
 
     private void OnEnable()
     {
@@ -62,6 +67,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        grounded = _controller.isGrounded;
         _timeDelta = Time.deltaTime;
 
         CalculateDirection();
@@ -73,17 +79,11 @@ public class PlayerMovement : MonoBehaviour
                 Rotate();
             }
 
-            
-            
-
             SetMove();
-            
-            if (_jump)
+
+            if (_controls.PlayerFreeMovement.Jump.triggered)
             {
-                if (Input.GetButton("Jump"))
-                {
-                    Jump();
-                }
+                Jump();
             }
         }
 
@@ -119,10 +119,10 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector3 right = cam.right;
         Vector3 forward = Vector3.Scale(cam.forward, new Vector3(1, 0, 1)).normalized;
-        
-        Vector3 movement = (right * _input.x) + (forward * _input.y) ;
-        
-        
+
+        Vector3 movement = (right * _input.x) + (forward * _input.y);
+
+
         _movementDirection = movement;
         _movementDirection *= _speed;
     }
@@ -143,5 +143,6 @@ public class PlayerMovement : MonoBehaviour
     void Jump()
     {
         _movementDirection.y = _jumpSpeed;
+        print("Jumped");
     }
 }

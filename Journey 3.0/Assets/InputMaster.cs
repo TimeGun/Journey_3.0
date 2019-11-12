@@ -15,9 +15,17 @@ public class InputMaster : IInputActionCollection, IDisposable
     ""name"": ""InputMaster"",
     ""maps"": [
         {
-            ""name"": ""Player"",
+            ""name"": ""PlayerFreeMovement"",
             ""id"": ""51d49166-0491-4f16-b2d0-67e6ff49caa6"",
             ""actions"": [
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""f93fcb5e-1e4e-44cf-bf0e-1eedc12de3e0"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
                 {
                     ""name"": ""Movement"",
                     ""type"": ""Button"",
@@ -33,93 +41,19 @@ public class InputMaster : IInputActionCollection, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
-                },
-                {
-                    ""name"": ""Jump"",
-                    ""type"": ""Button"",
-                    ""id"": ""f93fcb5e-1e4e-44cf-bf0e-1eedc12de3e0"",
-                    ""expectedControlType"": """",
-                    ""processors"": """",
-                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
                 {
                     ""name"": """",
                     ""id"": ""db189d30-95ce-4fb1-842c-c88b4eeddc08"",
-                    ""path"": """",
+                    ""path"": ""<Gamepad>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": ""Gamepad"",
                     ""action"": ""Interact"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""8d2126e1-8a76-4010-bc50-b0febf839da7"",
-                    ""path"": ""<Gamepad>/buttonSouth"",
-                    ""interactions"": ""Press"",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Jump"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""Left Stick"",
-                    ""id"": ""fe6c5671-48a6-4f55-9942-55f8f4df649c"",
-                    ""path"": ""2DVector"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Movement"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""up"",
-                    ""id"": ""47a99256-fbbc-48b4-b975-8de3a32c5ebe"",
-                    ""path"": ""<Gamepad>/leftStick/up"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""down"",
-                    ""id"": ""9c2402e4-187c-4c14-b6ae-f8980b6b48f0"",
-                    ""path"": ""<Gamepad>/leftStick/down"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""left"",
-                    ""id"": ""d1d07b00-7402-4e1c-933f-8bdc756e1c73"",
-                    ""path"": ""<Gamepad>/leftStick/left"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""right"",
-                    ""id"": ""da9ee3b1-5559-4c87-82d1-815f4f35fb90"",
-                    ""path"": ""<Gamepad>/leftStick/right"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Gamepad"",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
                 },
                 {
                     ""name"": ""WASD"",
@@ -175,6 +109,50 @@ public class InputMaster : IInputActionCollection, IDisposable
                     ""action"": ""Movement"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f7991acf-ef8a-42b3-b2eb-29340b2d958c"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2519f821-005f-47f1-a072-7c1fd8908a79"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""8d2126e1-8a76-4010-bc50-b0febf839da7"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c5173cd2-321a-4c2b-9ee1-badf74f93be4"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": ""Press"",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -204,11 +182,11 @@ public class InputMaster : IInputActionCollection, IDisposable
         }
     ]
 }");
-        // Player
-        m_Player = asset.FindActionMap("Player", throwIfNotFound: true);
-        m_Player_Movement = m_Player.FindAction("Movement", throwIfNotFound: true);
-        m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
-        m_Player_Jump = m_Player.FindAction("Jump", throwIfNotFound: true);
+        // PlayerFreeMovement
+        m_PlayerFreeMovement = asset.FindActionMap("PlayerFreeMovement", throwIfNotFound: true);
+        m_PlayerFreeMovement_Jump = m_PlayerFreeMovement.FindAction("Jump", throwIfNotFound: true);
+        m_PlayerFreeMovement_Movement = m_PlayerFreeMovement.FindAction("Movement", throwIfNotFound: true);
+        m_PlayerFreeMovement_Interact = m_PlayerFreeMovement.FindAction("Interact", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -255,54 +233,54 @@ public class InputMaster : IInputActionCollection, IDisposable
         asset.Disable();
     }
 
-    // Player
-    private readonly InputActionMap m_Player;
-    private IPlayerActions m_PlayerActionsCallbackInterface;
-    private readonly InputAction m_Player_Movement;
-    private readonly InputAction m_Player_Interact;
-    private readonly InputAction m_Player_Jump;
-    public struct PlayerActions
+    // PlayerFreeMovement
+    private readonly InputActionMap m_PlayerFreeMovement;
+    private IPlayerFreeMovementActions m_PlayerFreeMovementActionsCallbackInterface;
+    private readonly InputAction m_PlayerFreeMovement_Jump;
+    private readonly InputAction m_PlayerFreeMovement_Movement;
+    private readonly InputAction m_PlayerFreeMovement_Interact;
+    public struct PlayerFreeMovementActions
     {
         private InputMaster m_Wrapper;
-        public PlayerActions(InputMaster wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Movement => m_Wrapper.m_Player_Movement;
-        public InputAction @Interact => m_Wrapper.m_Player_Interact;
-        public InputAction @Jump => m_Wrapper.m_Player_Jump;
-        public InputActionMap Get() { return m_Wrapper.m_Player; }
+        public PlayerFreeMovementActions(InputMaster wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Jump => m_Wrapper.m_PlayerFreeMovement_Jump;
+        public InputAction @Movement => m_Wrapper.m_PlayerFreeMovement_Movement;
+        public InputAction @Interact => m_Wrapper.m_PlayerFreeMovement_Interact;
+        public InputActionMap Get() { return m_Wrapper.m_PlayerFreeMovement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(PlayerActions set) { return set.Get(); }
-        public void SetCallbacks(IPlayerActions instance)
+        public static implicit operator InputActionMap(PlayerFreeMovementActions set) { return set.Get(); }
+        public void SetCallbacks(IPlayerFreeMovementActions instance)
         {
-            if (m_Wrapper.m_PlayerActionsCallbackInterface != null)
+            if (m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface != null)
             {
-                Movement.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
-                Movement.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
-                Movement.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnMovement;
-                Interact.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
-                Interact.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
-                Interact.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
-                Jump.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
-                Jump.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
-                Jump.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnJump;
+                Jump.started -= m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface.OnJump;
+                Jump.performed -= m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface.OnJump;
+                Jump.canceled -= m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface.OnJump;
+                Movement.started -= m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface.OnMovement;
+                Movement.performed -= m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface.OnMovement;
+                Movement.canceled -= m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface.OnMovement;
+                Interact.started -= m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface.OnInteract;
+                Interact.performed -= m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface.OnInteract;
+                Interact.canceled -= m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface.OnInteract;
             }
-            m_Wrapper.m_PlayerActionsCallbackInterface = instance;
+            m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface = instance;
             if (instance != null)
             {
+                Jump.started += instance.OnJump;
+                Jump.performed += instance.OnJump;
+                Jump.canceled += instance.OnJump;
                 Movement.started += instance.OnMovement;
                 Movement.performed += instance.OnMovement;
                 Movement.canceled += instance.OnMovement;
                 Interact.started += instance.OnInteract;
                 Interact.performed += instance.OnInteract;
                 Interact.canceled += instance.OnInteract;
-                Jump.started += instance.OnJump;
-                Jump.performed += instance.OnJump;
-                Jump.canceled += instance.OnJump;
             }
         }
     }
-    public PlayerActions @Player => new PlayerActions(this);
+    public PlayerFreeMovementActions @PlayerFreeMovement => new PlayerFreeMovementActions(this);
     private int m_GamepadSchemeIndex = -1;
     public InputControlScheme GamepadScheme
     {
@@ -321,10 +299,10 @@ public class InputMaster : IInputActionCollection, IDisposable
             return asset.controlSchemes[m_KeyboardSchemeIndex];
         }
     }
-    public interface IPlayerActions
+    public interface IPlayerFreeMovementActions
     {
+        void OnJump(InputAction.CallbackContext context);
         void OnMovement(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
-        void OnJump(InputAction.CallbackContext context);
     }
 }
