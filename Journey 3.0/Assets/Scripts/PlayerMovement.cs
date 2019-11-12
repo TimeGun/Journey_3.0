@@ -34,39 +34,24 @@ public class PlayerMovement : MonoBehaviour
 
     private float _timeDelta;
 
-    private InputMaster _controls;
+    private InputSetUp _inputSetUp;
+    
 
-    private void Awake()
-    {
-        _controls = new InputMaster();
-
-        _controls.PlayerFreeMovement.Movement.performed += ctx => _input = ctx.ReadValue<Vector2>();
-        _controls.PlayerFreeMovement.Movement.canceled += ctx => _input = Vector2.zero;
-    }
-
+    
     void Start()
     {
         if (cam == null)
             cam = Camera.main.transform;
 
         _controller = GetComponent<CharacterController>();
-        
-        
-    }
+        _inputSetUp = GetComponent<InputSetUp>();
 
-
-    private void OnEnable()
-    {
-        _controls.Enable();
-    }
-
-    private void OnDisable()
-    {
-        _controls.Disable();
     }
 
     private void Update()
     {
+        _input = _inputSetUp.LeftStick;
+
         grounded = _controller.isGrounded;
         _timeDelta = Time.deltaTime;
 
@@ -81,7 +66,7 @@ public class PlayerMovement : MonoBehaviour
 
             SetMove();
 
-            if (_controls.PlayerFreeMovement.Jump.triggered)
+            if (_inputSetUp.Controls.PlayerFreeMovement.Jump.triggered)
             {
                 Jump();
             }
