@@ -15,6 +15,8 @@ public class CameraZone : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
+        
         if (targetPriority1 == 0 )
         {
             Debug.LogWarning("Target Priority for target camera 1 is not set");                        
