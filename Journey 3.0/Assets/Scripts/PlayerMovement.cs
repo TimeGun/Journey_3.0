@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.iOS;
 
 /// <summary>
 /// 1. Movement based of camera
@@ -13,25 +12,30 @@ using UnityEngine.iOS;
 public class PlayerMovement : MonoBehaviour
 {
     private Transform cam;
-    
-    
+
+
     [SerializeField] private float _speed = 5f;
     [SerializeField] private float _turnSpeed = 10f;
     [SerializeField] private float _gravity = 20f;
+    [SerializeField] private float _jumpSpeed = 10f;
 
-    private Vector2 input;
-    private float angle;
+        [SerializeField] private bool _jump;
+    
 
-    private Quaternion targetRotation;
+    private Vector2 _input;
+    private float _angle;
 
-
-    private RaycastHit hitInfo;
+    private Quaternion _targetRotation;
     private CharacterController _controller;
 
-    private Vector3 movementDirection;
+    private Vector3 _movementDirection;
 
     public bool grounded;
-    
+
+    private float _timeDelta;
+
+    private InputMaster _controls;
+
     void Start()
     {
         if (cam == null)
@@ -40,59 +44,104 @@ public class PlayerMovement : MonoBehaviour
         _controller = GetComponent<CharacterController>();
     }
 
+    private void Awake()
+    {
+        _controls = new InputMaster();
+        _controls.Player.Movement.performed += ctx => _input = ctx.ReadValue<Vector2>();
+    }
+
+    private void OnEnable()
+    {
+        _controls.Enable();
+    }
+
+    private void OnDisable()
+    {
+        _controls.Disable();
+    }
+
     private void Update()
     {
-        GetInput();
-        
+        _timeDelta = Time.deltaTime;
+
+        CalculateDirection();
+
         if (_controller.isGrounded)
         {
-            movementDirection = new Vector3(input.x, 0.0f, input.y);
-            movementDirection *= _speed;
+            if (Mathf.Abs(_input.magnitude) > 0.05f)
+            {
+                Rotate();
+            }
+
+            
+            
+
+            SetMove();
+            
+            if (_jump)
+            {
+                if (Input.GetButton("Jump"))
+                {
+                    Jump();
+                }
+            }
         }
 
-        
-        movementDirection.y -= _gravity * Time.deltaTime;
 
-        _controller.Move(movementDirection * Time.deltaTime);
+        ApplyGravity();
+
+        _controller.Move(_movementDirection * _timeDelta);
     }
 
-    /// <summary>
-    ///  Input based of new Input system
-    /// </summary>
-    void GetInput()
-    {
-        input.x = Input.GetAxis("Horizontal");
-        input.y = Input.GetAxis("Vertical");
-    }
-    
     /// <summary>
     /// Calculates the direction of movement
     /// </summary>
     void CalculateDirection()
     {
-        angle = Mathf.Atan2(input.x, input.y);
-        angle = Mathf.Rad2Deg * angle;
-        angle += cam.eulerAngles.y;
+        _angle = Mathf.Atan2(_input.x, _input.y);
+        _angle = Mathf.Rad2Deg * _angle;
+        _angle += cam.eulerAngles.y;
     }
-    
+
     /// <summary>
     /// Rotate towards the target direction
     /// </summary>
     void Rotate()
     {
-        targetRotation = Quaternion.Euler(0, angle, 0);
-        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, _turnSpeed * Time.deltaTime);
+        _targetRotation = Quaternion.Euler(0, _angle, 0);
+        transform.rotation = Quaternion.Slerp(transform.rotation, _targetRotation, _turnSpeed * _timeDelta);
     }
-    
+
     /// <summary>
-    /// Move along forward axis
+    /// Sets the moveDirections along forward axis by the speed variable
     /// </summary>
-    void Move()
+    void SetMove()
     {
-        if (!_controller.isGrounded) return;
-
-        movementDirection = transform.forward * _speed;
-
+        Vector3 right = cam.right;
+        Vector3 forward = Vector3.Scale(cam.forward, new Vector3(1, 0, 1)).normalized;
+        
+        Vector3 movement = (right * _input.x) + (forward * _input.y) ;
+        
+        
+        _movementDirection = movement;
+        _movementDirection *= _speed;
     }
-    
+
+    /// <summary>
+    /// Apply gravity to the moveDirections y axis
+    /// </summary>
+    void ApplyGravity()
+    {
+        _movementDirection.y -= _gravity * _timeDelta;
+    }
+
+
+    /// <summary>
+    /// Set the move directions y to the jump speed
+    /// this has to be called after set move, otherwise the y gets reset
+    /// </summary>
+    void Jump()
+    {
+        _movementDirection.y = _jumpSpeed;
+    }
 }
