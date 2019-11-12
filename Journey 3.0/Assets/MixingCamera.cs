@@ -12,6 +12,8 @@ public class MixingCamera : MonoBehaviour
     public AxisEnum axisToTrack;
     private bool playerDetected;
     private Vector3 playerStartPos;
+    private float amountBelowZeroZ;
+    private float amountAboveZeroZ;
 
     private CinemachineMixingCamera vcam;
     public GameObject cameraTrigger;
@@ -29,8 +31,8 @@ public class MixingCamera : MonoBehaviour
 
     void Update()
     {
-        playerDetected = cameraTrigger.GetComponent<DetectPlayer>().PlayerDetected;
-        
+        playerDetected = cameraTrigger.GetComponent<DetectPlayer>().PlayerInCollider;
+        Debug.Log(playerDetected);
         if (followTarget)
         {
             if (playerDetected)
@@ -39,16 +41,27 @@ public class MixingCamera : MonoBehaviour
                 if (playerStartPos == Vector3.zero)
                 {
                     playerStartPos = followTarget.position;
+                   /* if (followTarget.transform.position.z  0)
+                    {
+                        playerStartPos.z = playerStartPos.z 
+                    }
+                    if (followTarget.transform.position.z > 0)
+                    {
+                        amountAboveZeroZ = Mathf.Abs(followTarget.transform.position.z);
+                    }*/
+                    Debug.Log(playerStartPos);
                 }
             }
         
             switch (axisToTrack)
             {
                 case (AxisEnum.X):
-                    vcam.m_Weight1 = Mathf.Abs(followTarget.transform.position.x) - Mathf.Abs(playerStartPos.x);
+                    
+                        
+                    vcam.m_Weight1 = Mathf.Abs(followTarget.transform.position.x) - (playerStartPos.x);
                     break;
                 case (AxisEnum.Z):
-                    vcam.m_Weight1 = Mathf.Abs(followTarget.transform.position.z) - Mathf.Abs(playerStartPos.z);
+                    vcam.m_Weight1 = Mathf.Abs(followTarget.transform.position.z) - (playerStartPos.z);
                     break;
                 case (AxisEnum.XZ):
                     vcam.m_Weight1 =

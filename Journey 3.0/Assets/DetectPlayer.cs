@@ -67,7 +67,7 @@ public class DetectPlayer : MonoBehaviour
         if (col.gameObject.CompareTag("Player"))
         {
             playerInCollider = true;
-//            Debug.Log("Player in " + gameObject);
+           Debug.Log("Player in " + gameObject);
         }
     }
 
