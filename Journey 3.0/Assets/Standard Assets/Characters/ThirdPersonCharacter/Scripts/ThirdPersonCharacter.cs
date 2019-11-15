@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace UnityStandardAssets.Characters.ThirdPerson
 {
@@ -28,6 +29,16 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 		Vector3 m_CapsuleCenter;
 		CapsuleCollider m_Capsule;
 		bool m_Crouching;
+		
+		//Added Variables
+		private Vector3 _playerPos;
+
+		public Vector3 PlayerPos
+		{
+			get { return _playerPos; }
+		}
+
+		private GameObject _playerManager;
 
 
 		void Start()
@@ -37,9 +48,15 @@ namespace UnityStandardAssets.Characters.ThirdPerson
 			m_Capsule = GetComponent<CapsuleCollider>();
 			m_CapsuleHeight = m_Capsule.height;
 			m_CapsuleCenter = m_Capsule.center;
+			_playerPos = transform.position;
 
 			m_Rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
 			m_OrigGroundCheckDistance = m_GroundCheckDistance;
+			
+			// Added
+			_playerManager = GameObject.FindWithTag("GM");
+			
+			//_playerManager.GetComponent<>()
 		}
 
 
