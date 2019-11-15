@@ -19,7 +19,7 @@ public class playerRefs : MonoBehaviour
     {
         _playerPos = transform.position;
         PlayerManager.PlayerPosRef = _playerPos;
-        Debug.Log(PlayerManager.PlayerPosRef);
+//        Debug.Log(PlayerManager.PlayerPosRef);
 
     }
 }

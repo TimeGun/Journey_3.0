@@ -15,6 +15,9 @@ public class MixingCamera : MonoBehaviour
     private float amountBelowZeroZ;
     private float amountAboveZeroZ;
 
+    private int positionDirection = 1;
+    public bool PositiveDirection;
+
     private CinemachineMixingCamera vcam;
     public GameObject cameraTrigger;
     
@@ -25,14 +28,17 @@ public class MixingCamera : MonoBehaviour
            
             vcam = GetComponent<CinemachineMixingCamera>();
             vcam.m_Weight0 = initialBottomWeight;
-            
+            if (PositiveDirection == false)
+            {
+                positionDirection = -1;
+            }
         }
     }
 
     void Update()
     {
         playerDetected = cameraTrigger.GetComponent<DetectPlayer>().PlayerInCollider;
-        Debug.Log(playerDetected);
+//        Debug.Log(playerDetected);
         if (followTarget)
         {
             if (playerDetected)
@@ -61,10 +67,11 @@ public class MixingCamera : MonoBehaviour
                     break;
                 case (AxisEnum.Z):
                     vcam.m_Weight1 = Mathf.Abs(followTarget.transform.position.z) - (playerStartPos.z);
+                    vcam.m_Weight1 = vcam.m_Weight1 * positionDirection;
                     break;
                 case (AxisEnum.XZ):
                     vcam.m_Weight1 =
-                        Mathf.Abs(Mathf.Abs(followTarget.transform.position.x) - (playerStartPos.x))+
+                        Mathf.Abs(Mathf.Abs(followTarget.transform.position.x) - (playerStartPos.x * positionDirection))+
                                   (Mathf.Abs(followTarget.transform.position.z) - (playerStartPos.x));
                     break;
             }

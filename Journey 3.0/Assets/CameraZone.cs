@@ -31,7 +31,7 @@ public class CameraZone : MonoBehaviour
     void Update()
     {
         playerInZone = cameraTrigger.GetComponent<DetectPlayer>().PlayerInCollider;
-       
+//       Debug.Log(playerInZone);
         if (playerInZone)
         {
             
