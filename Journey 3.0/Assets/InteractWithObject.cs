@@ -33,8 +33,9 @@ public class InteractWithObject : MonoBehaviour
         {
             if (!_interacting && _objectDetection.Items.Count > 0)
             {
-                _interactingObj = _objectDetection.Items[0].GetComponent<IInteractible>();
-                StartCoroutine(TurnToGrab(_objectDetection.Items[0]));
+                GameObject obj =  ReturnCloserObject();
+                _interactingObj = obj.GetComponent<IInteractible>();
+                StartCoroutine(TurnToGrab(obj));
             }
             else if (_interacting)
             {
@@ -46,6 +47,36 @@ public class InteractWithObject : MonoBehaviour
     }
 
 
+    private GameObject ReturnCloserObject()
+    {
+        if (_objectDetection.Items.Count == 0)
+        {
+            return _objectDetection.Items[0];
+        }
+        else
+        {
+            GameObject closestObj = new GameObject();
+
+            float closestDistance = float.MaxValue;
+            
+            for (int i = 0; i < _objectDetection.Items.Count; i++)
+            {
+                float thisDistance = Vector3.Distance(transform.position, _objectDetection.Items[i].transform.position);
+                
+                if (thisDistance < closestDistance)
+                {
+                    closestDistance = thisDistance;
+                    closestObj = _objectDetection.Items[i];
+                }
+            }
+
+            return closestObj;
+        }
+
+
+    }
+
+
     IEnumerator TurnToGrab(GameObject interactible)
     {
         _movement.enabled = false;
@@ -53,7 +84,7 @@ public class InteractWithObject : MonoBehaviour
         Quaternion _targetRotation =
             Quaternion.LookRotation(interactible.transform.position - transform.position, Vector3.up);
 
-        while (Vector3.Angle(transform.forward, interactible.transform.position - transform.position) > 10f)
+        while (Vector3.Angle(transform.forward, interactible.transform.position - transform.position) > 20f)
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, _targetRotation, Time.deltaTime * _turnSpeed);
             yield return new WaitForEndOfFrame();
