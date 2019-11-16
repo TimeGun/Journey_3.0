@@ -8,17 +8,17 @@ public class InteractWithObject : MonoBehaviour
 
     private InputSetUp _inputSetUp;
 
-    private bool _grabbing;
-
-
-    private GameObject _itemHeld;
-
+    private bool _interacting;
+    
     [SerializeField] private Transform handPosition;
 
     private PlayerMovement _movement;
 
 
     [SerializeField] private float _turnSpeed;
+
+
+    private IInteractible _interactingObj;
 
     void Start()
     {
@@ -31,47 +31,36 @@ public class InteractWithObject : MonoBehaviour
     {
         if (_inputSetUp.Controls.PlayerFreeMovement.Interact.triggered)
         {
-            if (!_grabbing && _objectDetection.Items.Count > 0)
+            if (!_interacting && _objectDetection.Items.Count > 0)
             {
-                IPickup itemToPickUP = _objectDetection.Items[0].GetComponent<IPickup>();
-
-                itemToPickUP.GetPickedUp(handPosition);
+                _interactingObj = _objectDetection.Items[0].GetComponent<IInteractible>();
+                StartCoroutine(TurnToGrab(_objectDetection.Items[0]));
             }
-            else if (_grabbing)
+            else if (_interacting)
             {
-                _itemHeld.GetComponent<IPickup>().GetDropped();
-                _itemHeld = null;
-                _grabbing = false;
+                _interactingObj.StopInteraction();
+                _interactingObj = null;
+                _interacting = false;
             }
-        }
-
-        if (_grabbing)
-        {
-            _itemHeld.transform.position = handPosition.position;
         }
     }
 
-    public void SetGrabObject(GameObject obj)
-    {
-        _itemHeld = obj;
-        StartCoroutine(TurnToGrab());
-    }
 
-
-    IEnumerator TurnToGrab()
+    IEnumerator TurnToGrab(GameObject interactible)
     {
         _movement.enabled = false;
 
         Quaternion _targetRotation =
-            Quaternion.LookRotation(_itemHeld.transform.position - transform.position, Vector3.up);
+            Quaternion.LookRotation(interactible.transform.position - transform.position, Vector3.up);
 
-        while (Vector3.Angle(transform.forward, _itemHeld.transform.position - transform.position) > 10f)
+        while (Vector3.Angle(transform.forward, interactible.transform.position - transform.position) > 10f)
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, _targetRotation, Time.deltaTime * _turnSpeed);
             yield return new WaitForEndOfFrame();
         }
-
+        
+        _interactingObj.StartInteraction(handPosition);
         _movement.enabled = true;
-        _grabbing = true;
+        _interacting = true;
     }
 }

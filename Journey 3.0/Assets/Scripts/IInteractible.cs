@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IPickup
+public interface IInteractible
 {
-    void GetPickedUp(Transform parent);
+    void StartInteraction(Transform parent);
+    
 
-    void GetDropped();
+    void StopInteraction();
 }

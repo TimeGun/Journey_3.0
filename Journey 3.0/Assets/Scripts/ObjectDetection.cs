@@ -12,25 +12,14 @@ public class ObjectDetection : MonoBehaviour
         get => _items;
         set => _items = value;
     }
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 
     private void OnTriggerEnter(Collider other)
     {
 
-        IPickup itemToPickUp = other.GetComponent<IPickup>();
+        IInteractible itemToPickUp = other.GetComponent<IInteractible>();
 
-        if (itemToPickUp != null)
+        if (itemToPickUp != null && !_items.Contains(other.gameObject))
         {
             _items.Add(other.gameObject);
         }
