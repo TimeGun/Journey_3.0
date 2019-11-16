@@ -55,7 +55,7 @@ public class InteractWithObject : MonoBehaviour
         }
         else
         {
-            GameObject closestObj = new GameObject();
+            GameObject closestObj = _objectDetection.Items[0];
 
             float closestDistance = float.MaxValue;
             
