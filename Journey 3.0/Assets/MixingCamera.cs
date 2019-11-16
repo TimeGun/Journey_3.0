@@ -15,8 +15,11 @@ public class MixingCamera : MonoBehaviour
     private float amountBelowZeroZ;
     private float amountAboveZeroZ;
 
-    private int positionDirection = 1;
-    public bool PositiveDirection;
+    private int zPositionDirection = 1;
+    private int xPositionDirection = 1;
+    public bool zPositiveDirection;
+    public bool xPositiveDirection;
+
 
     private CinemachineMixingCamera vcam;
     public GameObject cameraTrigger;
@@ -28,9 +31,13 @@ public class MixingCamera : MonoBehaviour
            
             vcam = GetComponent<CinemachineMixingCamera>();
             vcam.m_Weight0 = initialBottomWeight;
-            if (PositiveDirection == false)
+            if (zPositiveDirection == false)
             {
-                positionDirection = -1;
+                zPositionDirection = -1;
+            }
+            if (xPositiveDirection == false)
+            {
+                xPositionDirection = -1;
             }
         }
     }
@@ -64,15 +71,26 @@ public class MixingCamera : MonoBehaviour
                 case (AxisEnum.X):
                     
                     vcam.m_Weight1 = Mathf.Abs(followTarget.transform.position.x) - (playerStartPos.x);
+                    vcam.m_Weight1 = vcam.m_Weight1 * xPositionDirection;
                     break;
                 case (AxisEnum.Z):
                     vcam.m_Weight1 = Mathf.Abs(followTarget.transform.position.z) - (playerStartPos.z);
-                    vcam.m_Weight1 = vcam.m_Weight1 * positionDirection;
+                    vcam.m_Weight1 = vcam.m_Weight1 * zPositionDirection;
                     break;
                 case (AxisEnum.XZ):
-                    vcam.m_Weight1 =
-                        Mathf.Abs(Mathf.Abs(followTarget.transform.position.x) - (playerStartPos.x * positionDirection))+
-                                  (Mathf.Abs(followTarget.transform.position.z) - (playerStartPos.x));
+                    
+                    float xWeight = Mathf.Abs(followTarget.transform.position.x - playerStartPos.x);
+                    xWeight = xWeight * xPositionDirection;
+                    float zWeight = Mathf.Abs(followTarget.transform.position.z - playerStartPos.z);
+                    zWeight = zWeight * zPositionDirection;
+                    Debug.Log(xWeight + "xweight");
+                    Debug.Log(zWeight + "zweight");
+
+                    vcam.m_Weight1 = (xWeight + zWeight) / 2;
+                    
+                        /*(Mathf.Abs(followTarget.transform.position.x) - (playerStartPos.x))+
+                                  (Mathf.Abs(followTarget.transform.position.z) - (playerStartPos.z));
+                    vcam.m_Weight1 = vcam.m_Weight1 * zPositionDirection;*/
                     break;
             }
         }
