@@ -1,9 +1,13 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Object = System.Object;
 
 public class PushObject : MonoBehaviour, IInteractible
 {
+    private GameObject player;
+    
     void Start()
     {
         
@@ -14,13 +18,15 @@ public class PushObject : MonoBehaviour, IInteractible
         
     }
 
+
     public void StartInteraction(Transform parent)
     {
-        throw new System.NotImplementedException();
+        player = transform.root.gameObject;
+        player.GetComponent<PlayerMovement>().Pushing = true;
     }
 
     public void StopInteraction()
     {
-        throw new System.NotImplementedException();
+        player.GetComponent<PlayerMovement>().Pushing = false;
     }
 }

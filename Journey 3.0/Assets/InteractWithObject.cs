@@ -33,9 +33,27 @@ public class InteractWithObject : MonoBehaviour
         {
             if (!_interacting && _objectDetection.Items.Count > 0)
             {
+                print("test");
+                _interacting = true;
+
                 GameObject obj =  ReturnCloserObject();
                 _interactingObj = obj.GetComponent<IInteractible>();
-                StartCoroutine(TurnToGrab(obj));
+
+
+                var type = _interactingObj.GetType();
+                
+                if (type == typeof(PushObject))
+                {
+                    StartCoroutine(TurnToPush(obj));
+                    print("Push Object");
+                }else if (type == typeof(PickUpObject))
+                {
+                    StartCoroutine(TurnToGrab(obj));
+                    print("Pickup Object");
+                }
+                
+                
+                StartCoroutine(TurnToPush(obj));
             }
             else if (_interacting)
             {
@@ -84,14 +102,32 @@ public class InteractWithObject : MonoBehaviour
         Quaternion _targetRotation =
             Quaternion.LookRotation(interactible.transform.position - transform.position, Vector3.up);
 
-        while (Vector3.Angle(transform.forward, interactible.transform.position - transform.position) > 20f)
+        while (Quaternion.Angle(transform.rotation, _targetRotation) > 15f)
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation, _targetRotation, Time.deltaTime * _turnSpeed);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, _targetRotation, Time.deltaTime * _turnSpeed * 20f);
             yield return new WaitForEndOfFrame();
         }
         
         _interactingObj.StartInteraction(handPosition);
         _movement.enabled = true;
-        _interacting = true;
+    }
+    
+    IEnumerator TurnToPush(GameObject interactible)
+    {
+        _movement.enabled = false;
+
+        Quaternion _targetRotation =
+            Quaternion.LookRotation(interactible.transform.position - transform.position, Vector3.up);
+        
+        _targetRotation.eulerAngles = new Vector3(transform.rotation.x, _targetRotation.eulerAngles.y, transform.rotation.z);
+
+        while (transform.rotation != _targetRotation)
+        {
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, _targetRotation, Time.deltaTime * _turnSpeed * 20f);
+            yield return new WaitForEndOfFrame();
+        }
+        
+        _interactingObj.StartInteraction(handPosition);
+        _movement.enabled = true;
     }
 }

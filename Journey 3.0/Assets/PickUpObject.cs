@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Object = System.Object;
 
 public class PickUpObject : MonoBehaviour, IInteractible
 {
@@ -53,6 +54,8 @@ public class PickUpObject : MonoBehaviour, IInteractible
         _rb.isKinematic = false;
         _carried = false;
     }
+
+
 
 
     public void StartInteraction(Transform parent)

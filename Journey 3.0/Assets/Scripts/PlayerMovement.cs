@@ -15,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
 
 
     [SerializeField] private float _speed = 5f;
+    [SerializeField] private float _pushSpeed = 2f;
     [SerializeField] private float _turnSpeed = 10f;
     [SerializeField] private float _gravity = 20f;
     [SerializeField] private float _jumpSpeed = 10f;
@@ -31,6 +32,14 @@ public class PlayerMovement : MonoBehaviour
     private Vector3 _movementDirection;
 
     public bool grounded;
+
+    [SerializeField] private bool _pushing;
+
+    public bool Pushing
+    {
+        get => _pushing;
+        set => _pushing = value;
+    }
 
     private float _timeDelta;
 
@@ -59,14 +68,14 @@ public class PlayerMovement : MonoBehaviour
 
         if (_controller.isGrounded)
         {
-            if (Mathf.Abs(_input.magnitude) > 0.05f)
+            if (Mathf.Abs(_input.magnitude) > 0.05f && !_pushing)
             {
                 Rotate();
             }
 
             SetMove();
 
-            if (_inputSetUp.Controls.PlayerFreeMovement.Jump.triggered)
+            if (_inputSetUp.Controls.PlayerFreeMovement.Jump.triggered && _jump && ! _pushing)
             {
                 Jump();
             }
@@ -107,9 +116,24 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 movement = (right * _input.x) + (forward * _input.y);
 
-
-        _movementDirection = movement;
-        _movementDirection *= _speed;
+        if (!_pushing)
+        {
+            _movementDirection = movement;
+            _movementDirection *= _speed;
+        }
+        else
+        {
+            if (Vector3.Angle(transform.forward, movement) > 120f)
+            {
+                _movementDirection = -transform.forward * _input.magnitude;
+                _movementDirection *= _pushSpeed;
+            }
+            else if (Vector3.Angle(transform.forward, movement) < 60f)
+            {
+                _movementDirection = transform.forward * _input.magnitude;
+                _movementDirection *= _pushSpeed;
+            }
+        }
     }
 
     /// <summary>
@@ -128,6 +152,5 @@ public class PlayerMovement : MonoBehaviour
     void Jump()
     {
         _movementDirection.y = _jumpSpeed;
-        print("Jumped");
     }
 }
