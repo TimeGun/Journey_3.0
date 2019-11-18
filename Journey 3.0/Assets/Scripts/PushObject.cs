@@ -21,7 +21,7 @@ public class PushObject : MonoBehaviour, IInteractible
 
     public void StartInteraction(Transform parent)
     {
-        player = transform.root.gameObject;
+        player = parent.root.gameObject;
         player.GetComponent<PlayerMovement>().Pushing = true;
     }
 

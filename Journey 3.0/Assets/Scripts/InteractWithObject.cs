@@ -20,11 +20,14 @@ public class InteractWithObject : MonoBehaviour
 
     private IInteractible _interactingObj;
 
+    private Coroutine _coroutine;
+
     void Start()
     {
         _inputSetUp = GetComponent<InputSetUp>();
         _objectDetection = GetComponent<ObjectDetection>();
         _movement = GetComponent<PlayerMovement>();
+        _coroutine = null;
     }
 
     void Update()
@@ -36,7 +39,6 @@ public class InteractWithObject : MonoBehaviour
                 _interacting = true;
 
                 GameObject obj =  ReturnCloserObject();
-                print(obj);
                 _interactingObj = obj.GetComponent<IInteractible>();
 
 
@@ -44,20 +46,19 @@ public class InteractWithObject : MonoBehaviour
                 
                 if (type == typeof(PushObject))
                 {
-                    StartCoroutine(TurnToPush(obj));
+                    _coroutine = StartCoroutine(TurnToPush(obj));
                 }else if (type == typeof(PickUpObject))
                 {
-                    StartCoroutine(TurnToGrab(obj));
+                    _coroutine = StartCoroutine(TurnToGrab(obj));
                 }
-                
-                
-                StartCoroutine(TurnToPush(obj));
             }
             else if (_interacting)
             {
                 _interactingObj.StopInteraction();
                 _interactingObj = null;
                 _interacting = false;
+                StopCoroutine(_coroutine);
+                _coroutine = null;
             }
         }
     }
@@ -65,7 +66,7 @@ public class InteractWithObject : MonoBehaviour
 
     private GameObject ReturnCloserObject()
     {
-        if (_objectDetection.Items.Count == 0)
+        if (_objectDetection.Items.Count == 1)
         {
             return _objectDetection.Items[0];
         }
@@ -102,9 +103,9 @@ public class InteractWithObject : MonoBehaviour
 
         while (Quaternion.Angle(transform.rotation, _targetRotation) > 10f)
         {
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, _targetRotation, Time.deltaTime * _turnSpeed);
+            transform.rotation = Quaternion.Slerp(transform.rotation, _targetRotation, Time.deltaTime * _turnSpeed);
 
-            yield return new WaitForEndOfFrame();
+           yield return new WaitForEndOfFrame();
         }
 
         _interactingObj.StartInteraction(handPosition);
@@ -122,7 +123,7 @@ public class InteractWithObject : MonoBehaviour
 
         while (Quaternion.Angle(transform.rotation, _targetRotation) > 10f)
         {
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, _targetRotation, Time.deltaTime * _turnSpeed);
+            transform.rotation = Quaternion.Slerp(transform.rotation, _targetRotation, Time.deltaTime * _turnSpeed);
             yield return new WaitForEndOfFrame();
         }
 
