@@ -33,10 +33,10 @@ public class InteractWithObject : MonoBehaviour
         {
             if (!_interacting && _objectDetection.Items.Count > 0)
             {
-                print("test");
                 _interacting = true;
 
                 GameObject obj =  ReturnCloserObject();
+                print(obj);
                 _interactingObj = obj.GetComponent<IInteractible>();
 
 
@@ -45,11 +45,9 @@ public class InteractWithObject : MonoBehaviour
                 if (type == typeof(PushObject))
                 {
                     StartCoroutine(TurnToPush(obj));
-                    print("Push Object");
                 }else if (type == typeof(PickUpObject))
                 {
                     StartCoroutine(TurnToGrab(obj));
-                    print("Pickup Object");
                 }
                 
                 
@@ -102,12 +100,13 @@ public class InteractWithObject : MonoBehaviour
         Quaternion _targetRotation =
             Quaternion.LookRotation(interactible.transform.position - transform.position, Vector3.up);
 
-        while (Quaternion.Angle(transform.rotation, _targetRotation) > 15f)
+        while (Quaternion.Angle(transform.rotation, _targetRotation) > 10f)
         {
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, _targetRotation, Time.deltaTime * _turnSpeed * 20f);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, _targetRotation, Time.deltaTime * _turnSpeed);
+
             yield return new WaitForEndOfFrame();
         }
-        
+
         _interactingObj.StartInteraction(handPosition);
         _movement.enabled = true;
     }
@@ -121,11 +120,13 @@ public class InteractWithObject : MonoBehaviour
         
         _targetRotation.eulerAngles = new Vector3(transform.rotation.x, _targetRotation.eulerAngles.y, transform.rotation.z);
 
-        while (transform.rotation != _targetRotation)
+        while (Quaternion.Angle(transform.rotation, _targetRotation) > 10f)
         {
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, _targetRotation, Time.deltaTime * _turnSpeed * 20f);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, _targetRotation, Time.deltaTime * _turnSpeed);
             yield return new WaitForEndOfFrame();
         }
+
+        transform.rotation = _targetRotation;
         
         _interactingObj.StartInteraction(handPosition);
         _movement.enabled = true;
