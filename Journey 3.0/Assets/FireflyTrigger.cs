@@ -22,9 +22,15 @@ public class FireflyTrigger : MonoBehaviour
     [SerializeField] private float _timeToFleeFor;
     
     private float _timeSinceFlee;
-    
+
+    private void Start()
+    {
+        _system.Stop();        //Gary Added 
+    }
+
     private void OnTriggerEnter(Collider other)
     {
+        _system.Play();    //Gary Added 
         StartCoroutine(Flee());
     }
 
