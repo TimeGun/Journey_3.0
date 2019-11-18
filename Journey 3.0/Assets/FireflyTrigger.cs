@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 
 
@@ -11,7 +12,7 @@ public class FireflyTrigger : MonoBehaviour
 {
     
     [SerializeField] private float _fleeSpeed;
-    
+    public GameObject Camera;
     [SerializeField] private Transform _flies;
     [SerializeField] private ParticleSystem _system;
     private ParticleSystem.EmissionModule _em;
