@@ -57,7 +57,11 @@ public class InteractWithObject : MonoBehaviour
                 _interactingObj.StopInteraction();
                 _interactingObj = null;
                 _interacting = false;
-                StopCoroutine(_coroutine);
+                if (_coroutine != null)
+                {
+                    StopCoroutine(_coroutine);
+                }
+
                 _coroutine = null;
             }
         }

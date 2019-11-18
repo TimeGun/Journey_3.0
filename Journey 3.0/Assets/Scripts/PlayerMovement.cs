@@ -16,6 +16,9 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private float _speed = 5f;
     [SerializeField] private float _pushSpeed = 2f;
+
+    
+
     [SerializeField] private float _turnSpeed = 10f;
     [SerializeField] private float _gravity = 20f;
     [SerializeField] private float _jumpSpeed = 10f;
@@ -30,6 +33,16 @@ public class PlayerMovement : MonoBehaviour
     private CharacterController _controller;
 
     private Vector3 _movementDirection;
+
+    public Vector3 MovementDirection
+    {
+        get => _movementDirection;
+    }
+    
+    public float ControllerVeclocityMagnitude
+    {
+        get => _controller.velocity.magnitude;
+    }
 
     public bool grounded;
 
