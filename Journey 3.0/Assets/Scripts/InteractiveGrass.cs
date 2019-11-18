@@ -9,6 +9,9 @@ public class InteractiveGrass : MonoBehaviour
     public Transform player;
     private Vector3 position;
     private float radius;
+
+    [SerializeField] private float yOffset;
+    
     
     // Start is called before the first frame update
     void Start()
@@ -21,7 +24,7 @@ public class InteractiveGrass : MonoBehaviour
         while (true)
         {
             position = player.transform.position;
-            position.y += player.localScale.y/2f;
+            position.y += yOffset;
             for (int i = 0; i < materials.Length; i++)
             {
                 materials[i].SetVector("_position", position);
@@ -36,6 +39,6 @@ public class InteractiveGrass : MonoBehaviour
     {
         
         Gizmos.color = new Color(0, 0, 1, 0.3f);
-        Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y + (player.localScale.y/2f), transform.position.z), radius);
+        Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y + yOffset, transform.position.z), radius);
     }
 }
