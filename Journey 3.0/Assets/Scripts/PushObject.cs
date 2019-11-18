@@ -15,9 +15,8 @@ public class PushObject : MonoBehaviour, IInteractible
     private bool _pushing;
 
     private PlayerMovement _movement;
+    [SerializeField] private float _speedOffset;
 
-    private CharacterController _characterController;
-    
     void Start()
     {
         
@@ -28,10 +27,9 @@ public class PushObject : MonoBehaviour, IInteractible
         if (_pushing)
         {
             Vector3 force = _movement.MovementDirection;
-            //_rb.AddForce(force, ForceMode.VelocityChange);
-            //_rb.velocity = Vector3.ClampMagnitude(_rb.velocity, _movement.ControllerVeclocityMagnitude);
+            _rb.AddForce(force, ForceMode.VelocityChange);
+            _rb.velocity = Vector3.ClampMagnitude(_rb.velocity, _movement.ControllerVeclocityMagnitude - _speedOffset);
 
-            _characterController.Move(force * Time.deltaTime);
             
             print(_movement.ControllerVeclocityMagnitude);
         }
@@ -47,18 +45,11 @@ public class PushObject : MonoBehaviour, IInteractible
         _movement.Pushing = true;
         if(_rb == null)
             _rb = GetComponent<Rigidbody>();
-
-        _characterController = GetComponent<CharacterController>();
-
-        _characterController.enabled = true;
-
         _rb.isKinematic = false;
     }
 
     public void StopInteraction()
     {
-        _characterController.enabled = false;
-
         _pushing = false;
         _movement.Pushing = false;
         _rb.isKinematic = true;
