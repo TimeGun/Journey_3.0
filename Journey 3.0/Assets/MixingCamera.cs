@@ -83,8 +83,8 @@ public class MixingCamera : MonoBehaviour
                     xWeight = xWeight * xPositionDirection;
                     float zWeight = Mathf.Abs(followTarget.transform.position.z - playerStartPos.z);
                     zWeight = zWeight * zPositionDirection;
-                    Debug.Log(xWeight + "xweight");
-                    Debug.Log(zWeight + "zweight");
+//                    Debug.Log(xWeight + "xweight");
+     //               Debug.Log(zWeight + "zweight");
 
                     vcam.m_Weight1 = (xWeight + zWeight) / 2;
                     
