@@ -14,26 +14,31 @@ public class PushObject : MonoBehaviour, IInteractible
 
     private bool _pushing;
 
+    private Vector3 _position;
+
     private PlayerMovement _movement;
+
     [SerializeField] private float _speedOffset;
+
+    private float _distanceToPushingObject;
+
+    [SerializeField] private float _minDistance;
 
     void Start()
     {
-        
     }
 
-    void Update()
+    void FixedUpdate()
     {
         if (_pushing)
         {
-            Vector3 force = _movement.MovementDirection;
-            _rb.AddForce(force, ForceMode.VelocityChange);
-            _rb.velocity = Vector3.ClampMagnitude(_rb.velocity, _movement.ControllerVeclocityMagnitude - _speedOffset);
+            _position = _player.transform.TransformPoint(Vector3.forward * _distanceToPushingObject);
+
+            _position.y = transform.position.y;
 
             
-            print(_movement.ControllerVeclocityMagnitude);
+            _rb.MovePosition(Vector3.Lerp(transform.position, _position, Time.deltaTime * 25f));
         }
-
     }
 
 
@@ -41,10 +46,27 @@ public class PushObject : MonoBehaviour, IInteractible
     {
         _pushing = true;
         _player = parent.root.gameObject;
+
+
+        SetUpPushing();
+        
+    }
+
+    private void SetUpPushing()
+    {
         _movement = _player.GetComponent<PlayerMovement>();
         _movement.Pushing = true;
-        if(_rb == null)
+        
+        
+        _distanceToPushingObject = Vector3.Distance(_player.transform.position, transform.position);
+        
+
+        if (_distanceToPushingObject < _minDistance)
+            _distanceToPushingObject = _minDistance;
+        
+        if (_rb == null)
             _rb = GetComponent<Rigidbody>();
+
         _rb.isKinematic = false;
     }
 
@@ -53,5 +75,14 @@ public class PushObject : MonoBehaviour, IInteractible
         _pushing = false;
         _movement.Pushing = false;
         _rb.isKinematic = true;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (_pushing)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(_position, 1f);
+        }
     }
 }
