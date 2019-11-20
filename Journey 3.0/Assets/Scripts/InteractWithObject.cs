@@ -115,6 +115,9 @@ public class InteractWithObject : MonoBehaviour
         }
 
         _interactingObj.StartInteraction(handPosition);
+        
+        yield return new WaitForEndOfFrame();
+
         _movement.enabled = true;
     }
     
@@ -132,8 +135,11 @@ public class InteractWithObject : MonoBehaviour
         }
 
         transform.rotation = _targetRotation;
-        _movement.enabled = true;
 
         _interactingObj.StartInteraction(handPosition);
+        
+        yield return new WaitForEndOfFrame();
+        _movement.enabled = true;
+
     }
 }
