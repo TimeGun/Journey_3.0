@@ -39,9 +39,10 @@ public class PlayerMovement : MonoBehaviour
         get => _movementDirection;
     }
     
-    public float ControllerVeclocityMagnitude
+    public Vector3 ControllerVeclocity
     {
-        get => _controller.velocity.magnitude;
+        get => _controller.velocity;
+        set => _controller.Move(value);
     }
 
     public bool grounded;
@@ -138,13 +139,13 @@ public class PlayerMovement : MonoBehaviour
         {
             if (Vector3.Angle(transform.forward, movement) > 120f)
             {
-                _movementDirection = -transform.forward * _input.magnitude;
+                _movementDirection = -transform.forward;
                 _movementDirection *= _pushSpeed;
             }
             else if (Vector3.Angle(transform.forward, movement) < 60f)
             {
-                _movementDirection = transform.forward * _input.magnitude;
-                _movementDirection *= _pushSpeed;
+                _movementDirection = transform.forward;
+                _movementDirection *= _pushSpeed * _input.magnitude;
             }
         }
     }

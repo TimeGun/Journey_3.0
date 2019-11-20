@@ -54,7 +54,8 @@ public class PushObject : MonoBehaviour, IInteractible
 
     private void SetUpPushing()
     {
-        _movement = _player.GetComponent<PlayerMovement>();
+        _movement = _player.GetComponent<PlayerMovement>(); 
+        _movement.ControllerVeclocity = Vector3.zero;
         _movement.Pushing = true;
         
         

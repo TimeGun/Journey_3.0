@@ -37,6 +37,9 @@ public class InteractWithObject : MonoBehaviour
             if (!_interacting && _objectDetection.Items.Count > 0)
             {
                 _interacting = true;
+                _movement.ControllerVeclocity = Vector3.zero;
+                _movement.enabled = false;
+
 
                 GameObject obj =  ReturnCloserObject();
                 _interactingObj = obj.GetComponent<IInteractible>();
@@ -100,7 +103,6 @@ public class InteractWithObject : MonoBehaviour
 
     IEnumerator TurnToGrab(GameObject interactible)
     {
-        _movement.enabled = false;
 
         Quaternion _targetRotation =
             Quaternion.LookRotation(interactible.transform.position - transform.position, Vector3.up);
@@ -118,8 +120,6 @@ public class InteractWithObject : MonoBehaviour
     
     IEnumerator TurnToPush(GameObject interactible)
     {
-        _movement.enabled = false;
-
         Quaternion _targetRotation =
             Quaternion.LookRotation(interactible.transform.position - transform.position, Vector3.up);
         
@@ -132,8 +132,8 @@ public class InteractWithObject : MonoBehaviour
         }
 
         transform.rotation = _targetRotation;
-        
-        _interactingObj.StartInteraction(handPosition);
         _movement.enabled = true;
+
+        _interactingObj.StartInteraction(handPosition);
     }
 }
