@@ -44,7 +44,7 @@ public class ChangeSize : MonoBehaviour
         {
             transform.localScale = largeScale;
             _small = false;
-            
+
             if (changeMode)
             {
                 Destroy(GetComponent<PickUpObject>());
@@ -63,4 +63,5 @@ public class ChangeSize : MonoBehaviour
             }
         }
     }
+    
 }

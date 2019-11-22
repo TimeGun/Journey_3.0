@@ -52,6 +52,7 @@ public class PushObject : MonoBehaviour, IInteractible
             {
                 _interactWithObject.StopInteracting();
             }
+            
         }
     }
 
