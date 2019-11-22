@@ -20,6 +20,16 @@ public class InputSetUp : MonoBehaviour
         get => _leftStick;
     }
 
+    
+
+    private float _valueInteractDown;
+
+    public float ValueInteractDown
+    {
+        get => _valueInteractDown;
+        set => _valueInteractDown = value;
+    }
+
 
     void Awake()
     {
@@ -27,9 +37,14 @@ public class InputSetUp : MonoBehaviour
 
         _controls.PlayerFreeMovement.Movement.performed += ctx => _leftStick = ctx.ReadValue<Vector2>();
         _controls.PlayerFreeMovement.Movement.canceled += ctx => _leftStick = Vector2.zero;
-    }
 
+        _controls.PlayerFreeMovement.InteractDown.performed += ctx => _valueInteractDown = ctx.ReadValue<float>();
+        _controls.PlayerFreeMovement.InteractDown.canceled += ctx => _valueInteractDown = 0;
+    }
     
+    
+
+
     void OnEnable()
     {
         _controls.Enable();

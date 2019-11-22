@@ -41,6 +41,14 @@ public class InputMaster : IInputActionCollection, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""InteractDown"",
+                    ""type"": ""Value"",
+                    ""id"": ""f6d2e04d-d298-4b50-acf3-69f5a1e904d5"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -153,6 +161,17 @@ public class InputMaster : IInputActionCollection, IDisposable
                     ""action"": ""Jump"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""63b44671-6b4c-4c9c-9002-5813c32e4a53"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""InteractDown"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -187,6 +206,7 @@ public class InputMaster : IInputActionCollection, IDisposable
         m_PlayerFreeMovement_Jump = m_PlayerFreeMovement.FindAction("Jump", throwIfNotFound: true);
         m_PlayerFreeMovement_Movement = m_PlayerFreeMovement.FindAction("Movement", throwIfNotFound: true);
         m_PlayerFreeMovement_Interact = m_PlayerFreeMovement.FindAction("Interact", throwIfNotFound: true);
+        m_PlayerFreeMovement_InteractDown = m_PlayerFreeMovement.FindAction("InteractDown", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -239,6 +259,7 @@ public class InputMaster : IInputActionCollection, IDisposable
     private readonly InputAction m_PlayerFreeMovement_Jump;
     private readonly InputAction m_PlayerFreeMovement_Movement;
     private readonly InputAction m_PlayerFreeMovement_Interact;
+    private readonly InputAction m_PlayerFreeMovement_InteractDown;
     public struct PlayerFreeMovementActions
     {
         private InputMaster m_Wrapper;
@@ -246,6 +267,7 @@ public class InputMaster : IInputActionCollection, IDisposable
         public InputAction @Jump => m_Wrapper.m_PlayerFreeMovement_Jump;
         public InputAction @Movement => m_Wrapper.m_PlayerFreeMovement_Movement;
         public InputAction @Interact => m_Wrapper.m_PlayerFreeMovement_Interact;
+        public InputAction @InteractDown => m_Wrapper.m_PlayerFreeMovement_InteractDown;
         public InputActionMap Get() { return m_Wrapper.m_PlayerFreeMovement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -264,6 +286,9 @@ public class InputMaster : IInputActionCollection, IDisposable
                 Interact.started -= m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface.OnInteract;
                 Interact.performed -= m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface.OnInteract;
                 Interact.canceled -= m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface.OnInteract;
+                InteractDown.started -= m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface.OnInteractDown;
+                InteractDown.performed -= m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface.OnInteractDown;
+                InteractDown.canceled -= m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface.OnInteractDown;
             }
             m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface = instance;
             if (instance != null)
@@ -277,6 +302,9 @@ public class InputMaster : IInputActionCollection, IDisposable
                 Interact.started += instance.OnInteract;
                 Interact.performed += instance.OnInteract;
                 Interact.canceled += instance.OnInteract;
+                InteractDown.started += instance.OnInteractDown;
+                InteractDown.performed += instance.OnInteractDown;
+                InteractDown.canceled += instance.OnInteractDown;
             }
         }
     }
@@ -304,5 +332,6 @@ public class InputMaster : IInputActionCollection, IDisposable
         void OnJump(InputAction.CallbackContext context);
         void OnMovement(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
+        void OnInteractDown(InputAction.CallbackContext context);
     }
 }

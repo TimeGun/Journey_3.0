@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Animations.Rigging;
+using UnityEngine.InputSystem;
 using VSCodeEditor;
 using Object = System.Object;
 
@@ -17,27 +18,40 @@ public class PushObject : MonoBehaviour, IInteractible
     private Vector3 _position;
 
     private PlayerMovement _movement;
-
-    [SerializeField] private float _speedOffset;
-
+    
     private float _distanceToPushingObject;
 
-    [SerializeField] private float _minDistance;
+    [SerializeField] private float _minDistance = 2.2f;
+
+    private InteractWithObject _interactWithObject;
+
+    private InputSetUp _inputSetUp;
+    
+    
 
     void Start()
     {
+        _interactWithObject = GetComponent<InteractWithObject>();
+        _inputSetUp = GetComponent<InputSetUp>();
     }
 
     void FixedUpdate()
     {
         if (_pushing)
         {
-            _position = _player.transform.TransformPoint(Vector3.forward * _distanceToPushingObject);
+            if (_inputSetUp.ValueInteractDown >= 0.9f)
+            {
+                _position = _player.transform.TransformPoint(Vector3.forward * _distanceToPushingObject);
 
-            _position.y = transform.position.y;
+                _position.y = transform.position.y;
 
             
-            _rb.MovePosition(Vector3.Lerp(transform.position, _position, Time.deltaTime * 25f));
+                _rb.MovePosition(Vector3.Lerp(transform.position, _position, Time.deltaTime * 25f));
+            }
+            else
+            {
+                _interactWithObject.StopInteracting();
+            }
         }
     }
 
@@ -63,6 +77,8 @@ public class PushObject : MonoBehaviour, IInteractible
         _movement.ControllerVeclocity = Vector3.zero;
         _movement.Pushing = true;
         
+        _interactWithObject = _player.GetComponent<InteractWithObject>();
+        _inputSetUp = _player.GetComponent<InputSetUp>();
         
         _distanceToPushingObject = Vector3.Distance(_player.transform.position, transform.position);
 
@@ -73,7 +89,7 @@ public class PushObject : MonoBehaviour, IInteractible
         if (_rb == null)
             _rb = GetComponent<Rigidbody>();
 
-        _rb.isKinematic = false;
+        _rb.isKinematic = true;
     }
 
     public void StopInteraction()

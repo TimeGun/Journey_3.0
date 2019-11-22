@@ -88,17 +88,22 @@ public class InteractWithObject : MonoBehaviour
             }
             else if (_interacting && !_nearRune)
             {
-                _interactingObj.StopInteraction();
-                _interactingObj = null;
-                _interacting = false;
-                if (_coroutine != null)
-                {
-                    StopCoroutine(_coroutine);
-                }
-
-                _coroutine = null;
+                StopInteracting();
             }
         }
+    }
+
+    public void StopInteracting()
+    {
+        _interactingObj.StopInteraction();
+        _interactingObj = null;
+        _interacting = false;
+        if (_coroutine != null)
+        {
+            StopCoroutine(_coroutine);
+        }
+
+        _coroutine = null;
     }
 
     private bool CheckNearRune()
