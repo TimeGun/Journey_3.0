@@ -42,6 +42,11 @@ public class PushObject : MonoBehaviour, IInteractible
     }
 
 
+    public GameObject getGameObject()
+    {
+        return gameObject;
+    }
+
     public void StartInteraction(Transform parent)
     {
         _pushing = true;
@@ -60,8 +65,8 @@ public class PushObject : MonoBehaviour, IInteractible
         
         
         _distanceToPushingObject = Vector3.Distance(_player.transform.position, transform.position);
-        
 
+        
         if (_distanceToPushingObject < _minDistance)
             _distanceToPushingObject = _minDistance;
         

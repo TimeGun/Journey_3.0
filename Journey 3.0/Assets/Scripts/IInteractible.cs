@@ -6,7 +6,8 @@ using Object = System.Object;
 
 public interface IInteractible
 {
-    
+    GameObject getGameObject();
+
     void StartInteraction(Transform parent);
     
 

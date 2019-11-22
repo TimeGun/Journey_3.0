@@ -54,6 +54,11 @@ public class PickUpObject : MonoBehaviour, IInteractible
         _rb.isKinematic = false;
         _carried = false;
     }
+    
+    public GameObject getGameObject()
+    {
+        return gameObject;
+    }
 
 
 

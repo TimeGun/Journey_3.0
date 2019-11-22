@@ -9,6 +9,7 @@ public class InteractWithObject : MonoBehaviour
     private InputSetUp _inputSetUp;
 
     private bool _interacting;
+    [SerializeField] private bool _nearRune;
     
     [SerializeField] private Transform handPosition;
 
@@ -19,6 +20,8 @@ public class InteractWithObject : MonoBehaviour
 
 
     private IInteractible _interactingObj;
+
+    private IRune _rune;
 
     private Coroutine _coroutine;
 
@@ -32,13 +35,41 @@ public class InteractWithObject : MonoBehaviour
 
     void Update()
     {
+        _nearRune = CheckNearRune();
+        
         if (_inputSetUp.Controls.PlayerFreeMovement.Interact.triggered)
         {
-            if (!_interacting && _objectDetection.Items.Count > 0)
+            if (_nearRune && _objectDetection.Items.Count > 1)
+            {
+                _movement.ControllerVeclocity = Vector3.zero;
+                _movement.enabled = false;
+
+                GameObject rune = _rune.getGameObject();
+                GameObject interactible;
+
+                if (_interacting)
+                {
+                    interactible = _interactingObj.getGameObject();
+
+                    GameObject[] temp = new GameObject[] {rune, interactible};
+                    print(temp[1]);
+                    _coroutine = StartCoroutine(UseRune(temp));
+                }
+                else
+                {
+                    interactible = ReturnCloserObject();
+
+                    GameObject[] temp = new GameObject[] {rune, interactible};
+                    _coroutine = StartCoroutine(UseRune(temp));
+                }
+
+                
+            }else if (!_interacting && !_nearRune && _objectDetection.Items.Count > 0)
             {
                 _interacting = true;
                 _movement.ControllerVeclocity = Vector3.zero;
                 _movement.enabled = false;
+                
 
 
                 GameObject obj =  ReturnCloserObject();
@@ -55,7 +86,7 @@ public class InteractWithObject : MonoBehaviour
                     _coroutine = StartCoroutine(TurnToGrab(obj));
                 }
             }
-            else if (_interacting)
+            else if (_interacting && !_nearRune)
             {
                 _interactingObj.StopInteraction();
                 _interactingObj = null;
@@ -68,6 +99,26 @@ public class InteractWithObject : MonoBehaviour
                 _coroutine = null;
             }
         }
+    }
+
+    private bool CheckNearRune()
+    {
+        if (_objectDetection.Items.Count == 0) return false;
+
+        bool checker = false;
+        for (int i = 0; i < _objectDetection.Items.Count; i++)
+        {
+            if (_objectDetection.Items[i].GetComponent<IRune>() != null)
+            {
+                _rune = _objectDetection.Items[i].GetComponent<IRune>();
+                checker = true;
+                break;
+            }
+        }
+
+        return checker;
+        
+        
     }
 
 
@@ -85,15 +136,18 @@ public class InteractWithObject : MonoBehaviour
             
             for (int i = 0; i < _objectDetection.Items.Count; i++)
             {
-                float thisDistance = Vector3.Distance(transform.position, _objectDetection.Items[i].transform.position);
-                
-                if (thisDistance < closestDistance)
+                if (_objectDetection.Items[i].GetComponent<IRune>() == null)
                 {
-                    closestDistance = thisDistance;
-                    closestObj = _objectDetection.Items[i];
+                    float thisDistance = Vector3.Distance(transform.position, _objectDetection.Items[i].transform.position);
+                
+                    if (thisDistance < closestDistance)
+                    {
+                        closestDistance = thisDistance;
+                        closestObj = _objectDetection.Items[i];
+                    }
                 }
             }
-
+            print(closestObj);
             return closestObj;
         }
 
@@ -121,6 +175,30 @@ public class InteractWithObject : MonoBehaviour
         _movement.enabled = true;
     }
     
+    IEnumerator UseRune(GameObject[] runeAndInteractible)
+    {
+
+        /*Quaternion _targetRotation =
+            Quaternion.LookRotation(interactible.transform.position - transform.position, Vector3.up);
+
+        while (Quaternion.Angle(transform.rotation, _targetRotation) > 10f)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, _targetRotation, Time.deltaTime * _turnSpeed);
+
+            yield return new WaitForEndOfFrame();
+        }*/
+
+        GameObject rune = runeAndInteractible[0];
+        GameObject interactible = runeAndInteractible[1];
+
+        
+        interactible.GetComponent<ChangeSize>().ChangeSizeOfObject();
+        
+        yield return new WaitForEndOfFrame();
+
+        _movement.enabled = true;
+    }
+    
     IEnumerator TurnToPush(GameObject interactible)
     {
         Quaternion _targetRotation =
@@ -140,6 +218,6 @@ public class InteractWithObject : MonoBehaviour
         
         yield return new WaitForEndOfFrame();
         _movement.enabled = true;
-
+        GetComponent<InputSetUp>().enabled = true;
     }
 }
