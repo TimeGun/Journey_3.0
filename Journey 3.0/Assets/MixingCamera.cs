@@ -99,7 +99,7 @@ public class MixingCamera : MonoBehaviour
                         xWeight = xWeight * xPositionDirection;
                         float zWeight = Mathf.Abs(followTarget.transform.position.z - playerStartPos.z);
                         zWeight = zWeight * zPositionDirection;
-                        if (followTarget.position.z > playerStartPos.z)
+                        if (followTarget.position.z > playerStartPos.z && zPositiveDirection)
                         {
                             zWeight = minWeight;
                         }
@@ -120,7 +120,7 @@ public class MixingCamera : MonoBehaviour
 
             if (playerDetected == false)
             {
-                playerStartPos = Vector3.zero;
+                //playerStartPos = Vector3.zero;
             }
         
             
