@@ -90,7 +90,7 @@ public class PushObject : MonoBehaviour, IInteractible
         if (_rb == null)
             _rb = GetComponent<Rigidbody>();
 
-        _rb.isKinematic = true;
+        _rb.isKinematic = false;
     }
 
     public void StopInteraction()

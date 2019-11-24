@@ -14,6 +14,11 @@ public class PickUpObject : MonoBehaviour, IInteractible
 
     private bool _carried;
 
+    public bool Carried
+    {
+        get => _carried;
+    }
+
 
     private Rigidbody _rb;
 

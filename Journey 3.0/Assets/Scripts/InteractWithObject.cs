@@ -196,8 +196,8 @@ public class InteractWithObject : MonoBehaviour
         GameObject rune = runeAndInteractible[0];
         GameObject interactible = runeAndInteractible[1];
 
-        
-        interactible.GetComponent<ChangeSize>().ChangeSizeOfObject();
+        ChangeSize _change = interactible.GetComponent<ChangeSize>();
+        _change.StartCoroutine(_change.ChangeSizeOfObject());
         
         yield return new WaitForEndOfFrame();
 
