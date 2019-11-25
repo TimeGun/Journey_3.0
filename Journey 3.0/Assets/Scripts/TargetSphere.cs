@@ -5,11 +5,14 @@ using UnityEngine;
 public class TargetSphere : MonoBehaviour
 {
     public GameObject Player;
-    private Vector3 _offset;
+    public Vector3 _offset;
     // Start is called before the first frame update
     void Start()
     {
-        _offset = transform.position - Player.transform.position;
+        if (_offset == Vector3.zero)
+        {
+            _offset = transform.position - Player.transform.position;
+        }
     }
 
     // Update is called once per frame
