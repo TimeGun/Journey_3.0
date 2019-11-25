@@ -52,7 +52,6 @@ public class InteractWithObject : MonoBehaviour
                     interactible = _interactingObj.getGameObject();
 
                     GameObject[] temp = new GameObject[] {rune, interactible};
-                    print(temp[1]);
                     _coroutine = StartCoroutine(UseRune(temp));
                 }
                 else
@@ -182,20 +181,11 @@ public class InteractWithObject : MonoBehaviour
     
     IEnumerator UseRune(GameObject[] runeAndInteractible)
     {
-
-        /*Quaternion _targetRotation =
-            Quaternion.LookRotation(interactible.transform.position - transform.position, Vector3.up);
-
-        while (Quaternion.Angle(transform.rotation, _targetRotation) > 10f)
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, _targetRotation, Time.deltaTime * _turnSpeed);
-
-            yield return new WaitForEndOfFrame();
-        }*/
-
         GameObject rune = runeAndInteractible[0];
         GameObject interactible = runeAndInteractible[1];
-
+        
+        interactible.GetComponent<IInteractible>().StopInteraction();
+        
         ChangeSize _change = interactible.GetComponent<ChangeSize>();
         _change.StartCoroutine(_change.ChangeSizeOfObject());
         

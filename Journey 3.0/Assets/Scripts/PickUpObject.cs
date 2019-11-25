@@ -55,6 +55,8 @@ public class PickUpObject : MonoBehaviour, IInteractible
 
     public void StopInteraction()
     {
+        _hand.root.GetComponent<PlayerMovement>().carryingObject = false;
+
         _col.enabled = true;
         _rb.isKinematic = false;
         _carried = false;
@@ -74,6 +76,8 @@ public class PickUpObject : MonoBehaviour, IInteractible
         _rb.isKinematic = true;
 
         _hand = parent;
+
+        _hand.root.GetComponent<PlayerMovement>().carryingObject = true;
         
         _carried = true;
     }
