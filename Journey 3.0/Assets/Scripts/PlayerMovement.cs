@@ -15,6 +15,10 @@ public class PlayerMovement : MonoBehaviour
 
 
     [SerializeField] private float _speed = 5f;
+    [SerializeField] private float _pushSpeed = 2f;
+
+    
+
     [SerializeField] private float _turnSpeed = 10f;
     [SerializeField] private float _gravity = 20f;
     [SerializeField] private float _jumpSpeed = 10f;
@@ -30,43 +34,47 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector3 _movementDirection;
 
+    public Vector3 MovementDirection
+    {
+        get => _movementDirection;
+    }
+    
+    public Vector3 ControllerVeclocity
+    {
+        get => _controller.velocity;
+        set => _controller.Move(value);
+    }
+
     public bool grounded;
+
+    [SerializeField] private bool _pushing;
+
+    public bool Pushing
+    {
+        get => _pushing;
+        set => _pushing = value;
+    }
 
     private float _timeDelta;
 
-    private InputMaster _controls;
+    private InputSetUp _inputSetUp;
+    
 
-    private void Awake()
-    {
-        _controls = new InputMaster();
-
-        _controls.PlayerFreeMovement.Movement.performed += ctx => _input = ctx.ReadValue<Vector2>();
-        _controls.PlayerFreeMovement.Movement.canceled += ctx => _input = Vector2.zero;
-    }
-
+    
     void Start()
     {
         if (cam == null)
             cam = Camera.main.transform;
 
         _controller = GetComponent<CharacterController>();
-        
-        
-    }
+        _inputSetUp = GetComponent<InputSetUp>();
 
-
-    private void OnEnable()
-    {
-        _controls.Enable();
-    }
-
-    private void OnDisable()
-    {
-        _controls.Disable();
     }
 
     private void Update()
     {
+        _input = _inputSetUp.LeftStick;
+
         grounded = _controller.isGrounded;
         _timeDelta = Time.deltaTime;
 
@@ -74,14 +82,14 @@ public class PlayerMovement : MonoBehaviour
 
         if (_controller.isGrounded)
         {
-            if (Mathf.Abs(_input.magnitude) > 0.05f)
+            if (Mathf.Abs(_input.magnitude) > 0.05f && !_pushing)
             {
                 Rotate();
             }
 
             SetMove();
 
-            if (_controls.PlayerFreeMovement.Jump.triggered)
+            if (_inputSetUp.Controls.PlayerFreeMovement.Jump.triggered && _jump && ! _pushing)
             {
                 Jump();
             }
@@ -122,9 +130,24 @@ public class PlayerMovement : MonoBehaviour
 
         Vector3 movement = (right * _input.x) + (forward * _input.y);
 
-
-        _movementDirection = movement;
-        _movementDirection *= _speed;
+        if (!_pushing)
+        {
+            _movementDirection = movement;
+            _movementDirection *= _speed;
+        }
+        else
+        {
+            if (Vector3.Angle(transform.forward, movement) > 120f)
+            {
+                _movementDirection = -transform.forward;
+                _movementDirection *= _pushSpeed;
+            }
+            else if (Vector3.Angle(transform.forward, movement) < 60f)
+            {
+                _movementDirection = transform.forward;
+                _movementDirection *= _pushSpeed * _input.magnitude;
+            }
+        }
     }
 
     /// <summary>
@@ -143,6 +166,5 @@ public class PlayerMovement : MonoBehaviour
     void Jump()
     {
         _movementDirection.y = _jumpSpeed;
-        print("Jumped");
     }
 }
