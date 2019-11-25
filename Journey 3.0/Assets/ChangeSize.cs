@@ -70,22 +70,14 @@ public class ChangeSize : MonoBehaviour
 
         _rb.isKinematic = false;
         _rb.useGravity = false;
-        
+
         while (transform.localScale != targetScale)
         {
             transform.localScale = Vector3.MoveTowards(transform.localScale, targetScale, Time.deltaTime * _growSpeed);
-            MoveOutOfCollidingBounds();
             yield return new WaitForFixedUpdate();
         }
 
         _rb.useGravity = true;
         _rb.isKinematic = true;
-    }
-
-    private void MoveOutOfCollidingBounds()
-    {
-        Collider col = GetComponent<Collider>();
-        
-        col.co
     }
 }
