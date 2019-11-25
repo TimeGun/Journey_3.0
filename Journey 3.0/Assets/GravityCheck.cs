@@ -32,9 +32,7 @@ public class GravityCheck : MonoBehaviour
             _grounded = false;
         }
 
-        Debug.Log("eoin is great!");
-
-        if(GetComponent<PushObject>() == null)
-        _rb.isKinematic = _grounded;
+        if (GetComponent<PushObject>() == null)
+            _rb.isKinematic = _grounded;
     }
 }

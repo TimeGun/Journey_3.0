@@ -48,9 +48,6 @@ public class ChangeSize : MonoBehaviour
         Vector3 targetScale;
         
         //_gravityCheck.enabled = false;
-        //_rb.isKinematic = true;
-        //_rb.useGravity = false;
-
 
         if (_small)
         {
@@ -78,16 +75,13 @@ public class ChangeSize : MonoBehaviour
         }
 
 
-        
+
         while (transform.localScale != targetScale)
         {
             transform.localScale = Vector3.MoveTowards(transform.localScale, targetScale, Time.deltaTime * _growSpeed);
             yield return new WaitForFixedUpdate();
         }
 
-        //_rb.useGravity = true;
-        //_rb.isKinematic = true;
-        
-        _gravityCheck.enabled = true;
+        //_gravityCheck.enabled = true;
     }
 }
