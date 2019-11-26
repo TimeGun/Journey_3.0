@@ -12,6 +12,7 @@ public class FovManipulator : MonoBehaviour
     private bool playerEnter;
     private bool playerExit;
     private bool playerInZone;
+    public float minDist;
     public float maxDist;
     private float _startFOV;
     private float _currentFov;
@@ -42,7 +43,7 @@ public class FovManipulator : MonoBehaviour
     {
         if (_distanceType == DistanceType.CameraToPlayer)
         {
-            
+            CameraToPlayerDist();
         }
         else if (_distanceType == DistanceType.ObjectToPlayer)
         {
@@ -120,9 +121,27 @@ public class FovManipulator : MonoBehaviour
 
     void CameraToPlayerDist()
     {
-        while (true)
+        float clampedFov;
+        if (maxDist == 0)
         {
-            
-        } 
+            Debug.LogError("Max distance is not set. Fov will return infinity");
+        }
+
+        currentDist = Vector3.Distance(Player.transform.position, TargetObj.transform.position);
+        //Mathf.Clamp(currentDist, minDist, maxDist);
+        //Debug.Log("Start Fov: " + _startFOV);
+        //Debug.Log("Target Fov: " + targetFov);
+
+        _currentFov = Map(currentDist, minDist, maxDist, _startFOV, targetFov);
+        if (_startFOV > targetFov)     // if you want to widen the fov as the player approaches the camera
+        {
+            clampedFov = Mathf.Clamp(_currentFov, targetFov, _startFOV);
+            Debug.Log(_currentFov);
+        }
+        else            //if you want to narrow fov as the player approaches the camera
+        {
+            clampedFov = Mathf.Clamp(_currentFov, _startFOV, targetFov);
+        }
+        activeCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.FieldOfView = clampedFov;       
     }
 }
