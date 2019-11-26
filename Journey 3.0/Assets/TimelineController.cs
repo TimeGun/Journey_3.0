@@ -8,7 +8,7 @@ using UnityEngine.Playables;
 public class TimelineController : MonoBehaviour
 {
     public GameObject cameraTrigger;
-    private bool playerDetected;
+    private bool _playerEntered;
     public PlayableDirector playableDirector;
     
     // Start is called before the first frame update
@@ -21,8 +21,8 @@ public class TimelineController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        playerDetected = cameraTrigger.GetComponent<DetectPlayer>().PlayerDetected;
-        if (playerDetected)
+        _playerEntered = cameraTrigger.GetComponent<DetectPlayer>().PlayerEntered;
+        if (_playerEntered)
         {
             //Debug.Log("yurt");
             SetCamera();
