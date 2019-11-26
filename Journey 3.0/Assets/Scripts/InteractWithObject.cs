@@ -27,6 +27,8 @@ public class InteractWithObject : MonoBehaviour
 
     [SerializeField] private Transform _chestHeight;
 
+    
+
     void Start()
     {
         _inputSetUp = GetComponent<InputSetUp>();
@@ -96,8 +98,8 @@ public class InteractWithObject : MonoBehaviour
 
     private float ReturnAngleToObj(Vector3 objPosition)
     {
-        Vector3 toObject = objPosition - transform.position;
-        Vector3 toObjectStraight = new Vector3(objPosition.x, transform.position.y, objPosition.z) - transform.position;
+        Vector3 toObject = objPosition - _chestHeight.position;
+        Vector3 toObjectStraight = new Vector3(objPosition.x, _chestHeight.position.y, objPosition.z) - _chestHeight.position;
         
         return Vector3.Angle(toObject, toObjectStraight);
     }
@@ -194,8 +196,10 @@ public class InteractWithObject : MonoBehaviour
         {
             gameObject.SendMessage("PickUpHigh");
         }
+
+        float animationTime = _movement.ReturnCurrentClipLength()/2f;
         
-        
+        yield return new WaitForSeconds(animationTime);
 
         _interactingObj.StartInteraction(handPosition);
 

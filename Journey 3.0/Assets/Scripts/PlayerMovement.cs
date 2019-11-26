@@ -221,4 +221,10 @@ public class PlayerMovement : MonoBehaviour
         
         //float a = value you want mapped t
     }
+
+
+    public float ReturnCurrentClipLength()
+    {
+        return _anim.GetCurrentAnimatorClipInfo(0).Length;
+    }
 }
