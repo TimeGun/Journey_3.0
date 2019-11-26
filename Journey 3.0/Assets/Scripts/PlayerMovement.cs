@@ -134,6 +134,16 @@ public class PlayerMovement : MonoBehaviour
         _anim.SetBool("pushing", _pushing);
     }
 
+    void PickUpLow()
+    {
+        _anim.SetTrigger("pickUp");
+    }
+
+    void PickUpHigh()
+    {
+        _anim.SetTrigger("grab");
+    }
+
     /// <summary>
     /// Calculates the direction of movement
     /// </summary>
