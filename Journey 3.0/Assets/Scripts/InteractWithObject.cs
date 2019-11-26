@@ -10,7 +10,7 @@ public class InteractWithObject : MonoBehaviour
 
     private bool _interacting;
     [SerializeField] private bool _nearRune;
-    
+
     [SerializeField] private Transform handPosition;
 
     private PlayerMovement _movement;
@@ -36,7 +36,7 @@ public class InteractWithObject : MonoBehaviour
     void Update()
     {
         _nearRune = CheckNearRune();
-        
+
         if (_inputSetUp.Controls.PlayerFreeMovement.Interact.triggered)
         {
             if (_nearRune && _objectDetection.Items.Count > 1)
@@ -52,7 +52,6 @@ public class InteractWithObject : MonoBehaviour
                     interactible = _interactingObj.getGameObject();
 
                     GameObject[] temp = new GameObject[] {rune, interactible};
-                    print(temp[1]);
                     _coroutine = StartCoroutine(UseRune(temp));
                 }
                 else
@@ -62,26 +61,25 @@ public class InteractWithObject : MonoBehaviour
                     GameObject[] temp = new GameObject[] {rune, interactible};
                     _coroutine = StartCoroutine(UseRune(temp));
                 }
-
-                
-            }else if (!_interacting && !_nearRune && _objectDetection.Items.Count > 0)
+            }
+            else if (!_interacting && !_nearRune && _objectDetection.Items.Count > 0)
             {
                 _interacting = true;
                 _movement.ControllerVeclocity = Vector3.zero;
                 _movement.enabled = false;
-                
 
 
-                GameObject obj =  ReturnCloserObject();
+                GameObject obj = ReturnCloserObject();
                 _interactingObj = obj.GetComponent<IInteractible>();
 
 
                 var type = _interactingObj.GetType();
-                
+
                 if (type == typeof(PushObject))
                 {
                     _coroutine = StartCoroutine(TurnToPush(obj));
-                }else if (type == typeof(PickUpObject))
+                }
+                else if (type == typeof(PickUpObject))
                 {
                     _coroutine = StartCoroutine(TurnToGrab(obj));
                 }
@@ -122,8 +120,6 @@ public class InteractWithObject : MonoBehaviour
         }
 
         return checker;
-        
-        
     }
 
 
@@ -138,13 +134,14 @@ public class InteractWithObject : MonoBehaviour
             GameObject closestObj = _objectDetection.Items[0];
 
             float closestDistance = float.MaxValue;
-            
+
             for (int i = 0; i < _objectDetection.Items.Count; i++)
             {
                 if (_objectDetection.Items[i].GetComponent<IRune>() == null)
                 {
-                    float thisDistance = Vector3.Distance(transform.position, _objectDetection.Items[i].transform.position);
-                
+                    float thisDistance =
+                        Vector3.Distance(transform.position, _objectDetection.Items[i].transform.position);
+
                     if (thisDistance < closestDistance)
                     {
                         closestDistance = thisDistance;
@@ -152,38 +149,16 @@ public class InteractWithObject : MonoBehaviour
                     }
                 }
             }
+
             print(closestObj);
             return closestObj;
         }
-
-
     }
 
 
     IEnumerator TurnToGrab(GameObject interactible)
     {
-
         Quaternion _targetRotation =
-            Quaternion.LookRotation(interactible.transform.position - transform.position, Vector3.up);
-
-        while (Quaternion.Angle(transform.rotation, _targetRotation) > 10f)
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, _targetRotation, Time.deltaTime * _turnSpeed);
-
-           yield return new WaitForEndOfFrame();
-        }
-
-        _interactingObj.StartInteraction(handPosition);
-        
-        yield return new WaitForEndOfFrame();
-
-        _movement.enabled = true;
-    }
-    
-    IEnumerator UseRune(GameObject[] runeAndInteractible)
-    {
-
-        /*Quaternion _targetRotation =
             Quaternion.LookRotation(interactible.transform.position - transform.position, Vector3.up);
 
         while (Quaternion.Angle(transform.rotation, _targetRotation) > 10f)
@@ -191,25 +166,38 @@ public class InteractWithObject : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, _targetRotation, Time.deltaTime * _turnSpeed);
 
             yield return new WaitForEndOfFrame();
-        }*/
+        }
 
-        GameObject rune = runeAndInteractible[0];
-        GameObject interactible = runeAndInteractible[1];
+        _interactingObj.StartInteraction(handPosition);
 
-        ChangeSize _change = interactible.GetComponent<ChangeSize>();
-        _change.StartCoroutine(_change.ChangeSizeOfObject());
-        
         yield return new WaitForEndOfFrame();
 
         _movement.enabled = true;
     }
-    
+
+    IEnumerator UseRune(GameObject[] runeAndInteractible)
+    {
+        GameObject rune = runeAndInteractible[0];
+        GameObject interactible = runeAndInteractible[1];
+
+        if (interactible.GetComponent<GravityCheck>() != null)
+            interactible.GetComponent<IInteractible>().StopInteraction();
+
+        ChangeSize _change = interactible.GetComponent<ChangeSize>();
+        _change.StartCoroutine(_change.ChangeSizeOfObject());
+
+        yield return new WaitForEndOfFrame();
+
+        _movement.enabled = true;
+    }
+
     IEnumerator TurnToPush(GameObject interactible)
     {
         Quaternion _targetRotation =
             Quaternion.LookRotation(interactible.transform.position - transform.position, Vector3.up);
-        
-        _targetRotation.eulerAngles = new Vector3(transform.rotation.x, _targetRotation.eulerAngles.y, transform.rotation.z);
+
+        _targetRotation.eulerAngles =
+            new Vector3(transform.rotation.x, _targetRotation.eulerAngles.y, transform.rotation.z);
 
         while (Quaternion.Angle(transform.rotation, _targetRotation) > 10f)
         {
@@ -220,7 +208,7 @@ public class InteractWithObject : MonoBehaviour
         transform.rotation = _targetRotation;
 
         _interactingObj.StartInteraction(handPosition);
-        
+
         yield return new WaitForEndOfFrame();
         _movement.enabled = true;
         GetComponent<InputSetUp>().enabled = true;

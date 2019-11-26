@@ -5,21 +5,23 @@ using UnityEngine;
 public class DetectPlayer : MonoBehaviour
 {
     
-    private bool playerDetected;
-    private bool playerEntered;
-    private bool playerExited;
+    private bool _playerDetected;
+    private bool _playerEntered;
+    private bool _playerExited;
     private bool playerInCollider;
     private bool firstDetection;
     private int testInt = 0;
 
+    private bool playerEnterBool;
+
     public bool PlayerDetected
     {
-        get { return playerDetected; }
+        get { return _playerDetected; }
     }
 
     public bool PlayerEntered
     {
-        get { return playerEntered; }
+        get { return _playerEntered; }
     }
 
     public bool PlayerInCollider
@@ -49,7 +51,11 @@ public class DetectPlayer : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Player"))
         {
-            playerEntered = true;                       
+            _playerEntered = true;
+            StartCoroutine(MakePlayerEnterFalse());
+            Debug.Log(_playerEntered);
+            //playerEntered = false;
+
         }
     }
 
@@ -57,7 +63,7 @@ public class DetectPlayer : MonoBehaviour
     {
         if (col.gameObject.CompareTag("Player"))
         {            
-            playerExited = true;
+            _playerExited = true;
             playerInCollider = false;
         }
     }
@@ -67,18 +73,31 @@ public class DetectPlayer : MonoBehaviour
         if (col.gameObject.CompareTag("Player"))
         {
             playerInCollider = true;
-//           Debug.Log("Player in " + gameObject);
+           
         }
     }
 
     void NewZone()
     {
-        if (playerEntered && playerExited)
+        if (_playerEntered && _playerExited)
         {
             //playerDetected = !playerDetected;
 //            Debug.Log(gameObject + "" + playerDetected);
-            playerEntered = false;
-            playerExited = false;
+            _playerEntered = false;
+            _playerExited = false;
         }
     }
+
+    IEnumerator MakePlayerEnterFalse()
+    {
+        
+        while (_playerEntered)
+        {
+            //Debug.Log("in coroutine");
+            yield return new WaitForSeconds(Time.deltaTime);
+            _playerEntered = false;
+           
+        }
+    }
+    
 }

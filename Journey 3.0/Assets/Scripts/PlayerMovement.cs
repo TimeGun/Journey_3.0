@@ -7,7 +7,6 @@ using UnityEngine;
 /// 1. Movement based of camera
 /// 2. stop and face dircetion when input is absent
 /// </summary>
-///
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
@@ -34,6 +33,10 @@ public class PlayerMovement : MonoBehaviour
 
     private Vector3 _movementDirection;
 
+    public bool carryingObject;
+
+    private float _originalRange;
+
     public Vector3 MovementDirection
     {
         get => _movementDirection;
@@ -59,6 +62,8 @@ public class PlayerMovement : MonoBehaviour
 
     private InputSetUp _inputSetUp;
     
+    
+    
 
     
     void Start()
@@ -69,10 +74,20 @@ public class PlayerMovement : MonoBehaviour
         _controller = GetComponent<CharacterController>();
         _inputSetUp = GetComponent<InputSetUp>();
 
+        _originalRange = _controller.radius;
     }
 
     private void Update()
     {
+        if (carryingObject)
+        {
+            _controller.radius = _originalRange * 2f;
+        }
+        else
+        {
+            _controller.radius = _originalRange;
+        }
+
         _input = _inputSetUp.LeftStick;
 
         grounded = _controller.isGrounded;
