@@ -134,6 +134,16 @@ public class PlayerMovement : MonoBehaviour
         _anim.SetBool("pushing", _pushing);
     }
 
+    void PickUpLow()
+    {
+        _anim.SetTrigger("pickUp");
+    }
+
+    void PickUpHigh()
+    {
+        _anim.SetTrigger("grab");
+    }
+
     /// <summary>
     /// Calculates the direction of movement
     /// </summary>
@@ -210,5 +220,11 @@ public class PlayerMovement : MonoBehaviour
         return d + howFar * de;
         
         //float a = value you want mapped t
+    }
+
+
+    public float ReturnCurrentClipLength()
+    {
+        return _anim.GetCurrentAnimatorClipInfo(0).Length;
     }
 }

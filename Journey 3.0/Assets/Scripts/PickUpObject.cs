@@ -42,12 +42,12 @@ public class PickUpObject : MonoBehaviour, IInteractible
 
     }
 
-    private void StayInRotation()
+    public void StayInRotation()
     {
         transform.rotation = _stayRotation;
     }
 
-    private void StayInPosition()
+    public void StayInPosition()
     {
         transform.position = _stayPosition;
     }

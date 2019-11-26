@@ -25,6 +25,10 @@ public class InteractWithObject : MonoBehaviour
 
     private Coroutine _coroutine;
 
+    [SerializeField] private Transform _chestHeight;
+
+    
+
     void Start()
     {
         _inputSetUp = GetComponent<InputSetUp>();
@@ -72,6 +76,7 @@ public class InteractWithObject : MonoBehaviour
                 GameObject obj = ReturnCloserObject();
                 _interactingObj = obj.GetComponent<IInteractible>();
 
+                
 
                 var type = _interactingObj.GetType();
 
@@ -89,6 +94,14 @@ public class InteractWithObject : MonoBehaviour
                 StopInteracting();
             }
         }
+    }
+
+    private float ReturnAngleToObj(Vector3 objPosition)
+    {
+        Vector3 toObject = objPosition - _chestHeight.position;
+        Vector3 toObjectStraight = new Vector3(objPosition.x, _chestHeight.position.y, objPosition.z) - _chestHeight.position;
+        
+        return Vector3.Angle(toObject, toObjectStraight);
     }
 
     public void StopInteracting()
@@ -150,7 +163,6 @@ public class InteractWithObject : MonoBehaviour
                 }
             }
 
-            print(closestObj);
             return closestObj;
         }
     }
@@ -161,12 +173,33 @@ public class InteractWithObject : MonoBehaviour
         Quaternion _targetRotation =
             Quaternion.LookRotation(interactible.transform.position - transform.position, Vector3.up);
 
+        _targetRotation.eulerAngles =
+            new Vector3(transform.rotation.x, _targetRotation.eulerAngles.y, transform.rotation.z);
+        
+        
         while (Quaternion.Angle(transform.rotation, _targetRotation) > 10f)
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, _targetRotation, Time.deltaTime * _turnSpeed);
 
             yield return new WaitForEndOfFrame();
         }
+        
+        float angleFromForward = ReturnAngleToObj(interactible.transform.position);
+        
+        print(angleFromForward);
+
+        if (angleFromForward > 10f && interactible.transform.position.y < _chestHeight.position.y)
+        {
+            gameObject.SendMessage("PickUpLow");
+        }
+        else
+        {
+            gameObject.SendMessage("PickUpHigh");
+        }
+
+        float animationTime = _movement.ReturnCurrentClipLength()/2f;
+        
+        yield return new WaitForSeconds(animationTime);
 
         _interactingObj.StartInteraction(handPosition);
 
