@@ -12,6 +12,8 @@ public class PlayerMovement : MonoBehaviour
 {
     private Transform cam;
 
+    [SerializeField] private Animator _anim;
+
 
     [SerializeField] private float _speed = 5f;
     [SerializeField] private float _pushSpeed = 2f;
@@ -23,6 +25,9 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float _jumpSpeed = 10f;
 
     [SerializeField] private bool _jump;
+
+    [SerializeField] private float _minWalkSpeed = 1f;
+    [SerializeField] private float _maxWalkSpeed = 20f;
 
 
     private Vector2 _input;
@@ -81,7 +86,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (carryingObject)
         {
-            _controller.radius = _originalRange * 2f;
+            _controller.radius = _originalRange * 1.5f;
         }
         else
         {
@@ -114,6 +119,19 @@ public class PlayerMovement : MonoBehaviour
         ApplyGravity();
 
         _controller.Move(_movementDirection * _timeDelta);
+
+        SetAnimation();
+    }
+
+    private void SetAnimation()
+    {
+        _anim.SetFloat("velocity", _controller.velocity.magnitude);
+
+        float walkSpeed = Map(_controller.velocity.magnitude, 0f, _speed, _minWalkSpeed, _maxWalkSpeed);
+        
+        _anim.SetFloat("walkSpeed", walkSpeed);
+        
+        _anim.SetBool("pushing", _pushing);
     }
 
     /// <summary>
@@ -181,5 +199,16 @@ public class PlayerMovement : MonoBehaviour
     void Jump()
     {
         _movementDirection.y = _jumpSpeed;
+    }
+    
+    public float Map(float a, float b, float c, float d, float e)
+    {
+        
+        float cb = c - b;
+        float de = e - d;
+        float howFar = (a - b) / cb;
+        return d + howFar * de;
+        
+        //float a = value you want mapped t
     }
 }

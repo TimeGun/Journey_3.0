@@ -16,6 +16,11 @@ public class GrowObject : MonoBehaviour, IInteractible, IRune
         
     }
 
+    public bool isActive()
+    {
+        return true;
+    }
+
     public void StartInteraction(Transform parent)
     {
         

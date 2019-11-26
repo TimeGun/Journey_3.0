@@ -180,8 +180,10 @@ public class InteractWithObject : MonoBehaviour
         GameObject rune = runeAndInteractible[0];
         GameObject interactible = runeAndInteractible[1];
 
-        if (interactible.GetComponent<GravityCheck>() != null)
-            interactible.GetComponent<IInteractible>().StopInteraction();
+        IInteractible _interactible = interactible.GetComponent<IInteractible>();
+
+        if (interactible.GetComponent<GravityCheck>() != null && _interactible.isActive())
+            _interactible.StopInteraction();
 
         ChangeSize _change = interactible.GetComponent<ChangeSize>();
         _change.StartCoroutine(_change.ChangeSizeOfObject());

@@ -63,6 +63,11 @@ public class PushObject : MonoBehaviour, IInteractible
         return gameObject;
     }
 
+    public bool isActive()
+    {
+        return _pushing;
+    }
+
     public void StartInteraction(Transform parent)
     {
         _pushing = true;

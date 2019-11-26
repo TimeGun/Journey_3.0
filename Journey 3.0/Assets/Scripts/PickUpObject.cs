@@ -67,7 +67,10 @@ public class PickUpObject : MonoBehaviour, IInteractible
         return gameObject;
     }
 
-
+    public bool isActive()
+    {
+        return _carried;
+    }
 
 
     public void StartInteraction(Transform parent)
