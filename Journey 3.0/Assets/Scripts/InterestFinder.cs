@@ -170,6 +170,6 @@ public class InterestFinder : MonoBehaviour
         Gizmos.color = new Color(1, 0, 0, 0.2f);
         Gizmos.DrawSphere(transform.position, radiusOfInterestVision);
         Gizmos.color = new Color(0, 1f, 0, 1f);
-        Gizmos.DrawRay(headPos.position, headPos.forward.normalized * radiusOfInterestVision);
+        Gizmos.DrawRay(headPos.position, headPos.right.normalized * radiusOfInterestVision);
     }
 }
