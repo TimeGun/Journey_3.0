@@ -11,13 +11,16 @@ public class CameraZone : MonoBehaviour
     private bool playerInZone;
     public int targetPriority1;
     public int targetPriority2;
+    public int targetPriority3;
     public GameObject targetCamera1;
     public GameObject targetCamera2;
+    public GameObject targetCamera3;
     public float CameraTime = 0;
     public bool specialEvent;
     bool timedCameraChange = true;
     private int initialPriority1;
     private int initialPriority2;
+    private int initialPriority3;
     
     
     // Start is called before the first frame update
@@ -25,6 +28,8 @@ public class CameraZone : MonoBehaviour
     {
         initialPriority1 = targetCamera1.GetComponent<CinemachineVirtualCameraBase>().Priority;
         initialPriority2 = targetCamera2.GetComponent<CinemachineVirtualCameraBase>().Priority;
+        //initialPriority3 = targetCamera3.GetComponent<CinemachineVirtualCameraBase>().Priority;
+
         
         if (targetPriority1 == 0 )
         {
@@ -54,6 +59,7 @@ public class CameraZone : MonoBehaviour
             {
                 targetCamera1.GetComponent<CinemachineVirtualCameraBase>().Priority = targetPriority1;
                 targetCamera2.GetComponent<CinemachineVirtualCameraBase>().Priority = targetPriority2;
+                //targetCamera3.GetComponent<CinemachineVirtualCameraBase>().Priority = targetPriority3;
             }
            
         }
