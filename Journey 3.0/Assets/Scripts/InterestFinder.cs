@@ -15,7 +15,6 @@ public class InterestFinder : MonoBehaviour
     [SerializeField] private float lookChangeSpeed;
     
     private bool newTargetFound;
-
     
     [SerializeField] private Transform[] transformsOfInterst;
     
@@ -29,8 +28,8 @@ public class InterestFinder : MonoBehaviour
     private Vector3 lockedPosition;
     
     private Coroutine resetCoroutine;
-    
-    [SerializeField] private Rig LookRig; 
+
+    [SerializeField] private Rig LookRig;
     
 
     void Start()
