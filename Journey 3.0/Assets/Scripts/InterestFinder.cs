@@ -25,7 +25,7 @@ public class InterestFinder : MonoBehaviour
     private List<Transform> closeItems = new List<Transform>();
     private List<Transform> infrontItems = new List<Transform>();
 
-    private Vector3 lockedPosition;
+    private Transform lockedPosition;
     
     private Coroutine resetCoroutine;
 
@@ -36,12 +36,12 @@ public class InterestFinder : MonoBehaviour
     {
         StartCoroutine(SetLookAtTarget());
         LookRig.weight = 0f;
-        lockedPosition = lookTarget.position;
+        lockedPosition.position = lookTarget.position;
     }
 
     void Update()
     {
-        lookTarget.position = lockedPosition;
+        lookTarget.position = lockedPosition.position;
     }
 
     IEnumerator SetLookAtTarget()
@@ -55,7 +55,7 @@ public class InterestFinder : MonoBehaviour
 
             if (potentialInterest != null)
             {
-                if (lockedPosition != potentialInterest.position)
+                if (lockedPosition != potentialInterest)
                 {
                     
                     newTargetFound = true;
@@ -65,7 +65,7 @@ public class InterestFinder : MonoBehaviour
                         StopCoroutine(resetCoroutine);
                     }
 
-                    resetCoroutine = StartCoroutine(ResetRigWeight(potentialInterest.position));
+                    resetCoroutine = StartCoroutine(ResetRigWeight(potentialInterest));
                 }
             }
             else
@@ -77,7 +77,7 @@ public class InterestFinder : MonoBehaviour
                     StopCoroutine(resetCoroutine);
                 }
                 
-                resetCoroutine = StartCoroutine(ResetRigWeight(Vector3.zero));
+                resetCoroutine = StartCoroutine(ResetRigWeight(transform));
             }
 
             yield return new WaitForSeconds(1f / distanceChecksPerSecond);
@@ -85,7 +85,7 @@ public class InterestFinder : MonoBehaviour
     }
 
 
-    IEnumerator ResetRigWeight(Vector3 newTarget)
+    IEnumerator ResetRigWeight(Transform newTarget)
     {
         while (LookRig.weight > 0.1f)
         {
@@ -103,6 +103,8 @@ public class InterestFinder : MonoBehaviour
             }
         }
     }
+    
+    
 
     Transform [] ReturnCloseInterestsInFront(Transform[] interests)
     {
