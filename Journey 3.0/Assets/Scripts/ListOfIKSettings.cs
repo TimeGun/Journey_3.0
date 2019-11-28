@@ -6,5 +6,5 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New IKSetting List", menuName = "ListOfIKSettings")]
 public class ListOfIKSettings : ScriptableObject
 {
-    public IKSettings[] premadeIKSettings;
+    public List<IKSettings> _premadeIKSettings;
 }

@@ -8,7 +8,7 @@ using UnityEngine.Animations.Rigging;
 public class RightArmIK : MonoBehaviour
 {
 
-    [SerializeField] private bool _inUse;
+    [SerializeField] private bool _inUse = false;
 
     [SerializeField] private TwoBoneIKConstraint _ikConstraint;
     
@@ -16,10 +16,13 @@ public class RightArmIK : MonoBehaviour
 
     [SerializeField] private Transform hint;
 
+    public static RightArmIK Instance;
+
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        Instance = this;
     }
 
     // Update is called once per frame
@@ -31,7 +34,7 @@ public class RightArmIK : MonoBehaviour
         }
         else
         {
-            _ikConstraint.weight = Mathf.Lerp(_ikConstraint.weight, 0, Time.deltaTime);
+            _ikConstraint.weight = Mathf.Lerp(_ikConstraint.weight, 0, Time.deltaTime * 10f);
         }
     }
 
@@ -41,6 +44,12 @@ public class RightArmIK : MonoBehaviour
         target.position = _settings.targetPos;
         target.rotation = _settings.targetRot;
         hint.position = _settings.hintPos;
+        _inUse = true;
+    }
+
+    public void StopIK()
+    {
+        _inUse = true;
     }
 }
 

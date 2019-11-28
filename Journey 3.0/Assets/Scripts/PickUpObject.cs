@@ -14,6 +14,8 @@ public class PickUpObject : MonoBehaviour, IInteractible
 
     private bool _carried;
 
+    [SerializeField] private ListOfIKSettings _listOfIkSettings;
+
     public bool Carried
     {
         get => _carried;
@@ -60,6 +62,8 @@ public class PickUpObject : MonoBehaviour, IInteractible
         _col.enabled = true;
         _rb.isKinematic = false;
         _carried = false;
+        
+        RightArmIK.Instance.StopIK();
     }
     
     public GameObject getGameObject()
@@ -83,5 +87,7 @@ public class PickUpObject : MonoBehaviour, IInteractible
         _hand.root.GetComponent<PlayerMovement>().carryingObject = true;
         
         _carried = true;
+        
+        RightArmIK.Instance.SetIkTargetAndHint(_listOfIkSettings._premadeIKSettings[0]);
     }
 }
