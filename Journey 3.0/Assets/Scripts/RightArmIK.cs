@@ -11,9 +11,7 @@ public class RightArmIK : MonoBehaviour
     [SerializeField] private bool _inUse;
 
     [SerializeField] private TwoBoneIKConstraint _ikConstraint;
-
-    [SerializeField] private ListOfIKSettings _listOfIkSettings;
-
+    
     [SerializeField] private Transform target;
 
     [SerializeField] private Transform hint;
