@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using UnityEditor;
 
 public class OffsetChange : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class OffsetChange : MonoBehaviour
     public float newOffset;
     public GameObject cameraTrigger;
     private bool playerEntered;
+    public float rateOfChange;
+    private bool changeHasOccured;
     
     
     // Start is called before the first frame update
@@ -27,10 +30,11 @@ public class OffsetChange : MonoBehaviour
     void Update()
     {
         playerEntered = cameraTrigger.GetComponent<DetectPlayer>().PlayerEntered;
-        if (playerEntered)
+        if (playerEntered && changeHasOccured == false)
         {
             //TD.m_AutoDolly.m_PositionOffset = Mathf.Lerp(offset, newOffset, 0.1f);
             StartCoroutine(MoveToValue());
+            changeHasOccured = true;
         }
         
     }
@@ -39,10 +43,10 @@ public class OffsetChange : MonoBehaviour
     {
         //Debug.Log("In Coroutine");
 
-        while (TD.m_AutoDolly.m_PositionOffset > newOffset)
+        while ( TD.m_AutoDolly.m_PositionOffset > newOffset + 0.01 ||TD.m_AutoDolly.m_PositionOffset < newOffset - 0.01)
         {
             //Debug.Log("In Coroutine");
-            TD.m_AutoDolly.m_PositionOffset = Mathf.Lerp(TD.m_AutoDolly.m_PositionOffset, newOffset, 0.02f);
+            TD.m_AutoDolly.m_PositionOffset = Mathf.Lerp(TD.m_AutoDolly.m_PositionOffset, newOffset, rateOfChange/100);
             yield return new WaitForSeconds(Time.deltaTime);
             Debug.Log(TD.m_AutoDolly.m_PositionOffset);
             Debug.Log(newOffset);

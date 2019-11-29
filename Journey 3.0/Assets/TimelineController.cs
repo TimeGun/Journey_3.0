@@ -18,6 +18,7 @@ public class TimelineController : MonoBehaviour
     private double _timelineLength;
     private bool cinematicStarted;
     
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -34,13 +35,14 @@ public class TimelineController : MonoBehaviour
     void Update()
     {
         _playerEntered = cameraTrigger.GetComponent<DetectPlayer>().PlayerEntered;
-        if (_playerEntered)
+        if (_playerEntered && cinematicStarted == false)
         {
             //Debug.Log("yurt");
             StartCoroutine(PriorityChange());
             SetCamera();
-            
-            
+            cinematicStarted = true;
+
+
         }
     }
 
