@@ -30,7 +30,7 @@ public class RightArmIK : MonoBehaviour
     {
         if (_inUse)
         {
-            _ikConstraint.weight = Mathf.Lerp(_ikConstraint.weight, 1f, Time.deltaTime);
+            _ikConstraint.weight = Mathf.Lerp(_ikConstraint.weight, 0.9f, Time.deltaTime);
         }
         else
         {
@@ -41,15 +41,15 @@ public class RightArmIK : MonoBehaviour
 
     public void SetIkTargetAndHint(IKSettings _settings)
     {
-        target.position = _settings.targetPos;
-        target.rotation = _settings.targetRot;
-        hint.position = _settings.hintPos;
+        target.localPosition = _settings.targetPos;
+        target.localRotation = _settings.targetRot;
+        hint.localPosition = _settings.hintPos;
         _inUse = true;
     }
 
     public void StopIK()
     {
-        _inUse = true;
+        _inUse = false;
     }
 }
 

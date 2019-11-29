@@ -186,8 +186,6 @@ public class InteractWithObject : MonoBehaviour
         
         float angleFromForward = ReturnAngleToObj(interactible.transform.position);
         
-        print(angleFromForward);
-
         if (angleFromForward > 10f && interactible.transform.position.y < _chestHeight.position.y)
         {
             gameObject.SendMessage("PickUpLow");
