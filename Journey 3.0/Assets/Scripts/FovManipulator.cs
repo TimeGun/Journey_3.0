@@ -136,7 +136,7 @@ public class FovManipulator : MonoBehaviour
         if (_startFOV > targetFov)     // if you want to widen the fov as the player approaches the camera
         {
             clampedFov = Mathf.Clamp(_currentFov, targetFov, _startFOV);
-            Debug.Log(_currentFov);
+//            Debug.Log(_currentFov);
         }
         else            //if you want to narrow fov as the player approaches the camera
         {
