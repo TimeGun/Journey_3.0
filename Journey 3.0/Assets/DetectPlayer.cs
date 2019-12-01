@@ -53,7 +53,7 @@ public class DetectPlayer : MonoBehaviour
         {
             _playerEntered = true;
             StartCoroutine(MakePlayerEnterFalse());
-            Debug.Log(_playerEntered);
+//            Debug.Log(_playerEntered);
             //playerEntered = false;
 
         }

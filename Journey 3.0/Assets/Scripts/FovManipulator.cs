@@ -41,33 +41,15 @@ public class FovManipulator : MonoBehaviour
   
     void Update()
     {
+       
         if (_distanceType == DistanceType.CameraToPlayer)
         {
-            CameraToPlayerDist();
+            CameraToPlayerDist();        //Choose when fov will change based on the distance from the player to the camera
         }
         else if (_distanceType == DistanceType.ObjectToPlayer)
         {
-           ObjectToPlayerDist();
+           ObjectToPlayerDist();        //Choose when fov will change based on distance from player to a stationary target object in the scene
         }
-        /*playerEnter = Trigger.GetComponent<DetectPlayer>().PlayerEntered;        //bool set true first frame player enters the  trigger collider. Set in detect player script
-        playerInZone = Trigger.GetComponent<DetectPlayer>().PlayerInCollider;        //bool set true when the player is in the trigger collider 
-        currentDist = Vector3.Distance(Player.transform.position, TargetObj.transform.position);        //current distance between p[layer and target obj
-        
-        if (playerEnter)
-        {
-            _startDist = Vector3.Distance(Player.transform.position, TargetObj.transform.position);        //get start dist when player enters the collider
-        }
-        else if (playerInZone)
-        {
-            _currentFov = Map(currentDist, _startDist, 0, _startFOV, targetFov);     //Map Function
-            //Debug.Log(_startDist);
-            //Debug.Log(currentFov);
-            activeCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.FieldOfView = _currentFov;        //set active camera fov to currentfov value
-        }
-        else if (playerInZone == false)
-        {
-            activeCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.FieldOfView = _startFOV;        //sets fov back to initial fov when the player exits the collider
-        }*/
      }
     
     public float DistCovered()
@@ -79,19 +61,18 @@ public class FovManipulator : MonoBehaviour
 
         float tempDist;
         tempDist = _startDist - Vector3.Distance(Player.transform.position, TargetObj.transform.position);
-        return tempDist;
-        
+        return tempDist;   
     }
     
     public float Map(float a, float b, float c, float d, float e)
     {
         
-        float cb = c - b;
-        float de = e - d;
+        float cb = c - b;            //cb is the first range which a is a part of
+        float de = e - d;            //de is the second range which the variable assigned to this function will be mapped to based off the a variable position in the first range
         float howFar = (a - b) / cb;
         return d + howFar * de;
         
-        //float a = value you want mapped t
+        
         
         
     }
@@ -128,15 +109,10 @@ public class FovManipulator : MonoBehaviour
         }
 
         currentDist = Vector3.Distance(Player.transform.position, TargetObj.transform.position);
-        //Mathf.Clamp(currentDist, minDist, maxDist);
-        //Debug.Log("Start Fov: " + _startFOV);
-        //Debug.Log("Target Fov: " + targetFov);
-
         _currentFov = Map(currentDist, minDist, maxDist, _startFOV, targetFov);
         if (_startFOV > targetFov)     // if you want to widen the fov as the player approaches the camera
         {
             clampedFov = Mathf.Clamp(_currentFov, targetFov, _startFOV);
-//            Debug.Log(_currentFov);
         }
         else            //if you want to narrow fov as the player approaches the camera
         {

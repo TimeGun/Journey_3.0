@@ -23,7 +23,7 @@ public class OffsetChange : MonoBehaviour
         vcam = targetCamera.GetComponent<CinemachineVirtualCamera>();
         TD = vcam.GetCinemachineComponent<CinemachineTrackedDolly>();
         offset = TD.m_AutoDolly.m_PositionOffset;
-        Debug.Log(offset);
+//        Debug.Log(offset);
     }
 
     // Update is called once per frame
