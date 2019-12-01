@@ -26,7 +26,7 @@ public class FireflyTrigger : MonoBehaviour
 
     private void Start()
     {
-        _system.Stop();        //Gary Added 
+        //_system.Stop();        //Gary Added 
     }
 
     private void OnTriggerEnter(Collider other)
