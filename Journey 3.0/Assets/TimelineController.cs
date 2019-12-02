@@ -26,7 +26,7 @@ public class TimelineController : MonoBehaviour
         vcam = targetCamera.GetComponent<CinemachineVirtualCamera>();
         _startPriority = vcam.Priority;
         _timelineLength = playableDirector.duration;
-        //Debug.Log(_startPriority);
+        Debug.Log(_startPriority);
 
 
     }
@@ -60,11 +60,12 @@ public class TimelineController : MonoBehaviour
                 //Debug.Log(testInt);
                 Debug.Log("Coroutine");
                 vcam.Priority = targetPriority;
-                Debug.Log(_timelineLength);
+                //Debug.Log(_timelineLength);
                 float tempTimelineLength = (float) _timelineLength;
                 playableDirector.Play();
+                Debug.Log(_timelineLength);
                 yield return new WaitForSeconds((float)_timelineLength);
-                //Debug.Log(_startPriority);
+                Debug.Log("sp = " + _startPriority);
                 vcam.Priority = _startPriority;
                 
                 runOnce = false;
