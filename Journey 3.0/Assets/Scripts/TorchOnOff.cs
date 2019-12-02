@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Experimental.VFX;
+using UnityEngine.VFX;
 
 public class TorchOnOff : MonoBehaviour
 {
@@ -19,6 +19,6 @@ public class TorchOnOff : MonoBehaviour
     void Update()
     {
         isLit = _pickUpObject.Carried;
-        visualEffect.enabled = isLit;
+        //visualEffect.enabled = isLit;
     }
 }
