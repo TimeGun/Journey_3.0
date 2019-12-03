@@ -6,6 +6,9 @@ using UnityEngine;
 public class ObjectDetection : MonoBehaviour
 {
     [SerializeField] List <GameObject> _items = new List<GameObject>();
+    
+    public GameObject carryingObject;
+
 
     public List<GameObject> Items
     {
@@ -27,8 +30,7 @@ public class ObjectDetection : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-
-        if (_items.Contains(other.gameObject))
+        if (_items.Contains(other.gameObject) && other.gameObject != carryingObject)
         {
             _items.Remove(other.gameObject);
         }

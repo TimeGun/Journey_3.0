@@ -13,6 +13,7 @@ public class PickUpObject : MonoBehaviour, IInteractible
     private Transform _hand;
 
     private bool _carried;
+    
 
     [SerializeField] private ListOfIKSettings _listOfIkSettings;
 
@@ -58,6 +59,8 @@ public class PickUpObject : MonoBehaviour, IInteractible
     public void StopInteraction()
     {
         _hand.root.GetComponent<PlayerMovement>().carryingObject = false;
+        
+        _hand.root.GetComponent<ObjectDetection>().carryingObject = null;
 
         _col.isTrigger = false;
         _rb.isKinematic = false;
@@ -86,6 +89,8 @@ public class PickUpObject : MonoBehaviour, IInteractible
         _hand = parent;
 
         _hand.root.GetComponent<PlayerMovement>().carryingObject = true;
+        _hand.root.GetComponent<ObjectDetection>().carryingObject = gameObject;
+
         
         _carried = true;
         

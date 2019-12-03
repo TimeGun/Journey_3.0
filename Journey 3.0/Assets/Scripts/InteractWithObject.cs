@@ -9,6 +9,7 @@ public class InteractWithObject : MonoBehaviour
     private InputSetUp _inputSetUp;
 
     private bool _interacting;
+    
     [SerializeField] private bool _nearRune;
 
     [SerializeField] private Transform handPosition;

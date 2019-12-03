@@ -30,7 +30,7 @@ public class RightArmIK : MonoBehaviour
     {
         if (_inUse)
         {
-            _ikConstraint.weight = Mathf.Lerp(_ikConstraint.weight, 0.9f, Time.deltaTime);
+            _ikConstraint.weight = Mathf.Lerp(_ikConstraint.weight, 0.75f, Time.deltaTime);
         }
         else
         {
