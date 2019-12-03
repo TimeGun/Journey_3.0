@@ -22,7 +22,7 @@ public class PushObject : MonoBehaviour, IInteractible
     
     private float _distanceToPushingObject;
 
-    [SerializeField] private float _minDistance = 2.2f;
+    [SerializeField] private float _minDistance = 0;
 
     private InteractWithObject _interactWithObject;
 

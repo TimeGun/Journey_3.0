@@ -32,7 +32,7 @@ public class PickUpObject : MonoBehaviour, IInteractible
         _col = GetComponent<Collider>();
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         if (_carried)
         {
