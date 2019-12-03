@@ -19,6 +19,6 @@ public class TorchOnOff : MonoBehaviour
     void Update()
     {
         isLit = _pickUpObject.Carried;
-        visualEffect.enabled = isLit;
+        //visualEffect.enabled = isLit;
     }
 }
