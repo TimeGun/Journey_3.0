@@ -17,7 +17,10 @@ public class FireflyTrigger : MonoBehaviour
     [SerializeField] private ParticleSystem _system;
     private ParticleSystem.EmissionModule _em;
     private ParticleSystem.MainModule _mm;
+    private ParticleSystem.VelocityOverLifetimeModule _vol;
 
+    
+    
     private bool _flee;
 
     [SerializeField] private float _timeToFleeFor;
@@ -26,7 +29,8 @@ public class FireflyTrigger : MonoBehaviour
 
     private void Start()
     {
-        //_system.Stop();        //Gary Added 
+        //_system.Stop();        //Gary Added
+        
     }
 
     private void OnTriggerEnter(Collider other)
@@ -42,7 +46,6 @@ public class FireflyTrigger : MonoBehaviour
         {
             _flies.transform.Translate(Vector3.up * (_fleeSpeed * Time.deltaTime));
             _timeSinceFlee += Time.deltaTime;
-
             if (_timeSinceFlee > _timeToFleeFor)
             {
                 _flee = false;
@@ -56,7 +59,13 @@ public class FireflyTrigger : MonoBehaviour
         _em.rateOverDistance = 0;
         _em.rateOverTime = 0;
         
+        /*_vol = _system.velocityOverLifetime;
+        _vol.x = new ParticleSystem.MinMaxCurve(-5,5);
+        _vol.y = new ParticleSystem.MinMaxCurve(8,12);
+        _vol.z = new ParticleSystem.MinMaxCurve(-5,5);*/
+
         yield return new WaitForSeconds(_mm.startLifetime.Evaluate(1));
-        Destroy(gameObject);
+        //Destroy(gameObject);
+        _system.Stop();
     }
 }
