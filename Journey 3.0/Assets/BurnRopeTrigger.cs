@@ -13,7 +13,6 @@ public class BurnRopeTrigger : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         TorchOnOff torchOnOff = other.GetComponent<TorchOnOff>();
-        print(torchOnOff);
 
         if (torchOnOff != null)
         {

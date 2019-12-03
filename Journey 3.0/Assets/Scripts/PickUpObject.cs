@@ -59,7 +59,7 @@ public class PickUpObject : MonoBehaviour, IInteractible
     {
         _hand.root.GetComponent<PlayerMovement>().carryingObject = false;
 
-        _col.enabled = true;
+        _col.isTrigger = false;
         _rb.isKinematic = false;
         _carried = false;
         
@@ -79,7 +79,8 @@ public class PickUpObject : MonoBehaviour, IInteractible
 
     public void StartInteraction(Transform parent)
     {
-        _col.enabled = false;
+        _col.isTrigger = true;
+
         _rb.isKinematic = true;
 
         _hand = parent;
