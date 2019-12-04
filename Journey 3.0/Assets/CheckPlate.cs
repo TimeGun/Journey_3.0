@@ -2,10 +2,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class CheckPlate : MonoBehaviour
 {
-    public bool _boulderPresent;
+    [SerializeField] private bool _boulderPresent;
+
+    private bool opened = false;
+
+    [SerializeField] private UnityEvent openDoor;
     
     private void OnTriggerEnter(Collider other)
     {
@@ -14,6 +19,11 @@ public class CheckPlate : MonoBehaviour
         if (_pushable != null)
         {
             _boulderPresent = true;
+            if (!opened)
+            {
+                openDoor.Invoke();
+                opened = true;
+            }
         }
     }
 
