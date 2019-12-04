@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using UnityEngine;
-using UnityEngine.Animations.Rigging;
-using UnityEngine.InputSystem;
-using VSCodeEditor;
-using Object = System.Object;
+﻿using UnityEngine;
+
 
 public class PushObject : MonoBehaviour, IInteractible
 {
