@@ -12,9 +12,7 @@ public class CinematicPlayerMoment : MonoBehaviour
 
     void Start()
     {
-        instance = this;
-        
-        FreezePlayer(3,5, true);
+        instance = this; 
     }
 
     public void FreezePlayer(float startFreezeIn, float timeToFreezeFor, bool blackBarsEnabled)
