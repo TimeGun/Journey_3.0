@@ -25,14 +25,14 @@ public class CinematicPlayerMoment : MonoBehaviour
 
         if (blackBars)
         {
-            //to do: Fade in black bars
+            BlackBarsScript.instance.SetBars(true);
         }
 
         yield return new WaitForSeconds(time);
 
         if (blackBars)
         {
-            //to do: fade out black bars
+            BlackBarsScript.instance.SetBars(false);
         }
 
         _playerMovement.enabled = true;
