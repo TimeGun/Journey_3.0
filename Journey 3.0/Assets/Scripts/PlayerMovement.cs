@@ -232,4 +232,11 @@ public class PlayerMovement : MonoBehaviour
     {
         return _anim.GetCurrentAnimatorClipInfo(0).Length;
     }
+
+
+    public void DisableThis()
+    {
+        _anim.SetFloat("velocity", 0f);
+        this.enabled = false;
+    }
 }

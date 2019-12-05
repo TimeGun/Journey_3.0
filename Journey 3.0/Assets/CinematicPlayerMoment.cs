@@ -7,21 +7,29 @@ public class CinematicPlayerMoment : MonoBehaviour
     [SerializeField] private PlayerMovement _playerMovement;
 
     public static CinematicPlayerMoment instance;
-    
+
+    private bool running;
+
     void Start()
     {
         instance = this;
-    }
-
-    public void FreezePlayer(float timeToFreezeFor, bool blackBarsEnabled)
-    {
         
+        FreezePlayer(3,5, true);
+    }
+
+    public void FreezePlayer(float startFreezeIn, float timeToFreezeFor, bool blackBarsEnabled)
+    {
+        if (!running)
+            StartCoroutine(FreezePlayerCoroutine(startFreezeIn, timeToFreezeFor, blackBarsEnabled));
     }
 
 
-    IEnumerator FreezePlayerCoroutine(float time, bool blackBars)
+    IEnumerator FreezePlayerCoroutine(float startIn, float time, bool blackBars)
     {
-        _playerMovement.enabled = false;
+        running = true;
+
+        yield return new WaitForSeconds(startIn);
+        _playerMovement.DisableThis();
 
         if (blackBars)
         {
@@ -36,5 +44,6 @@ public class CinematicPlayerMoment : MonoBehaviour
         }
 
         _playerMovement.enabled = true;
+        running = false;
     }
 }
