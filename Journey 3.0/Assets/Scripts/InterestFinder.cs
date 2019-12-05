@@ -65,6 +65,7 @@ public class InterestFinder : MonoBehaviour
             {
                 if (lockedPosition != potentialInterest)
                 {
+                    
                     newTargetFound = true;
 
                     if (resetCoroutine != null)
@@ -96,6 +97,7 @@ public class InterestFinder : MonoBehaviour
     {
         while (LookRig.weight > 0.1f)
         {
+            lockedPosition = null;
             yield return new WaitForEndOfFrame();
             LookRig.weight = Mathf.MoveTowards(LookRig.weight, 0f, Time.deltaTime * (lookChangeSpeed / 2f));
         }
@@ -128,7 +130,6 @@ public class InterestFinder : MonoBehaviour
         }
 
         Transform[] instrestsInfront = ReturnInterestsInfront(closeItems.ToArray());
-
 
         return instrestsInfront;
     }
@@ -186,7 +187,11 @@ public class InterestFinder : MonoBehaviour
     public void RemoveObject(Transform toRemove)
     {
         if (transformsOfInterst.Contains(toRemove))
+        {
             transformsOfInterst.Remove(toRemove);
+            lockedPosition = null;
+        }
+
     }
 
 
