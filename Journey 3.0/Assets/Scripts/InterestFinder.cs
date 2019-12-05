@@ -15,7 +15,7 @@ public class InterestFinder : MonoBehaviour
 
     private bool newTargetFound;
 
-    [SerializeField] private Transform[] transformsOfInterst;
+    [SerializeField] private List<Transform> transformsOfInterst = new List<Transform>();
 
     [SerializeField] private Transform lookTarget;
     [SerializeField] private Transform headPos;
@@ -30,9 +30,14 @@ public class InterestFinder : MonoBehaviour
 
     [SerializeField] private Rig LookRig;
 
+    public GameObject interactingObj;
+
+    public static InterestFinder instance;
+
 
     void Start()
     {
+        instance = this;
         StartCoroutine(SetLookAtTarget());
         LookRig.weight = 0f;
         if (lockedPosition != null)
@@ -51,7 +56,7 @@ public class InterestFinder : MonoBehaviour
     {
         while (true)
         {
-            Transform[] closeTransformsInFront = ReturnCloseInterestsInFront(transformsOfInterst);
+            Transform[] closeTransformsInFront = ReturnCloseInterestsInFront(transformsOfInterst.ToArray());
 
 
             Transform potentialInterest = ClosestItem(closeTransformsInFront);
@@ -138,7 +143,18 @@ public class InterestFinder : MonoBehaviour
 
             if (Vector3.Dot(forward, toOther) > 0)
             {
-                infrontItems.Add(interests[i]);
+                if (interactingObj == null)
+                {
+                    infrontItems.Add(interests[i]);
+                }
+                else
+                {
+                    if (interactingObj.transform != interests[i])
+                    {
+                        infrontItems.Add(interests[i]);
+                    }
+                }
+
             }
         }
 
@@ -165,6 +181,12 @@ public class InterestFinder : MonoBehaviour
         }
 
         return bestTarget;
+    }
+
+    public void RemoveObject(Transform toRemove)
+    {
+        if (transformsOfInterst.Contains(toRemove))
+            transformsOfInterst.Remove(toRemove);
     }
 
 

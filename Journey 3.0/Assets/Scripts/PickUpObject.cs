@@ -60,7 +60,10 @@ public class PickUpObject : MonoBehaviour, IInteractible
     {
         _hand.root.GetComponent<PlayerMovement>().carryingObject = false;
         
-        _hand.root.GetComponent<ObjectDetection>().carryingObject = null;
+        _hand.root.GetComponent<ObjectDetection>().carryingObject = null;        
+        _hand.root.GetComponent<InterestFinder>().interactingObj = null;
+
+        
 
         _col.isTrigger = false;
         _rb.isKinematic = false;
@@ -90,6 +93,7 @@ public class PickUpObject : MonoBehaviour, IInteractible
 
         _hand.root.GetComponent<PlayerMovement>().carryingObject = true;
         _hand.root.GetComponent<ObjectDetection>().carryingObject = gameObject;
+        _hand.root.GetComponent<InterestFinder>().interactingObj = gameObject;
 
         
         _carried = true;

@@ -168,6 +168,10 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     void SetMove()
     {
+        float angleToStraight = Quaternion.Angle(_targetRotation, transform.rotation);
+
+        float adjustedSpeed = Map(angleToStraight, 180, 0, 0f, _speed);
+        
         Vector3 right = cam.right;
         Vector3 forward = Vector3.Scale(cam.forward, new Vector3(1, 0, 1)).normalized;
 
@@ -176,7 +180,8 @@ public class PlayerMovement : MonoBehaviour
         if (!_pushing)
         {
             _movementDirection = movement;
-            _movementDirection *= _speed;
+            _movementDirection *= adjustedSpeed;
+            //_movementDirection *= _speed;
         }
         else
         {
