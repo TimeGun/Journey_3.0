@@ -46,7 +46,7 @@ public class RobynTexturing : MonoBehaviour
 
                 for(int i = 0; i < splatHeights.Length; i++)
                 {
-                    float thisNoise = Mathf.Clamp(Mathf.PerlinNoise(x * 0.05f, y * 0.05f),0.5f,1f);
+                    float thisNoise = map(Mathf.PerlinNoise(x * 0.05f, y * 0.05f),0f,1f,0.5f,1f);
                     float thisHeightStart = splatHeights[i].startingHeight * thisNoise - splatHeights[i].overlap * thisNoise;
                     float nextHeightStart = 0;
                     if(i != splatHeights.Length-1)
