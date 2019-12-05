@@ -66,7 +66,7 @@ public class FireflyTrigger : MonoBehaviour
 
         yield return new WaitForSeconds(_mm.startLifetime.Evaluate(1));
         //Destroy(gameObject);
-        InterestFinder.instance.RemoveObject(transform);
+        InterestFinder.instance.RemoveObject(_flies.transform);
         _system.Stop();
     }
 }
