@@ -97,7 +97,13 @@ public class PickUpObject : MonoBehaviour, IInteractible
 
         
         _carried = true;
-        
+
+        if (_listOfIkSettings == null)
+        {
+            _listOfIkSettings = _hand.root.GetComponent<PlayerIKPositions>()._settings;
+        }
+
         RightArmIK.Instance.SetIkTargetAndHint(_listOfIkSettings._premadeIKSettings[0]);
+        
     }
 }
