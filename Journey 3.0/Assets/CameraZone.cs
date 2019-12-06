@@ -10,34 +10,44 @@ public class CameraZone : MonoBehaviour
     private bool playerInZone;
     public int targetPriority1;
     public int targetPriority2;
-    public int targetPriority3;
+    //public int targetPriority3;
     public GameObject targetCamera1;
     public GameObject targetCamera2;
-    public GameObject targetCamera3;
+    //public GameObject targetCamera3;
     public float CameraTime = 0;
     public bool specialEvent;
     bool timedCameraChange = true;
     private int initialPriority1;
     private int initialPriority2;
-    private int initialPriority3;
+    //private int initialPriority3;
     
     
     // Start is called before the first frame update
     void Start()
     {
-        initialPriority1 = targetCamera1.GetComponent<CinemachineVirtualCameraBase>().Priority;
-        initialPriority2 = targetCamera2.GetComponent<CinemachineVirtualCameraBase>().Priority;
+        if (targetCamera1 != null)
+        {
+            initialPriority1 = targetCamera1.GetComponent<CinemachineVirtualCameraBase>().Priority;
+            if (targetPriority1 == 0 )
+            {
+                Debug.LogWarning("Target Priority for target camera 1 is not set");                        
+            }
+        }
+        if (targetCamera2 != null)
+        {
+            initialPriority2 = targetCamera2.GetComponent<CinemachineVirtualCameraBase>().Priority;
+            if (targetPriority2 == 0 )
+            {
+                Debug.LogWarning("Target Priority for target camera 2 is not set");                        
+            }
+        }
+        
+        
         //initialPriority3 = targetCamera3.GetComponent<CinemachineVirtualCameraBase>().Priority;
 
         
-        if (targetPriority1 == 0 )
-        {
-            Debug.LogWarning("Target Priority for target camera 1 is not set");                        
-        }
-        if (targetPriority2 == 0 )
-        {
-            Debug.LogWarning("Target Priority for target camera 2 is not set");                        
-        }
+        
+        
     }
 
     // Update is called once per frame
@@ -56,8 +66,18 @@ public class CameraZone : MonoBehaviour
             }
             else if (specialEvent == false)
             {
-                targetCamera1.GetComponent<CinemachineVirtualCameraBase>().Priority = targetPriority1;
-                targetCamera2.GetComponent<CinemachineVirtualCameraBase>().Priority = targetPriority2;
+                if (targetCamera1 != null)
+                {
+                    targetCamera1.GetComponent<CinemachineVirtualCameraBase>().Priority = targetPriority1;
+ 
+                }
+
+                if (targetCamera2 != null)
+                {
+                    targetCamera2.GetComponent<CinemachineVirtualCameraBase>().Priority = targetPriority2;
+
+                }
+
                 //targetCamera3.GetComponent<CinemachineVirtualCameraBase>().Priority = targetPriority3;
             }
            

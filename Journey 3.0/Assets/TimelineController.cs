@@ -26,7 +26,7 @@ public class TimelineController : MonoBehaviour
         vcam = targetCamera.GetComponent<CinemachineVirtualCamera>();
         _startPriority = vcam.Priority;
         _timelineLength = playableDirector.duration;
-        Debug.Log(_startPriority);
+//        Debug.Log(_startPriority);
 
 
     }
@@ -34,7 +34,7 @@ public class TimelineController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        _playerEntered = cameraTrigger.GetComponent<DetectPlayer>().PlayerEntered;
+        _playerEntered = cameraTrigger.GetComponent<DetectPlayer>().PlayerEntered;    //Use a coroutine to check if the player has entered every x amount of frames
         if (_playerEntered && cinematicStarted == false)
         {
             //Debug.Log("yurt");
@@ -59,9 +59,10 @@ public class TimelineController : MonoBehaviour
             {
                 //Debug.Log(testInt);
                 Debug.Log("Coroutine");
+                
                 vcam.Priority = targetPriority;
                 //Debug.Log(_timelineLength);
-                float tempTimelineLength = (float) _timelineLength;
+                //float tempTimelineLength = (float) _timelineLength;
                 playableDirector.Play();
                 Debug.Log(_timelineLength);
                 yield return new WaitForSeconds((float)_timelineLength);

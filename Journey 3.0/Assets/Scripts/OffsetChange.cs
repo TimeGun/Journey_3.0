@@ -48,8 +48,8 @@ public class OffsetChange : MonoBehaviour
             //Debug.Log("In Coroutine");
             TD.m_AutoDolly.m_PositionOffset = Mathf.Lerp(TD.m_AutoDolly.m_PositionOffset, newOffset, rateOfChange/100);
             yield return new WaitForSeconds(Time.deltaTime);
-            Debug.Log(TD.m_AutoDolly.m_PositionOffset);
-            Debug.Log(newOffset);
+//            Debug.Log(TD.m_AutoDolly.m_PositionOffset);
+//            Debug.Log(newOffset);
         }
     }
 }
