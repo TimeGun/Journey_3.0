@@ -33,9 +33,10 @@ public class PushObject : MonoBehaviour, IInteractible
     {
         if (_pushing)
         {
+            print(_distanceToPushingObject);
             if (_inputSetUp.ValueInteractDown >= 0.9f)
             {
-                _position = _player.transform.TransformPoint(Vector3.forward * _distanceToPushingObject);
+                _position = _player.transform.TransformPoint(Vector3.forward * (_distanceToPushingObject - 0.25f));
 
                 _position.y = transform.position.y;
 

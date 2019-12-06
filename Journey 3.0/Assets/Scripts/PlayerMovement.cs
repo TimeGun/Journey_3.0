@@ -185,16 +185,25 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
+            float localPushDirection;
             if (Vector3.Angle(transform.forward, movement) > 120f)
             {
                 _movementDirection = -transform.forward;
-                _movementDirection *= _pushSpeed;
+                _movementDirection *= _pushSpeed * _input.magnitude;
+                localPushDirection = -1f * _input.magnitude;
             }
             else if (Vector3.Angle(transform.forward, movement) < 60f)
             {
                 _movementDirection = transform.forward;
                 _movementDirection *= _pushSpeed * _input.magnitude;
+                localPushDirection = 1f * _input.magnitude;
             }
+            else
+            {
+
+                localPushDirection = 0f;
+            }
+            _anim.SetFloat("pushDirection", localPushDirection);
         }
     }
 
