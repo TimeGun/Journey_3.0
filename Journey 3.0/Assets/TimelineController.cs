@@ -64,6 +64,7 @@ public class TimelineController : MonoBehaviour
                 //Debug.Log(_timelineLength);
                 //float tempTimelineLength = (float) _timelineLength;
                 playableDirector.Play();
+                CinematicPlayerMoment.instance.FreezePlayer(0, (float)_timelineLength, true);
                 Debug.Log(_timelineLength);
                 yield return new WaitForSeconds((float)_timelineLength);
                 Debug.Log("sp = " + _startPriority);
