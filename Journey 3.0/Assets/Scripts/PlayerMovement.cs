@@ -197,7 +197,10 @@ public class PlayerMovement : MonoBehaviour
             else if (Vector3.Angle(transform.forward, movement) < 60f)
             {
                 Debug.DrawRay(info.position, transform.forward * info.distance);
-                if (!Physics.Raycast(info.position, transform.forward, info.distance, mask))
+                
+                Ray ray = new Ray(info.position, transform.forward);
+                
+                if (!Physics.SphereCast(ray, 1f, info.distance, mask))
                 {
                     _movementDirection = transform.forward;
                     _movementDirection *= _pushSpeed * _input.magnitude;
