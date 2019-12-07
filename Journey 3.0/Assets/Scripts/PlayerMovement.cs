@@ -66,9 +66,11 @@ public class PlayerMovement : MonoBehaviour
     private float _timeDelta;
 
     private InputSetUp _inputSetUp;
-    
-    
-    
+
+
+    public RayInfo info;
+
+    public LayerMask mask;
 
     
     void Start()
@@ -194,9 +196,18 @@ public class PlayerMovement : MonoBehaviour
             }
             else if (Vector3.Angle(transform.forward, movement) < 60f)
             {
-                _movementDirection = transform.forward;
-                _movementDirection *= _pushSpeed * _input.magnitude;
-                localPushDirection = 1f * _input.magnitude;
+                Debug.DrawRay(info.position, transform.forward * info.distance);
+                if (!Physics.Raycast(info.position, transform.forward, info.distance, mask))
+                {
+                    _movementDirection = transform.forward;
+                    _movementDirection *= _pushSpeed * _input.magnitude;
+                    localPushDirection = 1f * _input.magnitude;
+                }
+                else
+                {
+                    _movementDirection = forward * 0f;
+                    localPushDirection = 0;
+                }
             }
             else
             {

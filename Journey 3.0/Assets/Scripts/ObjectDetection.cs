@@ -21,7 +21,6 @@ public class ObjectDetection : MonoBehaviour
     {
 
         IInteractible itemToPickUp = other.GetComponent<IInteractible>();
-
         if (itemToPickUp != null && !_items.Contains(other.gameObject))
         {
             _items.Add(other.gameObject);

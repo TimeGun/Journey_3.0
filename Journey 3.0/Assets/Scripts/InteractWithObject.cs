@@ -26,7 +26,7 @@ public class InteractWithObject : MonoBehaviour
 
     private Coroutine _coroutine;
 
-    [SerializeField] private Transform _chestHeight;
+    public Transform _chestHeight;
 
     
 

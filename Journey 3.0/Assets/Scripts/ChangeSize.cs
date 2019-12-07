@@ -19,18 +19,20 @@ public class ChangeSize : MonoBehaviour
 
     [SerializeField] float _growSpeed = 2f;
 
+    public float _growthMultiplier = 2f;
+
 
     private void Start()
     {
         if (startSmall)
         {
             smallScale = transform.localScale;
-            largeScale = transform.localScale * 2;
+            largeScale = transform.localScale * _growthMultiplier;
             _small = true;
         }
         else
         {
-            smallScale = transform.localScale / 2f;
+            smallScale = transform.localScale / _growthMultiplier;
             largeScale = transform.localScale;
             _small = false;
         }

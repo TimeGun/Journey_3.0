@@ -33,6 +33,7 @@ public class InterestFinder : MonoBehaviour
     public GameObject interactingObj;
 
     public static InterestFinder instance;
+    public bool _debug;
 
 
     void Start()
@@ -197,9 +198,12 @@ public class InterestFinder : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.color = new Color(1, 0, 0, 0.2f);
-        Gizmos.DrawSphere(transform.position, radiusOfInterestVision);
-        Gizmos.color = new Color(0, 1f, 0, 1f);
-        Gizmos.DrawRay(headPos.position, headPos.right.normalized * radiusOfInterestVision);
+        if (_debug)
+        {
+            Gizmos.color = new Color(1, 0, 0, 0.2f);
+            Gizmos.DrawSphere(transform.position, radiusOfInterestVision);
+            Gizmos.color = new Color(0, 1f, 0, 1f);
+            Gizmos.DrawRay(headPos.position, headPos.up.normalized * radiusOfInterestVision);
+        }
     }
 }
