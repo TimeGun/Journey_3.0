@@ -63,6 +63,7 @@ public class TimelineController : MonoBehaviour
                 vcam.Priority = targetPriority;
                 //Debug.Log(_timelineLength);
                 //float tempTimelineLength = (float) _timelineLength;
+                
                 playableDirector.Play();
                 CinematicPlayerMoment.instance.FreezePlayer(0, (float)_timelineLength, true);
                 Debug.Log(_timelineLength);
