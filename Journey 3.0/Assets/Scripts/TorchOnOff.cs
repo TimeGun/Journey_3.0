@@ -8,7 +8,7 @@ public class TorchOnOff : MonoBehaviour
     public bool isLit;
     
     private PickUpObject _pickUpObject;
-    [SerializeField] private VisualEffect visualEffect;
+    [SerializeField] private GameObject visualEffect;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,6 +19,6 @@ public class TorchOnOff : MonoBehaviour
     void Update()
     {
         isLit = _pickUpObject.Carried;
-        visualEffect.enabled = isLit;
+        visualEffect.SetActive(isLit);
     }
 }
