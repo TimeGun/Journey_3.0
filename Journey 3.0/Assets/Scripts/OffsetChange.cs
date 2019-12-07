@@ -15,6 +15,7 @@ public class OffsetChange : MonoBehaviour
     private bool playerEntered;
     public float rateOfChange;
     private bool changeHasOccured;
+    public bool OneTimeChange;
     
     
     // Start is called before the first frame update
@@ -30,11 +31,13 @@ public class OffsetChange : MonoBehaviour
     void Update()
     {
         playerEntered = cameraTrigger.GetComponent<DetectPlayer>().PlayerEntered;
-        if (playerEntered && changeHasOccured == false)
+        if (OneTimeChange)
         {
-            //TD.m_AutoDolly.m_PositionOffset = Mathf.Lerp(offset, newOffset, 0.1f);
-            StartCoroutine(MoveToValue());
-            changeHasOccured = true;
+            ChangeOffsetOnce();
+        }
+        else
+        {
+            ChangeOffset();
         }
         
     }
@@ -50,6 +53,27 @@ public class OffsetChange : MonoBehaviour
             yield return new WaitForSeconds(Time.deltaTime);
 //            Debug.Log(TD.m_AutoDolly.m_PositionOffset);
 //            Debug.Log(newOffset);
+        }
+    }
+
+    void ChangeOffsetOnce()
+    {
+        if (playerEntered && changeHasOccured == false)
+        {
+            //TD.m_AutoDolly.m_PositionOffset = Mathf.Lerp(offset, newOffset, 0.1f);
+            StartCoroutine(MoveToValue());
+            changeHasOccured = true;
+        }
+        
+    }
+
+    void ChangeOffset()
+    {
+        if (playerEntered)
+        {
+            //TD.m_AutoDolly.m_PositionOffset = Mathf.Lerp(offset, newOffset, 0.1f);
+            StartCoroutine(MoveToValue());
+            
         }
     }
 }
