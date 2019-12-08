@@ -22,6 +22,7 @@ public class ChangeSize : MonoBehaviour
     public float _growthMultiplier = 2f;
 
 
+
     private void Start()
     {
         if (startSmall)

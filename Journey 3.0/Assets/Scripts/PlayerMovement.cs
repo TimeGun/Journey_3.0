@@ -73,8 +73,11 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask mask;
 
     [SerializeField] private bool pushingBoulder;
-
     
+    
+    [SerializeField] private AudioSource _walkSource;
+
+
     void Start()
     {
         if (cam == null)
@@ -123,6 +126,20 @@ public class PlayerMovement : MonoBehaviour
         ApplyGravity();
 
         _controller.Move(_movementDirection * _timeDelta);
+        if (_controller.velocity.magnitude >= 0.5f)
+        {
+            float walkSoundPitch = Map(_controller.velocity.magnitude, 0f, _speed, 0.6f, 1.35f);
+
+            _walkSource.pitch = walkSoundPitch;
+            
+            if (!_walkSource.isPlaying)
+            {
+                _walkSource.Play();
+            }
+        }else
+        {
+            _walkSource.Stop();
+        }
 
         SetAnimation();
     }
@@ -185,7 +202,6 @@ public class PlayerMovement : MonoBehaviour
         {
             _movementDirection = movement;
             _movementDirection *= adjustedSpeed;
-            //_movementDirection *= _speed;
             pushingBoulder = false;
         }
         else
