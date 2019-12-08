@@ -72,6 +72,8 @@ public class PlayerMovement : MonoBehaviour
 
     public LayerMask mask;
 
+    [SerializeField] private bool pushingBoulder;
+
     
     void Start()
     {
@@ -170,6 +172,7 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     void SetMove()
     {
+        pushingBoulder = false;
         float angleToStraight = Quaternion.Angle(_targetRotation, transform.rotation);
 
         float adjustedSpeed = Map(angleToStraight, 180, 0, 0f, _speed);
@@ -184,41 +187,55 @@ public class PlayerMovement : MonoBehaviour
             _movementDirection = movement;
             _movementDirection *= adjustedSpeed;
             //_movementDirection *= _speed;
+            pushingBoulder = false;
         }
         else
         {
             float localPushDirection;
+            
             if (Vector3.Angle(transform.forward, movement) > 120f)
             {
                 _movementDirection = -transform.forward;
                 _movementDirection *= _pushSpeed * _input.magnitude;
                 localPushDirection = -1f * _input.magnitude;
+                pushingBoulder = true;
             }
             else if (Vector3.Angle(transform.forward, movement) < 60f)
             {
                 Debug.DrawRay(info.position, transform.forward * info.distance);
                 
                 Ray ray = new Ray(info.position, transform.forward);
+
                 
-                if (!Physics.SphereCast(ray, 1f, info.distance, mask))
+                
+                if (!Physics.SphereCast(ray, 0.25f, out RaycastHit hit, info.distance, mask))
                 {
                     _movementDirection = transform.forward;
                     _movementDirection *= _pushSpeed * _input.magnitude;
                     localPushDirection = 1f * _input.magnitude;
+                    pushingBoulder = true;
                 }
                 else
                 {
+                    pushingBoulder = false;
                     _movementDirection = forward * 0f;
                     localPushDirection = 0;
+                    print(hit.transform.gameObject);
                 }
             }
             else
             {
-
+                pushingBoulder = false;
                 localPushDirection = 0f;
             }
             _anim.SetFloat("pushDirection", localPushDirection);
         }
+    }
+
+
+    public bool PushingBoulder()
+    {
+        return pushingBoulder;
     }
 
     /// <summary>

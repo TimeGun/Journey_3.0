@@ -12,7 +12,7 @@ public class PushObject : MonoBehaviour, IInteractible
     private Vector3 _position;
 
     private PlayerMovement _movement;
-    
+
     private float _distanceToPushingObject;
 
     [SerializeField] private float _minDistance = 0;
@@ -27,16 +27,21 @@ public class PushObject : MonoBehaviour, IInteractible
 
     private Collider _col;
 
+    private AudioSource _source;
+
+
+    public float _audioDistance = 0.02f;
 
     void Start()
     {
         _interactWithObject = GetComponent<InteractWithObject>();
         _inputSetUp = GetComponent<InputSetUp>();
 
-        string[] maskTargets = new string []{ "Ground", "Wall"};
+        string[] maskTargets = new string[] {"Ground", "Wall"};
         mask = LayerMask.GetMask(maskTargets);
 
         _col = GetComponent<Collider>();
+        _source = GetComponent<AudioSource>();
     }
 
     void FixedUpdate()
@@ -45,7 +50,7 @@ public class PushObject : MonoBehaviour, IInteractible
         {
             if (_inputSetUp.ValueInteractDown >= 0.9f)
             {
-                _position = _player.transform.TransformPoint(Vector3.forward * (_distanceToPushingObject - 0.25f));
+                _position = _player.transform.TransformPoint(Vector3.forward * (_distanceToPushingObject - 0.2f));
 
                 _position.y = transform.position.y;
 
@@ -55,23 +60,34 @@ public class PushObject : MonoBehaviour, IInteractible
                 Ray ray = new Ray(playerChest.position, _player.transform.forward);
 
                 RaycastHit hit;
-                
+
                 //Debug.DrawRay(playerChest.position, _player.transform.forward * (_distanceToPushingObject + internalDistance));
-                
+
                 _movement.info.distance = _distanceToPushingObject + internalDistance;
                 _movement.info.position = playerChest.position;
-                    
-                if (!Physics.Raycast(ray,_distanceToPushingObject + internalDistance, mask))
+
+                if (!Physics.Raycast(ray, _distanceToPushingObject + internalDistance, mask))
                 {
                     _rb.MovePosition(Vector3.Lerp(transform.position, _position, Time.deltaTime * 25f));
-                }
 
+
+                    if (_movement.PushingBoulder())
+                    {
+                        print("play sound");
+                        if (!_source.isPlaying)
+                            _source.Play();
+                    }
+                    else
+                    {
+                        _source.Stop();
+                    }
+                }
             }
             else
             {
+                _source.Stop();
                 _interactWithObject.StopInteracting();
             }
-            
         }
     }
 
@@ -93,27 +109,27 @@ public class PushObject : MonoBehaviour, IInteractible
 
 
         SetUpPushing();
-        
     }
 
     private void SetUpPushing()
     {
-        _movement = _player.GetComponent<PlayerMovement>(); 
+        _movement = _player.GetComponent<PlayerMovement>();
         _movement.ControllerVeclocity = Vector3.zero;
         _movement.Pushing = true;
         playerChest = _player.GetComponent<InteractWithObject>()._chestHeight;
         _interactWithObject = _player.GetComponent<InteractWithObject>();
         _inputSetUp = _player.GetComponent<InputSetUp>();
-        
-        
-        Vector3 sameHeightPos = new Vector3(playerChest.transform.position.x, transform.position.y, _player.transform.position.z);
-        
+
+
+        Vector3 sameHeightPos = new Vector3(playerChest.transform.position.x, transform.position.y,
+            _player.transform.position.z);
+
         _distanceToPushingObject = Vector3.Distance(sameHeightPos, transform.position);
 
-        
+
         if (_distanceToPushingObject < _minDistance)
             _distanceToPushingObject = _minDistance;
-        
+
         if (_rb == null)
             _rb = GetComponent<Rigidbody>();
 
@@ -138,7 +154,6 @@ public class PushObject : MonoBehaviour, IInteractible
 
     public void GetRayInfo()
     {
-        
     }
 }
 
