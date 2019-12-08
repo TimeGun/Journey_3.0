@@ -172,7 +172,6 @@ public class PlayerMovement : MonoBehaviour
     /// </summary>
     void SetMove()
     {
-        pushingBoulder = false;
         float angleToStraight = Quaternion.Angle(_targetRotation, transform.rotation);
 
         float adjustedSpeed = Map(angleToStraight, 180, 0, 0f, _speed);
@@ -193,14 +192,14 @@ public class PlayerMovement : MonoBehaviour
         {
             float localPushDirection;
             
-            if (Vector3.Angle(transform.forward, movement) > 120f)
+            if (Vector3.Angle(transform.forward, movement) > 120f && _input.magnitude > 0.1f)
             {
                 _movementDirection = -transform.forward;
                 _movementDirection *= _pushSpeed * _input.magnitude;
                 localPushDirection = -1f * _input.magnitude;
                 pushingBoulder = true;
             }
-            else if (Vector3.Angle(transform.forward, movement) < 60f)
+            else if (Vector3.Angle(transform.forward, movement) < 60f && _input.magnitude > 0.1f)
             {
                 Debug.DrawRay(info.position, transform.forward * info.distance);
                 
@@ -225,6 +224,7 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
+                _movementDirection = forward * 0f;
                 pushingBoulder = false;
                 localPushDirection = 0f;
             }
