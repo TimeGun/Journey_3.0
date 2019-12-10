@@ -13,8 +13,6 @@ public class ReloadVerticalSlice : MonoBehaviour
         if (other.gameObject.name == "Player")
         {
             SceneManager.LoadSceneAsync(0, LoadSceneMode.Single);
-
-
         }
     }
 
