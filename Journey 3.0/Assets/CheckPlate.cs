@@ -17,6 +17,8 @@ public class CheckPlate : MonoBehaviour
     [SerializeField] private Animator _gateAnim;
     [SerializeField] private Animator _platformAnim;
 
+    public Transform boulderParent;
+
     public ReturnBoulderPresent _ReturnBoulderPresent;
     
     private void OnTriggerEnter(Collider other)
@@ -46,7 +48,10 @@ public class CheckPlate : MonoBehaviour
         {
             if (!opened)
             {
-                _ReturnBoulderPresent.pushableObj = transform.root;
+                _ReturnBoulderPresent.pushableObj.SetParent(boulderParent, true);
+                _ReturnBoulderPresent.pushableObj.GetComponent<Rigidbody>().velocity = Vector3.zero;
+                Destroy(_ReturnBoulderPresent.pushableObj.GetComponent<GravityCheck>());
+                Destroy(_ReturnBoulderPresent.pushableObj.GetComponent<Rigidbody>());
                 Destroy(_ReturnBoulderPresent.pushableObj.GetComponent<PushObject>());
                 
                 openDoor.Invoke();
