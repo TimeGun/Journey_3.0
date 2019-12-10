@@ -9,7 +9,9 @@ public class TriggerGrabAnim : MonoBehaviour
 
     public float grabTime;
 
-    private Animator _animator;
+    private Animator _animatorPlayer;
+
+    public Animator _animatorFlies;
     
     private void OnTriggerEnter(Collider other)
     {
@@ -17,8 +19,8 @@ public class TriggerGrabAnim : MonoBehaviour
         {
             if (_coroutine == null)
             {
-                _animator = other.GetComponent<Animator>();
-                print(_animator);
+                _animatorPlayer = other.GetComponent<Animator>();
+                print(_animatorPlayer);
                 _coroutine = StartCoroutine(PlayGrabAnim());
             }
         }
@@ -27,6 +29,12 @@ public class TriggerGrabAnim : MonoBehaviour
     IEnumerator PlayGrabAnim()
     {
         yield return new WaitForSeconds(grabTime);
-        _animator.SetTrigger("grab");
+        _animatorPlayer.SetFloat("grabSpeedMult", 0.4f);
+        _animatorPlayer.SetTrigger("grab");
+        _animatorFlies.SetTrigger("Flee");
+        
+        yield return new WaitForSeconds(3f);
+        _animatorPlayer.SetFloat("grabSpeedMult", 1);
+
     }
 }
