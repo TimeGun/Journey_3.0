@@ -16,6 +16,8 @@ public class CheckPlate : MonoBehaviour
 
     [SerializeField] private Animator _gateAnim;
     [SerializeField] private Animator _platformAnim;
+
+    public ReturnBoulderPresent _ReturnBoulderPresent;
     
     private void OnTriggerEnter(Collider other)
     {
@@ -26,15 +28,7 @@ public class CheckPlate : MonoBehaviour
         
         if (_pushable != null)
         {
-            _boulderPresent = true;
-            if (!opened)
-            {
-                _pushable.transform.parent = transform.root;
-                Destroy(_pushable);
-                
-                openDoor.Invoke();
-                opened = true;
-            }
+           
         }
         
         if (_movement != null)
@@ -47,6 +41,18 @@ public class CheckPlate : MonoBehaviour
     {
         _gateAnim.SetBool("playerWeight", player);
         _platformAnim.SetBool("playerWeight", player);
+
+        if (_ReturnBoulderPresent.Boulder)
+        {
+            if (!opened)
+            {
+                _ReturnBoulderPresent.pushableObj = transform.root;
+                Destroy(_ReturnBoulderPresent.pushableObj.GetComponent<PushObject>());
+                
+                openDoor.Invoke();
+                opened = true;
+            } 
+        }
     }
 
     private void OnTriggerExit(Collider other)
