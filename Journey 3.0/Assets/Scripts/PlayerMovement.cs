@@ -14,6 +14,12 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private Animator _anim;
 
+    public Animator Anim
+    {
+        set => _anim = value;
+        get => _anim;
+    }
+
 
     [SerializeField] private float _speed = 5f;
     [SerializeField] private float _pushSpeed = 2f;
