@@ -30,6 +30,10 @@ public class InteractWithObject : MonoBehaviour
 
     private bool cooldown;
 
+    public AudioSource _source;
+
+    public AudioClip clip;
+
     
 
     void Start()
@@ -204,6 +208,7 @@ public class InteractWithObject : MonoBehaviour
         
         yield return new WaitForSeconds(animationTime);
 
+        _source.PlayOneShot(clip);
         _interactingObj.StartInteraction(handPosition);
 
         yield return new WaitForEndOfFrame();

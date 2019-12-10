@@ -33,7 +33,8 @@ public class TriggerGrabAnim : MonoBehaviour
         _animatorPlayer.SetTrigger("grab");
         _animatorFlies.SetTrigger("Flee");
         
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2f);
+        //_animatorPlayer.GetComponent<InterestFinder>().RemoveObject();
         _animatorPlayer.SetFloat("grabSpeedMult", 1);
 
     }
