@@ -15,7 +15,7 @@ public class PushObject : MonoBehaviour, IInteractible
 
     private float _distanceToPushingObject;
 
-    [SerializeField] private float _minDistance = 1.1f;
+    [SerializeField] private float _minDistance = 1.4f;
 
     private InteractWithObject _interactWithObject;
 
@@ -50,7 +50,7 @@ public class PushObject : MonoBehaviour, IInteractible
         {
             if (_inputSetUp.ValueInteractDown >= 0.9f)
             {
-                _position = _player.transform.TransformPoint(Vector3.forward * (_distanceToPushingObject - 0.2f));
+                _position = _player.transform.TransformPoint(Vector3.forward * (_distanceToPushingObject));
 
                 _position.y = transform.position.y;
 
@@ -60,9 +60,7 @@ public class PushObject : MonoBehaviour, IInteractible
                 Ray ray = new Ray(playerChest.position, _player.transform.forward);
 
                 RaycastHit hit;
-
-                //Debug.DrawRay(playerChest.position, _player.transform.forward * (_distanceToPushingObject + internalDistance));
-
+                
                 _movement.info.distance = _distanceToPushingObject + internalDistance;
                 _movement.info.position = playerChest.position;
 
@@ -123,7 +121,8 @@ public class PushObject : MonoBehaviour, IInteractible
         Vector3 sameHeightPos = new Vector3(playerChest.transform.position.x, transform.position.y,
             _player.transform.position.z);
 
-        _distanceToPushingObject = Vector3.Distance(sameHeightPos, transform.position);
+        _distanceToPushingObject = _minDistance;
+        //_distanceToPushingObject = Vector3.Distance(sameHeightPos, transform.position);
 
 
         if (_distanceToPushingObject < _minDistance)

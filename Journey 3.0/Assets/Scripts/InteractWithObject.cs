@@ -28,6 +28,8 @@ public class InteractWithObject : MonoBehaviour
 
     public Transform _chestHeight;
 
+    private bool cooldown;
+
     
 
     void Start()
@@ -42,10 +44,11 @@ public class InteractWithObject : MonoBehaviour
     {
         _nearRune = CheckNearRune();
 
-        if (_inputSetUp.Controls.PlayerFreeMovement.Interact.triggered)
+        if (_inputSetUp.Controls.PlayerFreeMovement.Interact.triggered && !cooldown)
         {
             if (_nearRune && _objectDetection.Items.Count > 1)
             {
+                cooldown = true;
                 _movement.ControllerVeclocity = Vector3.zero;
                 _movement.enabled = false;
 
@@ -69,6 +72,7 @@ public class InteractWithObject : MonoBehaviour
             }
             else if (!_interacting && !_nearRune && _objectDetection.Items.Count > 0)
             {
+                cooldown = true;
                 _interacting = true;
                 _movement.ControllerVeclocity = Vector3.zero;
                 _movement.enabled = false;
@@ -205,6 +209,7 @@ public class InteractWithObject : MonoBehaviour
         yield return new WaitForEndOfFrame();
 
         _movement.enabled = true;
+        cooldown = false;
     }
 
     IEnumerator UseRune(GameObject[] runeAndInteractible)
@@ -223,6 +228,7 @@ public class InteractWithObject : MonoBehaviour
         yield return new WaitForEndOfFrame();
 
         _movement.enabled = true;
+        cooldown = false;
     }
 
     IEnumerator TurnToPush(GameObject interactible)
@@ -246,5 +252,6 @@ public class InteractWithObject : MonoBehaviour
         yield return new WaitForEndOfFrame();
         _movement.enabled = true;
         GetComponent<InputSetUp>().enabled = true;
+        cooldown = false;
     }
 }
