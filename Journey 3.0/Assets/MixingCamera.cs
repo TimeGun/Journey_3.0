@@ -65,9 +65,9 @@ public class MixingCamera : MonoBehaviour
                 if (playerStartPos == Vector3.zero)
                 {
                     playerStartPos = followTarget.position;
-                    GameObject marker = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-                    marker.transform.position = playerStartPos;
-                    marker.GetComponent<Collider>().enabled = false;
+                    //GameObject marker = GameObject.CreatePrimitive(PrimitiveType.Cylinder);
+                    //marker.transform.position = playerStartPos;
+                    //marker.GetComponent<Collider>().enabled = false;
                    /* if (followTarget.transform.position.z  0)
                     {
                         playerStartPos.z = playerStartPos.z 
