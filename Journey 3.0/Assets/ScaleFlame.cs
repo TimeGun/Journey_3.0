@@ -7,17 +7,11 @@ public class ScaleFlame : MonoBehaviour
 {
     public VisualEffect _effect;
 
-    private Transform parent;
-    // Start is called before the first frame update
-    void Start()
-    {
-        parent = transform.root;
-    }
-
-    // Update is called once per frame
+    public Transform parent;
+    
     void Update()
     {
-        float flameScale = Map(parent.localPosition.x, 1.5f, 3f, 1f, 2.5f);
+        float flameScale = Map(parent.localScale.x, 1.5f, 3f, 1f, 2.5f);
         _effect.SetFloat("SizeMultiplier", flameScale);
     }
     
