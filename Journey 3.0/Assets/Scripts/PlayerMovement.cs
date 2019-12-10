@@ -97,6 +97,11 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (_controller == null)
+        {
+            Start();
+        }
+
         if (carryingObject)
         {
             _controller.radius = _originalRange * 1.5f;
