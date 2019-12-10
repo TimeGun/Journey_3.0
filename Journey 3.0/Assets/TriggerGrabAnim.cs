@@ -18,6 +18,7 @@ public class TriggerGrabAnim : MonoBehaviour
             if (_coroutine == null)
             {
                 _animator = other.GetComponent<Animator>();
+                print(_animator);
                 _coroutine = StartCoroutine(PlayGrabAnim());
             }
         }
