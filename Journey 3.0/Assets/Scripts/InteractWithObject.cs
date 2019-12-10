@@ -12,6 +12,11 @@ public class InteractWithObject : MonoBehaviour
     
     [SerializeField] private bool _nearRune;
 
+    public bool NearRune
+    {
+        get => _nearRune;
+    }
+
     [SerializeField] private Transform handPosition;
 
     private PlayerMovement _movement;
@@ -46,6 +51,7 @@ public class InteractWithObject : MonoBehaviour
 
     void Update()
     {
+
         _nearRune = CheckNearRune();
 
         if (_inputSetUp.Controls.PlayerFreeMovement.Interact.triggered && !cooldown)
