@@ -17,7 +17,8 @@ public class TimelineController : MonoBehaviour
     private CinemachineVirtualCamera vcam;
     private double _timelineLength;
     private bool cinematicStarted;
-    
+    public bool ropeCutScene;
+    public bool playTimeline;
     
     // Start is called before the first frame update
     void Start()
@@ -27,6 +28,8 @@ public class TimelineController : MonoBehaviour
         _startPriority = vcam.Priority;
         _timelineLength = playableDirector.duration;
 //        Debug.Log(_startPriority);
+        
+            
 
 
     }
@@ -34,6 +37,21 @@ public class TimelineController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (playTimeline)
+        {
+            //playableDirector.Play();
+            StartCoroutine(JankyRope());
+            //playableDirector.Pause();
+            playTimeline = false;
+        }
+        
+        if (ropeCutScene)
+        {
+            StartCoroutine(JankyRope());
+            ropeCutScene = false;
+            //playableDirector.Stop();
+            //playableDirector.Evaluate();
+        }
         _playerEntered = cameraTrigger.GetComponent<DetectPlayer>().PlayerEntered;    //Use a coroutine to check if the player has entered every x amount of frames
         if (_playerEntered && cinematicStarted == false)
         {
@@ -74,5 +92,15 @@ public class TimelineController : MonoBehaviour
                 runOnce = false;
                 
             }        
+    }
+
+    IEnumerator JankyRope()
+    {
+        yield return new WaitForSeconds((float)_timelineLength);
+        yield return new WaitForSeconds(3.4f);
+        playableDirector.Play();
+        yield return new WaitForSeconds(0.1f);
+        playableDirector.Pause();
+        //playableDirector.time = 0.3f;
     }
 }
