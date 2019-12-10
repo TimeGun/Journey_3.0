@@ -16,8 +16,6 @@ public class BurnRopeTrigger : MonoBehaviour
 
         if (torchOnOff != null)
         {
-            print("Oi cunt");
-
             burnedRope.Invoke();
         }
     }

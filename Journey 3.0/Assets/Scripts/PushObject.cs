@@ -15,7 +15,7 @@ public class PushObject : MonoBehaviour, IInteractible
 
     private float _distanceToPushingObject;
 
-    [SerializeField] private float _minDistance = 0;
+    [SerializeField] private float _minDistance = 1.1f;
 
     private InteractWithObject _interactWithObject;
 
@@ -73,7 +73,6 @@ public class PushObject : MonoBehaviour, IInteractible
 
                     if (_movement.PushingBoulder())
                     {
-                        print("play sound");
                         if (!_source.isPlaying)
                             _source.Play();
                     }
