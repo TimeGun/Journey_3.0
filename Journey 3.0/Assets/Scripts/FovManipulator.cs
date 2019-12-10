@@ -17,6 +17,7 @@ public class FovManipulator : MonoBehaviour
     private float _startFOV;
     private float _currentFov;
     public float targetFov;
+    private bool firstTimeEnter;
     
 
     public enum DistanceType
@@ -83,9 +84,10 @@ public class FovManipulator : MonoBehaviour
             playerInZone = Trigger.GetComponent<DetectPlayer>().PlayerInCollider;        //bool set true when the player is in the trigger collider 
             currentDist = Vector3.Distance(Player.transform.position, TargetObj.transform.position);        //current distance between p[layer and target obj
         
-            if (playerEnter)
+            if (playerEnter && firstTimeEnter == false)
             {
                 _startDist = Vector3.Distance(Player.transform.position, TargetObj.transform.position);        //get start dist when player enters the collider
+                firstTimeEnter = true;
             }
             else if (playerInZone)
             {
@@ -96,7 +98,8 @@ public class FovManipulator : MonoBehaviour
             }
             else if (playerInZone == false)
             {
-                activeCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.FieldOfView = _startFOV;        //sets fov back to initial fov when the player exits the collider
+                //activeCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.FieldOfView = _startFOV;        //sets fov back to initial fov when the player exits the collider
+                activeCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.FieldOfView =  activeCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.FieldOfView = _startFOV;;
             }
     }
 
