@@ -19,6 +19,7 @@ public class TimelineController : MonoBehaviour
     private bool cinematicStarted;
     public bool ropeCutScene;
     public bool playTimeline;
+    public bool rockFall;
     
     // Start is called before the first frame update
     void Start()
@@ -37,6 +38,8 @@ public class TimelineController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
+        
         if (playTimeline)
         {
             //playableDirector.Play();
@@ -52,11 +55,27 @@ public class TimelineController : MonoBehaviour
             //playableDirector.Stop();
             //playableDirector.Evaluate();
         }
-        _playerEntered = cameraTrigger.GetComponent<DetectPlayer>().PlayerEntered;    //Use a coroutine to check if the player has entered every x amount of frames
+
+        if (cameraTrigger != null)
+        {
+            _playerEntered = cameraTrigger.GetComponent<DetectPlayer>().PlayerEntered;    //Use a coroutine to check if the player has entered every x amount of frames
+
+        }
+        
         if (_playerEntered && cinematicStarted == false)
         {
             //Debug.Log("yurt");
-            StartCoroutine(PriorityChange());
+            if (targetCamera != null)
+            {
+                StartCoroutine(PriorityChange());
+            }
+
+            if (rockFall)
+            {
+                PlayTimeline();
+                rockFall = false;
+            }
+           
             SetCamera();
             cinematicStarted = true;
 
@@ -92,6 +111,11 @@ public class TimelineController : MonoBehaviour
                 runOnce = false;
                 
             }        
+    }
+
+    void PlayTimeline()
+    {
+        playableDirector.Play();
     }
 
     IEnumerator JankyRope()
