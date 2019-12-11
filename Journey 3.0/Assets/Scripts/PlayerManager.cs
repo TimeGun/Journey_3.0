@@ -8,8 +8,4 @@ public static class PlayerManager
     public static Vector3 FireflyRef;
     public static bool GateOpened;
     
-    
-    
-    
-   
 }
