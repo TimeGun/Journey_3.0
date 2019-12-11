@@ -10,15 +10,19 @@ public class GateOpenCutscene : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        gateOpen = PlayerManager.GateOpened;
+       
     }
 
     // Update is called once per frame
     void Update()
     {
+        gateOpen = PlayerManager.GateOpened;
+        Debug.Log(gateOpen);
         if (gateOpen)
         {
-            timeline.GetComponent<TimelineController>().playTimeline = true;
+            timeline.GetComponent<TimelineController>().PlayTimeline();
+            PlayerManager.GateOpened = false;
+            gateOpen = false;
         }
     }
 }

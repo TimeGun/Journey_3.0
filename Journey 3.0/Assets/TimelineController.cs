@@ -113,7 +113,7 @@ public class TimelineController : MonoBehaviour
             }        
     }
 
-    void PlayTimeline()
+    public void PlayTimeline()
     {
         playableDirector.Play();
     }
