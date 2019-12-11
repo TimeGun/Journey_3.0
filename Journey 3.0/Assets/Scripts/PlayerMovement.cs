@@ -93,6 +93,8 @@ public class PlayerMovement : MonoBehaviour
         _inputSetUp = GetComponent<InputSetUp>();
 
         _originalRange = _controller.radius;
+
+        FadeToBlack.instance.SetBlack(false);
     }
 
     private void Update()

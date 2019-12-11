@@ -13,7 +13,7 @@ public class FadeToBlack : MonoBehaviour
         instance = this;
     }
 
-    public void SetBars(bool value)
+    public void SetBlack(bool value)
     {
         _anim.SetBool("blackBarsOn", value);
     }
