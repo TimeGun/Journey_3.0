@@ -12,9 +12,15 @@ public class ReloadVerticalSlice : MonoBehaviour
     {
         if (other.gameObject.name == "Player")
         {
-            SceneManager.LoadSceneAsync(0, LoadSceneMode.Single);
+            StartCoroutine(EndVerticalSlice());
         }
     }
 
-    
+    IEnumerator EndVerticalSlice()
+    {
+        FadeToBlack.instance.SetBlack(true);
+        
+        yield return new WaitForSeconds(3f);
+        SceneManager.LoadSceneAsync(0, LoadSceneMode.Single);
+    }
 }

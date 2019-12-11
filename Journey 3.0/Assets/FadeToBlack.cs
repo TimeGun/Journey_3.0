@@ -15,6 +15,6 @@ public class FadeToBlack : MonoBehaviour
 
     public void SetBlack(bool value)
     {
-        _anim.SetBool("blackBarsOn", value);
+        _anim.SetBool("black", value);
     }
 }
