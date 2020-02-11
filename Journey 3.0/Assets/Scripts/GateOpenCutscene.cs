@@ -17,7 +17,7 @@ public class GateOpenCutscene : MonoBehaviour
     void Update()
     {
         gateOpen = PlayerManager.GateOpened;
-        Debug.Log(gateOpen);
+        
         if (gateOpen)
         {
             timeline.GetComponent<TimelineController>().PlayTimeline();

@@ -28,6 +28,8 @@ public static class API
     }
     
     private static GlobalReferences _globalReferencesInstance;
+
+
     public static GlobalReferences GlobalReferences {
         get {
             if (_globalReferencesInstance == null ||
@@ -37,6 +39,9 @@ public static class API
             return _globalReferencesInstance;
         }
     }
+    
+    
+    
     public static bool PrewarmReferences () {
         if (GlobalReferences) {
             return true ;
