@@ -21,6 +21,8 @@ public class SceneManagerScript : MonoBehaviour
     public static int bundleIndex = 0;
 
     public static bool loading = false;
+
+    public bool baseSceneLoaded = false;
     
     
     void Start()
@@ -32,11 +34,22 @@ public class SceneManagerScript : MonoBehaviour
 
     IEnumerator StartGameLoad()
     {
-        StartCoroutine(LoadBundle());
-        yield return new WaitUntil(() => loading == false);
-        StartCoroutine(LoadBundle());
-        yield return new WaitUntil(() => loading == false);
         SceneManager.LoadSceneAsync("Base Scene", LoadSceneMode.Additive);
+        SceneManager.sceneLoaded += LoadedBaseScene;
+        
+        yield return new WaitUntil(() => baseSceneLoaded == true);
+        
+        StartCoroutine(LoadBundle());
+        yield return new WaitUntil(() => loading == false);
+        StartCoroutine(LoadBundle());
+        yield return new WaitUntil(() => loading == false);
+
+        API.GlobalReferences.PlayerRef.GetComponent<PlayerMovement>().enabled = true;
+    }
+
+    void LoadedBaseScene(Scene scene, LoadSceneMode mode)
+    {
+        baseSceneLoaded = true;
     }
 
     public static IEnumerator LoadBundle()
@@ -45,6 +58,7 @@ public class SceneManagerScript : MonoBehaviour
 
         loading = true;
         print("Bundle Loading");
+        
         //Sets the current bundle to be the bundleIndex number
         instance.currentBundle = instance.gameScenes[bundleIndex];
         

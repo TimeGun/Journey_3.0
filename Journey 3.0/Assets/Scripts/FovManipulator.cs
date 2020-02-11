@@ -36,6 +36,7 @@ public class FovManipulator : MonoBehaviour
     void Start()
     {
         _startFOV = activeCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.FieldOfView;    //get initial fov of target camera
+        Player = API.GlobalReferences.PlayerRef;
     }
 
   
