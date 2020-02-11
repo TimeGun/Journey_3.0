@@ -17,6 +17,12 @@ public class InterestFinder : MonoBehaviour
 
     [SerializeField] private List<Transform> transformsOfInterst = new List<Transform>();
 
+    public List<Transform> TransformsOfInterst
+    {
+        get => transformsOfInterst;
+        set => transformsOfInterst = value;
+    }
+
     [SerializeField] private Transform lookTarget;
     [SerializeField] private Transform headPos;
 

@@ -22,7 +22,7 @@ public class SceneManagerScript : MonoBehaviour
 
     public static bool loading = false;
 
-    public bool baseSceneLoaded = false;
+    private bool baseSceneLoaded = false;
     
     
     void Start()

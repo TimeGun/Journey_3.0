@@ -23,6 +23,7 @@ public class FadeLight : MonoBehaviour
     {
         startColor = new Color(0, 1f, 1f, 1f);
         startIntensity = _light.intensity;
+        _interactWithObject = API.GlobalReferences.PlayerRef.GetComponent<InteractWithObject>();
     }
 
     void Update()
