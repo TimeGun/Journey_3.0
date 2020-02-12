@@ -2,10 +2,17 @@
 
 using Cinemachine;
 using UnityEngine;
+using UnityEngine.Rendering.HighDefinition;
 
 public class CameraZone : MonoBehaviour
 {
     public GameObject cameraTrigger;
+
+    public bool FindCam1;
+    public bool FindCam2;
+
+    public string Cam1Name;
+    public string Cam2Name;
 
     private bool playerInZone;
     public int targetPriority1;
@@ -25,6 +32,16 @@ public class CameraZone : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (FindCam1)
+        {
+            targetCamera1 = GameObject.Find(Cam1Name);
+        }
+
+        if (FindCam2)
+        {
+            targetCamera2 = GameObject.Find(Cam2Name);
+        }
+
         if (targetCamera1 != null)
         {
             initialPriority1 = targetCamera1.GetComponent<CinemachineVirtualCameraBase>().Priority;

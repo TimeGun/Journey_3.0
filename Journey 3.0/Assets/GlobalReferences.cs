@@ -6,6 +6,14 @@ public class GlobalReferences : MonoBehaviour
 {
     private GameObject _playerRef;
     private GameObject _mainCamera;
+    
+    [SerializeField] private GameObject _behindPlayerSphere;
+
+    public GameObject BehindPlayerSphere
+    {
+        get => _behindPlayerSphere;
+        set => _behindPlayerSphere = value;
+    }
 
     public GameObject PlayerRef
     {
