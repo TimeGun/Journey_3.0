@@ -55,6 +55,7 @@ public class CheckPlate : MonoBehaviour
                 Destroy(_ReturnBoulderPresent.pushableObj.GetComponent<PushObject>());
                 
                 openDoor.Invoke();
+                API.GlobalReferences.PlayerRef.GetComponent<InteractWithObject>().StopInteracting();
                 opened = true;
             } 
         }

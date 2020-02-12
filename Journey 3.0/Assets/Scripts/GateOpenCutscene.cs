@@ -16,6 +16,7 @@ public class GateOpenCutscene : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         gateOpen = PlayerManager.GateOpened;
         
         if (gateOpen)

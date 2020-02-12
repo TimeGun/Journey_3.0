@@ -5,6 +5,6 @@ using UnityEngine;
 public static class PlayerManager
 {
     public static Vector3 PlayerPosRef;
-    public static Vector3 FireflyRef;
+    public static Transform FireflyRef;
     public static bool GateOpened;
 }

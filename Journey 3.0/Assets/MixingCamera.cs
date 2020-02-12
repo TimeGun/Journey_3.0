@@ -30,6 +30,7 @@ public class MixingCamera : MonoBehaviour
     
     void Start()
     {
+        followTarget = API.GlobalReferences.PlayerRef.transform;
         
         if (followTarget)
         {

@@ -13,6 +13,6 @@ public class PlayerFollower : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.position = PlayerManager.PlayerPosRef;
+        //transform.position = PlayerManager.PlayerPosRef;
     }
 }

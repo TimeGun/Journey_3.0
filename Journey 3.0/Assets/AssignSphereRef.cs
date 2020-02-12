@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class FireflyFollower : MonoBehaviour
+public class AssignSphereRef : MonoBehaviour
 {
     // Start is called before the first frame update
     void Start()
     {
-        
+        API.GlobalReferences.BehindPlayerSphere = gameObject;
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.position = PlayerManager.FireflyRef.position;
+        
     }
 }

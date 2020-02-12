@@ -4,17 +4,15 @@ using UnityEngine;
 
 public class FireflyRef : MonoBehaviour
 {
-    private Vector3 _fireFlyRef;
     // Start is called before the first frame update
     void Start()
     {
-        
+        PlayerManager.FireflyRef = transform;
     }
 
     // Update is called once per frame
     void Update()
     {
-        _fireFlyRef = transform.position;
-        PlayerManager.FireflyRef = _fireFlyRef;
+        
     }
 }

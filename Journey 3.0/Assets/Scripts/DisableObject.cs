@@ -10,7 +10,7 @@ public class DisableObject : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        Target = GameObject.Find("CameraTrigger6");
     }
 
     // Update is called once per frame
