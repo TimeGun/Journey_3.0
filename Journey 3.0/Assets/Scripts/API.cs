@@ -29,6 +29,8 @@ public static class API
     
     private static GlobalReferences _globalReferencesInstance;
 
+    private static InterestManagerScript _interestManagerScriptInstance;
+
 
     public static GlobalReferences GlobalReferences {
         get {
@@ -37,6 +39,16 @@ public static class API
                 _globalReferencesInstance = FindSingleInstance<GlobalReferences>();
             }
             return _globalReferencesInstance;
+        }
+    }
+    
+    public static InterestManagerScript InterestManagerScript {
+        get {
+            if (_interestManagerScriptInstance == null ||
+                ReferenceEquals(_interestManagerScriptInstance, null)) {
+                _interestManagerScriptInstance = FindSingleInstance<InterestManagerScript>();
+            }
+            return _interestManagerScriptInstance;
         }
     }
     

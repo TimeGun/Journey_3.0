@@ -90,8 +90,9 @@ public class SceneManagerScript : MonoBehaviour
         print("Bundle Loaded");
         loading = false;
         bundleIndex++;
-
-
+        
+        API.InterestManagerScript.LoadNewPointsOfInterest(section);
+        
         if (SceneManager.sceneCount > maximumNumberOfScenesLoaded)
         {
             UnloadScenes();

@@ -1,11 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class InterestManagerScript : MonoBehaviour
 {
-    private Queue<Transform> currentObjectsOfInterst;
+    private Queue<Transform> currentObjectsOfInterst = new Queue<Transform>();
 
     public int maximumInterestCount;
     
@@ -29,13 +30,6 @@ public class InterestManagerScript : MonoBehaviour
 
         for (int i = 0; i < sceneOjbects.Length; i++)
         {
-            ObjectToLookAt rootCheck = sceneOjbects[i].GetComponent<ObjectToLookAt>();
-
-            if (rootCheck != null)
-            {
-                currentObjectsOfInterst.Enqueue(rootCheck.transform);
-            }
-
             ObjectToLookAt[] tempObjs = sceneOjbects[i].GetComponentsInChildren<ObjectToLookAt>();
 
             if (tempObjs.Length > 0)
@@ -54,9 +48,15 @@ public class InterestManagerScript : MonoBehaviour
 
         API.GlobalReferences.PlayerRef.GetComponent<InterestFinder>().TransformsOfInterst.Clear();
 
-        for (int i = 0; i < currentObjectsOfInterst.Count; i++)
-        {
-            API.GlobalReferences.PlayerRef.GetComponent<InterestFinder>().TransformsOfInterst.Add(currentObjectsOfInterst[i]);
-        }
+//        for (int i = 0; i < currentObjectsOfInterst.Count; i++)
+//        {
+//            API.GlobalReferences.PlayerRef.GetComponent<InterestFinder>().TransformsOfInterst.Add(currentObjectsOfInterst[i]);
+//        }
+
+        API.GlobalReferences.PlayerRef.GetComponent<InterestFinder>().TransformsOfInterst =
+            currentObjectsOfInterst.ToList();
+
+
+
     }
 }
