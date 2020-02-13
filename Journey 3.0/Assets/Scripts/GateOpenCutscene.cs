@@ -6,6 +6,8 @@ public class GateOpenCutscene : MonoBehaviour
 {
     private bool gateOpen;
     public GameObject timeline;
+
+    public TimelineController _timelineController;
     
     // Start is called before the first frame update
     void Start()
@@ -22,6 +24,7 @@ public class GateOpenCutscene : MonoBehaviour
         if (gateOpen)
         {
             timeline.GetComponent<TimelineController>().PlayTimeline();
+            _timelineController.StartCoroutine(_timelineController.PriorityChange());
             PlayerManager.GateOpened = false;
             gateOpen = false;
         }

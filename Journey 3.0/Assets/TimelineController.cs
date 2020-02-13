@@ -26,6 +26,7 @@ public class TimelineController : MonoBehaviour
     {
         //Debug.Log(playableDirector.duration);
         vcam = targetCamera.GetComponent<CinemachineVirtualCamera>();
+        print(vcam);
         _startPriority = vcam.Priority;
         _timelineLength = playableDirector.duration;
 //        Debug.Log(_startPriority);
@@ -64,7 +65,7 @@ public class TimelineController : MonoBehaviour
         
         if (_playerEntered && cinematicStarted == false)
         {
-            //Debug.Log("yurt");
+            Debug.Log("yurt");
             if (targetCamera != null)
             {
                 StartCoroutine(PriorityChange());
@@ -88,7 +89,7 @@ public class TimelineController : MonoBehaviour
         //playableDirector.Play();
     }
 
-    IEnumerator PriorityChange()
+    public IEnumerator PriorityChange()
     {
         
         bool runOnce = true;
