@@ -39,8 +39,6 @@ public class TimelineController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
-        
         if (playTimeline)
         {
             //playableDirector.Play();
