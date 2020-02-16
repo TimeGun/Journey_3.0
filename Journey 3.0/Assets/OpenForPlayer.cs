@@ -24,6 +24,10 @@ public class OpenForPlayer : MonoBehaviour
 
     private Vector3 _closedRunePosition;
 
+    private bool _playerActivated = false;
+
+    private float _itemPresentHeightOffset;
+
     void Start()
     {
         if (testing)
@@ -44,6 +48,7 @@ public class OpenForPlayer : MonoBehaviour
 
         if (distanceToPlayer < _activationDistance)
         {
+            _playerActivated = true;
             _lerpSpeed = Map(distanceToPlayer, _activationDistance, 0, _lerpSpeedMax * _minimumLerpSpeedPercentage, _lerpSpeedMax);
             float tempHoverDistance = Map(distanceToPlayer, _activationDistance, 0, _hoverDistance * _minimumOpeningPercentage, _hoverDistance);
             _topRunePart.transform.position = 
@@ -51,11 +56,26 @@ public class OpenForPlayer : MonoBehaviour
         }
         else
         {
+            if (_playerActivated)
+            {
+                StartCoroutine(SlamDown());
+                _playerActivated = false;
+            }
+
             _lerpSpeed = _lerpSpeedMax;
-            _topRunePart.transform.position = Vector3.MoveTowards(_topRunePart.transform.position, _closedRunePosition, Time.deltaTime * _slamSpeed);
+            _topRunePart.transform.position = Vector3.MoveTowards(_topRunePart.transform.position, _closedRunePosition + new Vector3(0, _itemPresentHeightOffset, 0), Time.deltaTime * _slamSpeed);
         }
     }
-    
+
+    IEnumerator SlamDown()
+    {
+        //check if object is on rune
+        //check where to move rune down to
+        //call squishObject
+        //spawn particles (other flair)
+        return null;
+    }
+
     public float Map(float a, float b, float c, float d, float e)
     {
         

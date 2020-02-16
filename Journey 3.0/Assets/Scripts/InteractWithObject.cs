@@ -233,8 +233,18 @@ public class InteractWithObject : MonoBehaviour
         if (interactible.GetComponent<GravityCheck>() != null && _interactible.isActive())
             _interactible.StopInteraction();
 
-        ChangeSize _change = interactible.GetComponent<ChangeSize>();
-        _change.StartCoroutine(_change.ChangeSizeOfObject());
+        if (rune.GetComponent<GrowObject>() != null)
+        {
+            ChangeSize _change = interactible.GetComponent<ChangeSize>();
+            _change.StartCoroutine(_change.ChangeSizeOfObject());
+        }
+
+        if (rune.GetComponent<HoldInteractipleOnRune>())
+        {
+            //place object on rune
+        }
+
+
 
         yield return new WaitForEndOfFrame();
 
