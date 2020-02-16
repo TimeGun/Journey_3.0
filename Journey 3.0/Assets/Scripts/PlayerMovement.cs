@@ -94,7 +94,7 @@ public class PlayerMovement : MonoBehaviour
 
         _originalRange = _controller.radius;
 
-        FadeToBlack.instance.SetBlack(false);
+        //FadeToBlack.instance.SetBlack(false);
     }
 
     private void Update()

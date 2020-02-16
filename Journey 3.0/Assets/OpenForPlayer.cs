@@ -9,12 +9,14 @@ public class OpenForPlayer : MonoBehaviour
     private GameObject player;
 
     [SerializeField] private float _hoverDistance = 2f;
+    [SerializeField] [Range(0, 1)] private float _minimumOpeningPercentage;
 
     [SerializeField] private float _activationDistance = 5f;
 
     private float _lerpSpeed;
     
     [SerializeField] private float _lerpSpeedMax;
+    [SerializeField] [Range(0, 1)] private float _minimumLerpSpeedPercentage;
 
     [SerializeField] private bool testing;
 
@@ -42,8 +44,8 @@ public class OpenForPlayer : MonoBehaviour
 
         if (distanceToPlayer < _activationDistance)
         {
-            _lerpSpeed = Map(distanceToPlayer, _activationDistance, 0, 0, _lerpSpeedMax);
-            float tempHoverDistance = Map(distanceToPlayer, _activationDistance, 0, 0.5f, _hoverDistance);
+            _lerpSpeed = Map(distanceToPlayer, _activationDistance, 0, _lerpSpeedMax * _minimumLerpSpeedPercentage, _lerpSpeedMax);
+            float tempHoverDistance = Map(distanceToPlayer, _activationDistance, 0, _hoverDistance * _minimumOpeningPercentage, _hoverDistance);
             _topRunePart.transform.position = 
                 Vector3.Lerp(_topRunePart.transform.position, _closedRunePosition + new Vector3(0, tempHoverDistance, 0), Time.deltaTime * _lerpSpeed);
         }
