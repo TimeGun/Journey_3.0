@@ -28,6 +28,8 @@ public class OpenForPlayer : MonoBehaviour
 
     private float _itemPresentHeightOffset;
 
+    [SerializeField] private HoldInteractipleOnRune _holdInteractipleOnRune;
+
     void Start()
     {
         if (testing)
@@ -49,10 +51,21 @@ public class OpenForPlayer : MonoBehaviour
         if (distanceToPlayer < _activationDistance)
         {
             _playerActivated = true;
-            _lerpSpeed = Map(distanceToPlayer, _activationDistance, 0, _lerpSpeedMax * _minimumLerpSpeedPercentage, _lerpSpeedMax);
-            float tempHoverDistance = Map(distanceToPlayer, _activationDistance, 0, _hoverDistance * _minimumOpeningPercentage, _hoverDistance);
-            _topRunePart.transform.position = 
-                Vector3.Lerp(_topRunePart.transform.position, _closedRunePosition + new Vector3(0, tempHoverDistance, 0), Time.deltaTime * _lerpSpeed);
+            
+            if (_holdInteractipleOnRune.ItemOnRuneBool)
+            {
+                _lerpSpeed = Map(distanceToPlayer, _activationDistance, 0, _lerpSpeedMax * _minimumLerpSpeedPercentage, _lerpSpeedMax);
+                float tempHoverDistance = Map(distanceToPlayer, _activationDistance, 0, _hoverDistance * _minimumOpeningPercentage, _hoverDistance);
+                _topRunePart.transform.position = 
+                    Vector3.Lerp(_topRunePart.transform.position, _closedRunePosition + new Vector3(0, _hoverDistance, 0), Time.deltaTime * _lerpSpeed);
+            }
+            else
+            {
+                _lerpSpeed = Map(distanceToPlayer, _activationDistance, 0, _lerpSpeedMax * _minimumLerpSpeedPercentage, _lerpSpeedMax);
+                float tempHoverDistance = Map(distanceToPlayer, _activationDistance, 0, _hoverDistance * _minimumOpeningPercentage, _hoverDistance);
+                _topRunePart.transform.position = 
+                    Vector3.Lerp(_topRunePart.transform.position, _closedRunePosition + new Vector3(0, tempHoverDistance, 0), Time.deltaTime * _lerpSpeed);
+            }
         }
         else
         {
