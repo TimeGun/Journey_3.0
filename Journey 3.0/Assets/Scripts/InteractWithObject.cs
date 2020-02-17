@@ -33,7 +33,7 @@ public class InteractWithObject : MonoBehaviour
 
     public Transform _chestHeight;
 
-    private bool cooldown;
+    [SerializeField] private bool cooldown;
 
     public AudioSource _source;
 
@@ -74,10 +74,17 @@ public class InteractWithObject : MonoBehaviour
                 }
                 else
                 {
-                    interactible = ReturnCloserObject();
+                    if (rune.GetComponent<HoldInteractipleOnRune>() != null)
+                    {
+                        interactible = rune.GetComponent<HoldInteractipleOnRune>().ItemOnRune;
+                    }
+                    else
+                    {
+                        interactible = ReturnCloserObject();
 
-                    GameObject[] temp = new GameObject[] {rune, interactible};
-                    _coroutine = StartCoroutine(UseRune(temp));
+                        GameObject[] temp = new GameObject[] {rune, interactible};
+                        _coroutine = StartCoroutine(UseRune(temp));
+                    }
                 }
             }
             else if (!_interacting && !_nearRune && _objectDetection.Items.Count > 0)
@@ -225,6 +232,8 @@ public class InteractWithObject : MonoBehaviour
 
     IEnumerator UseRune(GameObject[] runeAndInteractible)
     {
+        bool adjustCoolDown = false;
+        
         GameObject rune = runeAndInteractible[0];
         GameObject interactible = runeAndInteractible[1];
 
@@ -243,7 +252,7 @@ public class InteractWithObject : MonoBehaviour
         {
             HoldInteractipleOnRune holdInteractipleOnRune = rune.GetComponent<HoldInteractipleOnRune>();
 
-            if (!holdInteractipleOnRune.ItemOnRune)
+            if (!holdInteractipleOnRune.ItemOnRuneBool)
             {
                 _interactible.StopInteraction();
 
@@ -251,18 +260,24 @@ public class InteractWithObject : MonoBehaviour
                 float ySize = col.bounds.size.y;
                 col.isTrigger= true;
                 interactible.GetComponent<Rigidbody>().isKinematic = true;
+                holdInteractipleOnRune.ItemOnRune = interactible;
                 interactible.transform.position = holdInteractipleOnRune.ObjectPlaceArea.position + new Vector3(0f, ySize/2f, 0f);
-                holdInteractipleOnRune.ItemOnRune = true;
+                holdInteractipleOnRune.ItemOnRuneBool = true;
             }
-
+            else
+            {
+                holdInteractipleOnRune.ItemOnRune = null;
+                holdInteractipleOnRune.ItemOnRuneBool = false;
+                StartCoroutine(TurnToGrab(interactible));
+                adjustCoolDown = true;
+            }
         }
-
-
 
         yield return new WaitForEndOfFrame();
 
         _movement.enabled = true;
-        cooldown = false;
+        if(!adjustCoolDown)
+            cooldown = false;
     }
 
     IEnumerator TurnToPush(GameObject interactible)
