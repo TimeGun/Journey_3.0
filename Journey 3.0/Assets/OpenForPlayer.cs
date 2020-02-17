@@ -69,11 +69,12 @@ public class OpenForPlayer : MonoBehaviour
 
     IEnumerator SlamDown()
     {
+        print("Slammed down");
         //check if object is on rune
         //check where to move rune down to
         //call squishObject
         //spawn particles (other flair)
-        return null;
+        yield return null;
     }
 
     public float Map(float a, float b, float c, float d, float e)

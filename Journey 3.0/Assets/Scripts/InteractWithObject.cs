@@ -239,9 +239,22 @@ public class InteractWithObject : MonoBehaviour
             _change.StartCoroutine(_change.ChangeSizeOfObject());
         }
 
-        if (rune.GetComponent<HoldInteractipleOnRune>())
+        if (rune.GetComponent<HoldInteractipleOnRune>() != null)
         {
-            //place object on rune
+            HoldInteractipleOnRune holdInteractipleOnRune = rune.GetComponent<HoldInteractipleOnRune>();
+
+            if (!holdInteractipleOnRune.ItemOnRune)
+            {
+                _interactible.StopInteraction();
+
+                Collider col = interactible.GetComponent<Collider>();
+                float ySize = col.bounds.size.y;
+                col.isTrigger= true;
+                interactible.GetComponent<Rigidbody>().isKinematic = true;
+                interactible.transform.position = holdInteractipleOnRune.ObjectPlaceArea.position + new Vector3(0f, ySize/2f, 0f);
+                holdInteractipleOnRune.ItemOnRune = true;
+            }
+
         }
 
 

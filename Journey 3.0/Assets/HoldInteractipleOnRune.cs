@@ -5,7 +5,21 @@ using UnityEngine;
 public class HoldInteractipleOnRune : MonoBehaviour, IInteractible, IRune
 {
     private bool _itemOnRune;
-    
+
+    public bool ItemOnRune
+    {
+        get => _itemOnRune;
+        set => _itemOnRune = value;
+    }
+
+    [SerializeField] private Transform objectPlaceArea;
+
+    public Transform ObjectPlaceArea
+    {
+        get => objectPlaceArea;
+        set => objectPlaceArea = value;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -18,28 +32,23 @@ public class HoldInteractipleOnRune : MonoBehaviour, IInteractible, IRune
         
     }
 
-    GameObject IInteractible.getGameObject()
-    {
-        throw new System.NotImplementedException();
-    }
-
     public bool isActive()
     {
-        throw new System.NotImplementedException();
+        return true;
     }
 
     public void StartInteraction(Transform parent)
     {
-        throw new System.NotImplementedException();
+        
     }
 
     public void StopInteraction()
     {
-        throw new System.NotImplementedException();
+        
     }
 
-    GameObject IRune.getGameObject()
+    public GameObject getGameObject()
     {
-        throw new System.NotImplementedException();
+        return gameObject;
     }
 }
