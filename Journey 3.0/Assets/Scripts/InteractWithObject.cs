@@ -8,7 +8,7 @@ public class InteractWithObject : MonoBehaviour
 
     private InputSetUp _inputSetUp;
 
-    private bool _interacting;
+    [SerializeField] private bool _interacting;
     
     [SerializeField] private bool _nearRune;
 
@@ -58,6 +58,7 @@ public class InteractWithObject : MonoBehaviour
         {
             if (_nearRune && _objectDetection.Items.Count > 1)
             {
+                print("debug");
                 cooldown = true;
                 _movement.ControllerVeclocity = Vector3.zero;
                 _movement.enabled = false;
@@ -77,6 +78,11 @@ public class InteractWithObject : MonoBehaviour
                     if (rune.GetComponent<HoldInteractipleOnRune>() != null)
                     {
                         interactible = rune.GetComponent<HoldInteractipleOnRune>().ItemOnRune;
+                        _interactingObj = rune.GetComponent<HoldInteractipleOnRune>().ItemOnRune
+                            .GetComponent<IInteractible>();
+                        GameObject[] temp = new GameObject[] {rune, interactible};
+                        
+                        _coroutine = StartCoroutine(UseRune(temp));
                     }
                     else
                     {
@@ -254,11 +260,11 @@ public class InteractWithObject : MonoBehaviour
 
             if (!holdInteractipleOnRune.ItemOnRuneBool)
             {
-                _interactible.StopInteraction();
+                StopInteracting();
 
                 Collider col = interactible.GetComponent<Collider>();
                 float ySize = col.bounds.size.y;
-                col.isTrigger= true;
+                col.isTrigger = true;
                 interactible.GetComponent<Rigidbody>().isKinematic = true;
                 holdInteractipleOnRune.ItemOnRune = interactible;
                 interactible.transform.position = holdInteractipleOnRune.ObjectPlaceArea.position + new Vector3(0f, ySize/2f, 0f);
@@ -269,6 +275,7 @@ public class InteractWithObject : MonoBehaviour
                 holdInteractipleOnRune.ItemOnRune = null;
                 holdInteractipleOnRune.ItemOnRuneBool = false;
                 StartCoroutine(TurnToGrab(interactible));
+                _interacting = true;
                 adjustCoolDown = true;
             }
         }
@@ -276,6 +283,7 @@ public class InteractWithObject : MonoBehaviour
         yield return new WaitForEndOfFrame();
 
         _movement.enabled = true;
+        
         if(!adjustCoolDown)
             cooldown = false;
     }
