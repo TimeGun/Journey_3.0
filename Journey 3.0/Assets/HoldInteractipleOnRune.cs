@@ -4,13 +4,22 @@ using UnityEngine;
 
 public class HoldInteractipleOnRune : MonoBehaviour, IInteractible, IRune
 {
-    private bool _itemOnRune;
+    private bool _itemOnRuneBoolBool;
 
-    public bool ItemOnRune
+    public bool ItemOnRuneBool
+    {
+        get => _itemOnRuneBoolBool;
+        set => _itemOnRuneBoolBool = value;
+    }
+
+    [SerializeField] private GameObject _itemOnRune;
+
+    public GameObject ItemOnRune
     {
         get => _itemOnRune;
         set => _itemOnRune = value;
     }
+
 
     [SerializeField] private Transform objectPlaceArea;
 
