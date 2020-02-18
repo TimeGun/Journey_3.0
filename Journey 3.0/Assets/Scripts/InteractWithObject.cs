@@ -260,20 +260,31 @@ public class InteractWithObject : MonoBehaviour
 
             if (!holdInteractipleOnRune.ItemOnRuneBool)
             {
+                print(interactible.gameObject);
                 StopInteracting();
 
                 Collider col = interactible.GetComponent<Collider>();
-                float ySize = col.bounds.size.y;
+                Renderer rend = interactible.GetComponentInChildren<Renderer>();
+
+                interactible.transform.position = holdInteractipleOnRune.ObjectPlaceArea.position;
+                interactible.transform.rotation = Quaternion.identity;
+                yield return new WaitForEndOfFrame();
+                float ySize = rend.bounds.size.y;
+                print(ySize);
                 col.isTrigger = true;
+                interactible.transform.position = interactible.transform.position + new Vector3(0, ySize/2f, 0);
+                rune.GetComponent<OpenForPlayer>().ItemPresentHeightOffset = ySize;
                 interactible.GetComponent<Rigidbody>().isKinematic = true;
                 holdInteractipleOnRune.ItemOnRune = interactible;
-                interactible.transform.position = holdInteractipleOnRune.ObjectPlaceArea.position + new Vector3(0f, ySize/2f, 0f);
+                
+
                 holdInteractipleOnRune.ItemOnRuneBool = true;
             }
             else
             {
                 holdInteractipleOnRune.ItemOnRune = null;
                 holdInteractipleOnRune.ItemOnRuneBool = false;
+                rune.GetComponent<OpenForPlayer>().ItemPresentHeightOffset = 0f;
                 StartCoroutine(TurnToGrab(interactible));
                 _interacting = true;
                 adjustCoolDown = true;

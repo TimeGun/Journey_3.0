@@ -28,6 +28,12 @@ public class OpenForPlayer : MonoBehaviour
 
     private float _itemPresentHeightOffset;
 
+    public float ItemPresentHeightOffset
+    {
+        get => _itemPresentHeightOffset;
+        set => _itemPresentHeightOffset = value;
+    }
+
     [SerializeField] private HoldInteractipleOnRune _holdInteractipleOnRune;
 
     void Start()
@@ -69,20 +75,23 @@ public class OpenForPlayer : MonoBehaviour
         }
         else
         {
-            if (_playerActivated)
+            Vector3 heightOffsetVector = new Vector3(0, _itemPresentHeightOffset, 0);
+            
+            if (_playerActivated && _topRunePart.transform.position == _closedRunePosition + heightOffsetVector)
             {
                 StartCoroutine(SlamDown());
                 _playerActivated = false;
             }
 
             _lerpSpeed = _lerpSpeedMax;
-            _topRunePart.transform.position = Vector3.MoveTowards(_topRunePart.transform.position, _closedRunePosition + new Vector3(0, _itemPresentHeightOffset, 0), Time.deltaTime * _slamSpeed);
+            _topRunePart.transform.position = Vector3.MoveTowards(_topRunePart.transform.position, _closedRunePosition + heightOffsetVector, Time.deltaTime * _slamSpeed);
         }
     }
 
     IEnumerator SlamDown()
     {
         print("Slammed down");
+
         //check if object is on rune
         //check where to move rune down to
         //call squishObject
