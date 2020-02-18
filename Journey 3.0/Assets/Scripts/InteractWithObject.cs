@@ -218,6 +218,8 @@ public class InteractWithObject : MonoBehaviour
 
     IEnumerator TurnToGrab(GameObject interactible)
     {
+        _movement.enabled = false;
+        
         Quaternion _targetRotation =
             Quaternion.LookRotation(interactible.transform.position - transform.position, Vector3.up);
 
@@ -249,12 +251,14 @@ public class InteractWithObject : MonoBehaviour
 
         _source.PlayOneShot(clip);
         _interactingObj.StartInteraction(handPosition);
-
-        yield return new WaitForEndOfFrame();
-
-        _movement.enabled = true;
         
-        yield return new WaitUntil(() => _animator.IsInTransition(0) == false);
+        yield return new WaitForEndOfFrame();
+        
+        
+        yield return new WaitUntil(() => !_animator.IsInTransition(0));
+        print("Transition finished");
+        
+        _movement.enabled = true;
         cooldown = false;
     }
 
@@ -284,7 +288,7 @@ public class InteractWithObject : MonoBehaviour
             {
                 interactible.transform.rotation = Quaternion.Euler(0, interactible.transform.rotation.eulerAngles.y, 0);
                 interactible.transform.position = holdInteractipleOnRune.ObjectPlaceArea.position;
-                print(interactible.gameObject);
+                
                 StopInteracting();
 
                 Collider col = interactible.GetComponent<Collider>();
@@ -293,15 +297,19 @@ public class InteractWithObject : MonoBehaviour
                 
                 
                 yield return new WaitForEndOfFrame();
+                
                 float ySize = rend.bounds.size.y;
-                print(ySize);
+                
                 col.isTrigger = true;
+                
                 interactible.transform.position = interactible.transform.position + new Vector3(0, ySize/2f, 0);
+                
                 rune.GetComponent<OpenForPlayer>().ItemPresentHeightOffset = ySize;
+                
                 interactible.GetComponent<Rigidbody>().isKinematic = true;
+                
                 holdInteractipleOnRune.ItemOnRune = interactible;
                 
-
                 holdInteractipleOnRune.ItemOnRuneBool = true;
             }
             else
@@ -317,10 +325,12 @@ public class InteractWithObject : MonoBehaviour
 
         yield return new WaitForEndOfFrame();
 
-        _movement.enabled = true;
-        
-        if(!adjustCoolDown)
+
+        if (!adjustCoolDown)
+        {
+            _movement.enabled = true;
             cooldown = false;
+        }
     }
 
     IEnumerator TurnToPush(GameObject interactible)
