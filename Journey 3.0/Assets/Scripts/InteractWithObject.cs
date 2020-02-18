@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class InteractWithObject : MonoBehaviour
 {
+    private Animator _animator;
     private ObjectDetection _objectDetection;
 
     private InputSetUp _inputSetUp;
@@ -47,6 +49,7 @@ public class InteractWithObject : MonoBehaviour
         _objectDetection = GetComponent<ObjectDetection>();
         _movement = GetComponent<PlayerMovement>();
         _coroutine = null;
+        _animator = GetComponent<Animator>();
     }
 
     void Update()
@@ -58,16 +61,20 @@ public class InteractWithObject : MonoBehaviour
         {
             if (_nearRune && _objectDetection.Items.Count > 1)
             {
-                print("debug");
-                cooldown = true;
-                _movement.ControllerVeclocity = Vector3.zero;
-                _movement.enabled = false;
-
                 GameObject rune = _rune.getGameObject();
                 GameObject interactible;
 
                 if (_interacting)
                 {
+                    if (rune.GetComponent<HoldInteractipleOnRune>() != null && rune.GetComponent<HoldInteractipleOnRune>().ItemOnRuneBool)
+                    {
+                        return;
+                    }
+                    
+                    cooldown = true;
+                    _movement.ControllerVeclocity = Vector3.zero;
+                    _movement.enabled = false;
+                    
                     interactible = _interactingObj.getGameObject();
 
                     GameObject[] temp = new GameObject[] {rune, interactible};
@@ -77,6 +84,15 @@ public class InteractWithObject : MonoBehaviour
                 {
                     if (rune.GetComponent<HoldInteractipleOnRune>() != null)
                     {
+                        if (!rune.GetComponent<HoldInteractipleOnRune>().ItemOnRuneBool)
+                        {
+                            return;
+                        }
+
+                        cooldown = true;
+                        _movement.ControllerVeclocity = Vector3.zero;
+                        _movement.enabled = false;
+                        
                         interactible = rune.GetComponent<HoldInteractipleOnRune>().ItemOnRune;
                         _interactingObj = rune.GetComponent<HoldInteractipleOnRune>().ItemOnRune
                             .GetComponent<IInteractible>();
@@ -86,6 +102,10 @@ public class InteractWithObject : MonoBehaviour
                     }
                     else
                     {
+                        cooldown = true;
+                        _movement.ControllerVeclocity = Vector3.zero;
+                        _movement.enabled = false;
+                        
                         interactible = ReturnCloserObject();
 
                         GameObject[] temp = new GameObject[] {rune, interactible};
@@ -198,6 +218,8 @@ public class InteractWithObject : MonoBehaviour
 
     IEnumerator TurnToGrab(GameObject interactible)
     {
+        _movement.enabled = false;
+        
         Quaternion _targetRotation =
             Quaternion.LookRotation(interactible.transform.position - transform.position, Vector3.up);
 
@@ -229,9 +251,13 @@ public class InteractWithObject : MonoBehaviour
 
         _source.PlayOneShot(clip);
         _interactingObj.StartInteraction(handPosition);
-
+        
         yield return new WaitForEndOfFrame();
-
+        
+        
+        yield return new WaitUntil(() => !_animator.IsInTransition(0));
+        print("Transition finished");
+        
         _movement.enabled = true;
         cooldown = false;
     }
@@ -260,24 +286,30 @@ public class InteractWithObject : MonoBehaviour
 
             if (!holdInteractipleOnRune.ItemOnRuneBool)
             {
-                print(interactible.gameObject);
+                interactible.transform.rotation = Quaternion.Euler(0, interactible.transform.rotation.eulerAngles.y, 0);
+                interactible.transform.position = holdInteractipleOnRune.ObjectPlaceArea.position;
+                
                 StopInteracting();
 
                 Collider col = interactible.GetComponent<Collider>();
                 Renderer rend = interactible.GetComponentInChildren<Renderer>();
 
-                interactible.transform.position = holdInteractipleOnRune.ObjectPlaceArea.position;
-                interactible.transform.rotation = Quaternion.identity;
+                
+                
                 yield return new WaitForEndOfFrame();
+                
                 float ySize = rend.bounds.size.y;
-                print(ySize);
+                
                 col.isTrigger = true;
+                
                 interactible.transform.position = interactible.transform.position + new Vector3(0, ySize/2f, 0);
+                
                 rune.GetComponent<OpenForPlayer>().ItemPresentHeightOffset = ySize;
+                
                 interactible.GetComponent<Rigidbody>().isKinematic = true;
+                
                 holdInteractipleOnRune.ItemOnRune = interactible;
                 
-
                 holdInteractipleOnRune.ItemOnRuneBool = true;
             }
             else
@@ -293,10 +325,12 @@ public class InteractWithObject : MonoBehaviour
 
         yield return new WaitForEndOfFrame();
 
-        _movement.enabled = true;
-        
-        if(!adjustCoolDown)
+
+        if (!adjustCoolDown)
+        {
+            _movement.enabled = true;
             cooldown = false;
+        }
     }
 
     IEnumerator TurnToPush(GameObject interactible)
