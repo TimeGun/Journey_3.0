@@ -92,7 +92,16 @@ public class OpenForPlayer : MonoBehaviour
     {
         print("Slammed down");
 
-        //check if object is on rune
+        if (_holdInteractipleOnRune.ItemOnRuneBool)
+        {
+            SquishObject item = _holdInteractipleOnRune.ItemOnRune.GetComponent<SquishObject>();
+            
+            if (item != null)
+            {
+                item.Squish();
+            }
+        }
+
         //check where to move rune down to
         //call squishObject
         //spawn particles (other flair)
