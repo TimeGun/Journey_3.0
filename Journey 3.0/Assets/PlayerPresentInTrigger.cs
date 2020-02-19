@@ -7,6 +7,7 @@ public class PlayerPresentInTrigger : MonoBehaviour
 {
     [SerializeField] private PlayerInPlacementArea _playerInPlacementArea;
     
+    //player has entered the trigger
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
@@ -14,7 +15,8 @@ public class PlayerPresentInTrigger : MonoBehaviour
             _playerInPlacementArea.PlayerInTrigger = true;
         }
     }
-
+    
+    //Player has left the trigger
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("Player"))
