@@ -4,15 +4,11 @@ using UnityEngine;
 
 public class PlayerInPlacementArea : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] private bool _playerInTrigger;
 
-    // Update is called once per frame
-    void Update()
+    public bool PlayerInTrigger
     {
-        
+        get => _playerInTrigger;
+        set => _playerInTrigger = value;
     }
 }
