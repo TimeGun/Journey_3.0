@@ -7,40 +7,32 @@ public class TeleportPlayer : MonoBehaviour
 {
 
     [SerializeField] private GameObject _teleportExitLocation;
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            TeleportToExit(other.transform.root.gameObject);
+            StartCoroutine(TeleportToExit(other.transform.gameObject));
         }
     }
 
-    private void TeleportToExit(GameObject objectToTeleport)
+    private IEnumerator TeleportToExit(GameObject objectToTeleport)
     {
+        PlayerMovement _playerMovement = objectToTeleport.GetComponent<PlayerMovement>();
+
+        _playerMovement.enabled = false;
         objectToTeleport.transform.position = _teleportExitLocation.transform.position;
-        print("called");
+        
+        yield return new WaitForEndOfFrame();
+        _playerMovement.enabled = true;
     }
 
     private void OnDrawGizmos()
     {
         Gizmos.color = new Color(0, 0, 1f, 0.4f);
-        Gizmos.DrawSphere(_teleportExitLocation.transform.position, 10f);
+        Gizmos.DrawCube(_teleportExitLocation.transform.position, GetComponent<Collider>().bounds.size);
         
         Gizmos.color = new Color(1, 0, 1f, 0.4f);
-        Gizmos.DrawSphere(transform.position, 10f);
+        Gizmos.DrawCube(transform.position, GetComponent<Collider>().bounds.size);
     }
 }
