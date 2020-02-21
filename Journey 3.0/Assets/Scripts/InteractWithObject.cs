@@ -128,7 +128,7 @@ public class InteractWithObject : MonoBehaviour
                     }
                 }
             }
-            else if (!_interacting && !_nearRune && _objectDetection.Items.Count > 0)
+            else if (!_interacting && !_nearRune && _objectDetection.Items.Count > 0 && !_inPlacementArea)
             {
                 cooldown = true;
                 _interacting = true;
@@ -150,6 +150,14 @@ public class InteractWithObject : MonoBehaviour
                 else if (type == typeof(PickUpObject))
                 {
                     _coroutine = StartCoroutine(TurnToGrab(obj));
+                }
+            }
+            else if (!_interacting && !_nearRune && _objectDetection.Items.Count > 0 && _inPlacementArea)
+            {
+                if (_plankPlacement.PlankIsPlaceDown != null)
+                {
+                    _interactingObj = _plankPlacement.Plank.GetComponent<IInteractible>();
+                    _coroutine = StartCoroutine(TurnToGrab(_plankPlacement.Plank));
                 }
             }
             else if (_interacting && !_nearRune && !_inPlacementArea)
@@ -314,8 +322,8 @@ public class InteractWithObject : MonoBehaviour
 
         _plankPlacement.Plank = interactible;
         
-        _interactingObj.StopInteraction();
-
+        StopInteracting();
+        
         _plankPlacement.PlankIsPlaceDown = true;
         _plankPlacement.UpdatePositionAdjustBool();
         
