@@ -13,13 +13,10 @@ public class PlayerPresentInTrigger : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             _playerInPlacementArea.PlayerInTrigger = true;
-            if (_playerInPlacementArea.PlayerInterestFinder == null)
-            {
-                _playerInPlacementArea.PlayerInterestFinder = other.GetComponent<InterestFinder>();
-            }
 
             InteractWithObject interactWithObject = other.GetComponent<InteractWithObject>();
-
+            interactWithObject.PlankPlacement = transform.root.GetComponent<PlankPlacement>();
+            interactWithObject.InPlacementArea = true;
         }
     }
     

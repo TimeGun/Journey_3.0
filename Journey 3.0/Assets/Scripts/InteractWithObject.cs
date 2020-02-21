@@ -157,6 +157,7 @@ public class InteractWithObject : MonoBehaviour
                 StopInteracting();
             }else if (_interacting && !_nearRune && _inPlacementArea)
             {
+                print("ayyyy");
                 SquishObject squishObject = _interactingObj.getGameObject().GetComponent<SquishObject>();
                 
                 if (squishObject != null && squishObject.Squished)
@@ -290,8 +291,10 @@ public class InteractWithObject : MonoBehaviour
     {
         _movement.enabled = false;
         
+
+        
         Quaternion _targetRotation =
-            Quaternion.LookRotation(interactible.transform.position - transform.position, Vector3.up);
+            Quaternion.LookRotation(_plankPlacement.CenterOfGapObj.transform.right, Vector3.up);
 
         _targetRotation.eulerAngles =
             new Vector3(transform.rotation.x, _targetRotation.eulerAngles.y, transform.rotation.z);
@@ -303,30 +306,32 @@ public class InteractWithObject : MonoBehaviour
 
             yield return new WaitForEndOfFrame();
         }
-        
-        float angleFromForward = ReturnAngleToObj(interactible.transform.position);
-        
-        if (angleFromForward > 10f && interactible.transform.position.y < _chestHeight.position.y)
-        {
-            gameObject.SendMessage("PickUpLow");
-        }
-        else
-        {
-            gameObject.SendMessage("PickUpHigh");
-        }
-
-        float animationTime = _movement.ReturnCurrentClipLength()/2f;
-        
-        yield return new WaitForSeconds(animationTime);
 
         _source.PlayOneShot(clip);
-        _interactingObj.StartInteraction(handPosition);
+        
+        print(interactible);
+
+
+        _plankPlacement.Plank = interactible;
+        
+        _interactingObj.StopInteraction();
+
+        _plankPlacement.PlankIsPlaceDown = true;
+        _plankPlacement.UpdatePositionAdjustBool();
+        
+        interactible.GetComponent<Rigidbody>().isKinematic = true;
+        interactible.GetComponent<Collider>().isTrigger = true;
+        
+        _plankPlacement.Plank.transform.position = _plankPlacement.CenterOfGapObj.transform.position;
+        _plankPlacement.Plank.transform.rotation = _plankPlacement.CenterOfGapObj.transform.rotation;
+
+        
+        
         
         yield return new WaitForEndOfFrame();
         
         
         yield return new WaitUntil(() => !_animator.IsInTransition(0));
-        print("Transition finished");
         
         _movement.enabled = true;
         cooldown = false;

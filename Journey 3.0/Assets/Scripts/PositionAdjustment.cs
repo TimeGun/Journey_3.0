@@ -8,6 +8,24 @@ public class PositionAdjustment : MonoBehaviour
 
     [SerializeField] private bool plankPlacedDown = false;
 
+    public PlayerInPlacementArea PlayerInPlacementArea
+    {
+        get => _playerInPlacementArea;
+        set => _playerInPlacementArea = value;
+    }
+
+    public bool PlankPlacedDown
+    {
+        get => plankPlacedDown;
+        set => plankPlacedDown = value;
+    }
+
+    public GameObject PlayerObject
+    {
+        get => _playerObject;
+        set => _playerObject = value;
+    }
+
     private GameObject _playerObject;
     
     void Start()
