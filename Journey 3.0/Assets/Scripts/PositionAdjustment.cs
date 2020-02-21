@@ -27,10 +27,13 @@ public class PositionAdjustment : MonoBehaviour
     }
 
     private GameObject _playerObject;
+
+    private Collider col;
     
     void Start()
     {
         _playerObject = GameObject.FindWithTag("Player");
+        col = GetComponent<Collider>();
     }
 
     void Update()
@@ -39,6 +42,11 @@ public class PositionAdjustment : MonoBehaviour
         if (_playerInPlacementArea.PlayerInTrigger && !plankPlacedDown)
         {
             AdjustPosition();
+            col.isTrigger = false;
+        }
+        else
+        {
+            col.isTrigger = true;
         }
     }
 
