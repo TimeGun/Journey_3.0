@@ -324,6 +324,8 @@ public class InteractWithObject : MonoBehaviour
         
         _plankPlacement.Plank.transform.position = _plankPlacement.CenterOfGapObj.transform.position;
         _plankPlacement.Plank.transform.rotation = _plankPlacement.CenterOfGapObj.transform.rotation;
+        
+        _plankPlacement.Plank.transform.rotation = _plankPlacement.Plank.transform.rotation * Quaternion.AngleAxis(90f, _plankPlacement.Plank.transform.up);
 
         
         
