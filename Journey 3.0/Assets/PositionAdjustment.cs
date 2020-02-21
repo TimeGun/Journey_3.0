@@ -38,8 +38,6 @@ public class PositionAdjustment : MonoBehaviour
         
         Vector2 pointOfIntersection = lineLineIntersection(new Vector2(thisPos.x, thisPos.z), new Vector2(thisPos2.x, thisPos2.z), new Vector2(playerPos.x, playerPos.z), new Vector2(playerPos2.x, playerPos2.z));
 
-         
-
         transform.position = new Vector3(pointOfIntersection.x, transform.position.y, pointOfIntersection.y);
         
     }

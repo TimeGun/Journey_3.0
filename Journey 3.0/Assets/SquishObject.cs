@@ -8,7 +8,15 @@ public class SquishObject : MonoBehaviour
     [SerializeField] private MeshRenderer _meshRenderer;
     [SerializeField] private Mesh _newMesh;
     [SerializeField] private Material _newMaterial;
-    
+
+    private bool _squished;
+
+    public bool Squished
+    {
+        get => _squished;
+        set => _squished = value;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,6 +31,11 @@ public class SquishObject : MonoBehaviour
 
     public void Squish()
     {
+        if (!_squished)
+        {
+            _squished = true;
+        }
+
         _meshFilter.mesh = _newMesh;
         _meshRenderer.material = _newMaterial;
     }

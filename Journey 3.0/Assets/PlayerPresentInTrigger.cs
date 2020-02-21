@@ -13,6 +13,13 @@ public class PlayerPresentInTrigger : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             _playerInPlacementArea.PlayerInTrigger = true;
+            if (_playerInPlacementArea.PlayerInterestFinder == null)
+            {
+                _playerInPlacementArea.PlayerInterestFinder = other.GetComponent<InterestFinder>();
+            }
+
+            InteractWithObject interactWithObject = other.GetComponent<InteractWithObject>();
+
         }
     }
     
@@ -22,6 +29,7 @@ public class PlayerPresentInTrigger : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             _playerInPlacementArea.PlayerInTrigger = false;
+            other.GetComponent<InteractWithObject>().InPlacementArea = false;
         }
     }
 }

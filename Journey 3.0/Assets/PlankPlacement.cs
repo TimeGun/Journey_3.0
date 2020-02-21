@@ -9,14 +9,4 @@ public class PlankPlacement : MonoBehaviour
     private bool plankIsPlaceDown;
     
     
-    
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
 }

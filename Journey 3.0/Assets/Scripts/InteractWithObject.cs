@@ -14,6 +14,14 @@ public class InteractWithObject : MonoBehaviour
     
     [SerializeField] private bool _nearRune;
 
+    [SerializeField] private bool _inPlacementArea;
+
+    public bool InPlacementArea
+    {
+        get => _inPlacementArea;
+        set => _inPlacementArea = value;
+    }
+
     public bool NearRune
     {
         get => _nearRune;
@@ -41,7 +49,14 @@ public class InteractWithObject : MonoBehaviour
 
     public AudioClip clip;
 
-    
+    private PlankPlacement _plankPlacement;
+
+    public PlankPlacement PlankPlacement
+    {
+        get => _plankPlacement;
+        set => _plankPlacement = value;
+    }
+
 
     void Start()
     {
@@ -137,9 +152,17 @@ public class InteractWithObject : MonoBehaviour
                     _coroutine = StartCoroutine(TurnToGrab(obj));
                 }
             }
-            else if (_interacting && !_nearRune)
+            else if (_interacting && !_nearRune && !_inPlacementArea)
             {
                 StopInteracting();
+            }else if (_interacting && !_nearRune && _inPlacementArea)
+            {
+                SquishObject squishObject = _interactingObj.getGameObject().GetComponent<SquishObject>();
+                
+                if (squishObject != null && squishObject.Squished)
+                {
+                    StartCoroutine(PlacePlank(_interactingObj.getGameObject()));
+                }
             }
         }
     }
@@ -261,6 +284,56 @@ public class InteractWithObject : MonoBehaviour
         _movement.enabled = true;
         cooldown = false;
     }
+    
+    
+    IEnumerator PlacePlank(GameObject interactible)
+    {
+        _movement.enabled = false;
+        
+        Quaternion _targetRotation =
+            Quaternion.LookRotation(interactible.transform.position - transform.position, Vector3.up);
+
+        _targetRotation.eulerAngles =
+            new Vector3(transform.rotation.x, _targetRotation.eulerAngles.y, transform.rotation.z);
+        
+        
+        while (Quaternion.Angle(transform.rotation, _targetRotation) > 10f)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, _targetRotation, Time.deltaTime * _turnSpeed);
+
+            yield return new WaitForEndOfFrame();
+        }
+        
+        float angleFromForward = ReturnAngleToObj(interactible.transform.position);
+        
+        if (angleFromForward > 10f && interactible.transform.position.y < _chestHeight.position.y)
+        {
+            gameObject.SendMessage("PickUpLow");
+        }
+        else
+        {
+            gameObject.SendMessage("PickUpHigh");
+        }
+
+        float animationTime = _movement.ReturnCurrentClipLength()/2f;
+        
+        yield return new WaitForSeconds(animationTime);
+
+        _source.PlayOneShot(clip);
+        _interactingObj.StartInteraction(handPosition);
+        
+        yield return new WaitForEndOfFrame();
+        
+        
+        yield return new WaitUntil(() => !_animator.IsInTransition(0));
+        print("Transition finished");
+        
+        _movement.enabled = true;
+        cooldown = false;
+    }
+    
+    
+    
 
     IEnumerator UseRune(GameObject[] runeAndInteractible)
     {
