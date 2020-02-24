@@ -130,10 +130,7 @@ public class InteractWithObject : MonoBehaviour
             }
             else if (!_interacting && !_nearRune && _objectDetection.Items.Count > 0 && !_inPlacementArea)
             {
-                cooldown = true;
-                _interacting = true;
-                _movement.ControllerVeclocity = Vector3.zero;
-                _movement.enabled = false;
+                
 
 
                 GameObject obj = ReturnCloserObject();
@@ -145,19 +142,56 @@ public class InteractWithObject : MonoBehaviour
 
                 if (type == typeof(PushObject))
                 {
+                    cooldown = true;
+                    _interacting = true;
+                    _movement.ControllerVeclocity = Vector3.zero;
+                    _movement.enabled = false;
+                    
                     _coroutine = StartCoroutine(TurnToPush(obj));
                 }
                 else if (type == typeof(PickUpObject))
                 {
-                    _coroutine = StartCoroutine(TurnToGrab(obj));
+                    if (_plankPlacement != null)
+                    {
+                        if (_plankPlacement.Plank != null && _plankPlacement.Plank != obj)
+                        {
+                            cooldown = true;
+                            _interacting = true;
+                            _movement.ControllerVeclocity = Vector3.zero;
+                            _movement.enabled = false;
+                            
+                            _coroutine = StartCoroutine(TurnToGrab(obj));
+                        }
+                    }
+                    else
+                    {
+                        cooldown = true;
+                        _interacting = true;
+                        _movement.ControllerVeclocity = Vector3.zero;
+                        _movement.enabled = false;
+                        
+                        _coroutine = StartCoroutine(TurnToGrab(obj));
+                    }
                 }
             }
             else if (!_interacting && !_nearRune && _objectDetection.Items.Count > 0 && _inPlacementArea)
             {
-                if (_plankPlacement.PlankIsPlaceDown != null)
+                print("plank specific pickup");
+                cooldown = true;
+                _interacting = true;
+                _movement.ControllerVeclocity = Vector3.zero;
+                _movement.enabled = false;
+                
+                GameObject obj = ReturnCloserObject();
+                
+                _interactingObj = obj.GetComponent<IInteractible>();
+                _coroutine = StartCoroutine(TurnToGrab(obj));
+
+                if (obj == _plankPlacement.Plank)
                 {
-                    _interactingObj = _plankPlacement.Plank.GetComponent<IInteractible>();
-                    _coroutine = StartCoroutine(TurnToGrab(_plankPlacement.Plank));
+                    _plankPlacement.Plank = null;
+                    _plankPlacement.PlankIsPlaceDown = false;
+                    _plankPlacement.UpdatePositionAdjustBool();
                 }
             }
             else if (_interacting && !_nearRune && !_inPlacementArea)
@@ -165,7 +199,7 @@ public class InteractWithObject : MonoBehaviour
                 StopInteracting();
             }else if (_interacting && !_nearRune && _inPlacementArea)
             {
-                print("ayyyy");
+                print("Plank placement");
                 SquishObject squishObject = _interactingObj.getGameObject().GetComponent<SquishObject>();
                 
                 if (squishObject != null && squishObject.Squished)

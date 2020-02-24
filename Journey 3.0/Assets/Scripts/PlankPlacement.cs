@@ -26,14 +26,14 @@ public class PlankPlacement : MonoBehaviour
 
     public bool PlankIsPlaceDown
     {
-        get => plankIsPlaceDown;
-        set => plankIsPlaceDown = value;
+        get => _plankIsPlacedDown;
+        set => _plankIsPlacedDown = value;
     }
 
-    private bool plankIsPlaceDown;
+    private bool _plankIsPlacedDown;
 
     public void UpdatePositionAdjustBool()
     {
-        _positionAdjustment.PlankPlacedDown = plankIsPlaceDown;
+        _positionAdjustment.PlankPlacedDown = _plankIsPlacedDown;
     }
 }
