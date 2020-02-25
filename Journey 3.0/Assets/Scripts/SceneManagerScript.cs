@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -11,7 +12,7 @@ public class SceneManagerScript : MonoBehaviour
 
     public static SceneManagerScript instance;
 
-    [SerializeField] private int maximumNumberOfSectionsLoaded = 3;
+    [SerializeField] private int maximumNumberOfSectionsLoaded = 4;
 
     private int maximumNumberOfScenesLoaded;
 
@@ -60,7 +61,9 @@ public class SceneManagerScript : MonoBehaviour
         print("Bundle Loading");
         
         //Sets the current bundle to be the bundleIndex number
-        instance.currentBundle = instance.gameScenes[bundleIndex];
+        print(bundleIndex);
+        if(instance.gameScenes.Length > bundleIndex)
+            instance.currentBundle = instance.gameScenes[bundleIndex];
         
         for (int i = 0; i < instance.currentBundle.scenes.Length; i++)
         {
@@ -68,7 +71,6 @@ public class SceneManagerScript : MonoBehaviour
         }
 
         SceneManager.sceneLoaded += instance.MergeScenes;
-        
     }
 
     private void MergeScenes(Scene scene, LoadSceneMode mode)
@@ -87,24 +89,33 @@ public class SceneManagerScript : MonoBehaviour
         {
             SceneManager.MergeScenes(SceneManager.GetSceneByName(currentBundle.scenes[i]), section);
         }
-        print("Bundle Loaded");
-        loading = false;
-        bundleIndex++;
+        
         
         API.InterestManagerScript.LoadNewPointsOfInterest(section);
         
+        print(SceneManager.sceneCount);
+        print(maximumNumberOfScenesLoaded);
+        
         if (SceneManager.sceneCount > maximumNumberOfScenesLoaded)
         {
-            UnloadScenes();
+            print("Unloading Scene");
+            StartCoroutine(UnloadScenes());
         }
+        
+        print("Bundle Loaded");
+        loading = false;
+        bundleIndex++;
     }
 
-    void UnloadScenes()
+    IEnumerator UnloadScenes()
     {
+        yield return new WaitUntil(() => !API.GlobalReferences.MainCamera.GetComponent<CinemachineBrain>().IsBlending);
         string sceneToUnloadName = "Section"+ sceneToUnloadIndex.ToString();
         
         SceneManager.UnloadSceneAsync(sceneToUnloadName);
 
         sceneToUnloadIndex++;
+        
+        print("Scene Unloaded");
     }
 }

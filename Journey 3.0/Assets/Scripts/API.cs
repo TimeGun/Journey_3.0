@@ -30,6 +30,8 @@ public static class API
     private static GlobalReferences _globalReferencesInstance;
 
     private static InterestManagerScript _interestManagerScriptInstance;
+    
+    private static SceneManagerScript _sceneManagerScriptInstance;
 
 
     public static GlobalReferences GlobalReferences {
@@ -51,9 +53,20 @@ public static class API
             return _interestManagerScriptInstance;
         }
     }
-    
-    
-    
+
+
+    public static SceneManagerScript SceneManagerScript
+    {
+        get {
+            if (_sceneManagerScriptInstance == null ||
+                ReferenceEquals(_sceneManagerScriptInstance, null)) {
+                _sceneManagerScriptInstance = FindSingleInstance<SceneManagerScript>();
+            }
+            return _sceneManagerScriptInstance;
+        }
+    }
+
+
     public static bool PrewarmReferences () {
         if (GlobalReferences) {
             return true ;

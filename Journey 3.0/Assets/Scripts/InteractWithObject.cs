@@ -404,6 +404,7 @@ public class InteractWithObject : MonoBehaviour
 
         if (rune.GetComponent<HoldInteractipleOnRune>() != null)
         {
+            print("Hold on Rune");
             HoldInteractipleOnRune holdInteractipleOnRune = rune.GetComponent<HoldInteractipleOnRune>();
 
             if (!holdInteractipleOnRune.ItemOnRuneBool)

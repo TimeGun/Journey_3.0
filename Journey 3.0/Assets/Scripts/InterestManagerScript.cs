@@ -55,8 +55,5 @@ public class InterestManagerScript : MonoBehaviour
 
         API.GlobalReferences.PlayerRef.GetComponent<InterestFinder>().TransformsOfInterst =
             currentObjectsOfInterst.ToList();
-
-
-
     }
 }
