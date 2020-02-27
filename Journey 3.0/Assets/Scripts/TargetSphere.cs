@@ -13,11 +13,16 @@ public class TargetSphere : MonoBehaviour
         {
             _offset = transform.position - _player.transform.position;
         }
+        
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (SceneManagerScript.bundleIndex == 2)
+        {
+            _offset.z = _offset.z * -1;
+        }
         transform.position = _player.transform.position + _offset;
         
     }
