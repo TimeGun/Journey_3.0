@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 
 public class TeleportPlayer : MonoBehaviour
@@ -21,7 +22,22 @@ public class TeleportPlayer : MonoBehaviour
         PlayerMovement _playerMovement = objectToTeleport.GetComponent<PlayerMovement>();
 
         _playerMovement.enabled = false;
+        
+        FadeToBlack.instance.SetBlack(true);
+        
+        yield return new WaitForSeconds(1f);
+        
         objectToTeleport.transform.position = _teleportExitLocation.transform.position;
+        
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        
+
+        yield return new WaitUntil(() => !API.GlobalReferences.MainCamera.GetComponent<CinemachineBrain>().IsBlending);
+        
+        FadeToBlack.instance.SetBlack(false);
         
         yield return new WaitForEndOfFrame();
         _playerMovement.enabled = true;
