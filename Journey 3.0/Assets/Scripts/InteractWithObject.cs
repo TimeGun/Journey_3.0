@@ -15,12 +15,7 @@ public class InteractWithObject : MonoBehaviour
     [SerializeField] private bool _nearRune;
 
     [SerializeField] private bool _inPlacementArea;
-
-    public bool InPlacementArea
-    {
-        get => _inPlacementArea;
-        set => _inPlacementArea = value;
-    }
+    
 
     public bool NearRune
     {
@@ -128,15 +123,10 @@ public class InteractWithObject : MonoBehaviour
                     }
                 }
             }
-            else if (!_interacting && !_nearRune && _objectDetection.Items.Count > 0 && !_inPlacementArea)
+            else if (!_interacting && !_nearRune && _objectDetection.Items.Count > 0 && !_inPlacementArea)// pickup items in general
             {
-                
-
-
                 GameObject obj = ReturnCloserObject();
                 _interactingObj = obj.GetComponent<IInteractible>();
-
-                
 
                 var type = _interactingObj.GetType();
 
@@ -174,7 +164,7 @@ public class InteractWithObject : MonoBehaviour
                     }
                 }
             }
-            else if (!_interacting && !_nearRune && _objectDetection.Items.Count > 0 && _inPlacementArea)
+            else if (!_interacting && !_nearRune && _objectDetection.Items.Count > 0 && _inPlacementArea) // pickup of item whilst in the placement zone (bridge)
             {
                 print("plank specific pickup");
                 cooldown = true;
@@ -194,10 +184,11 @@ public class InteractWithObject : MonoBehaviour
                     _plankPlacement.UpdatePositionAdjustBool();
                 }
             }
-            else if (_interacting && !_nearRune && !_inPlacementArea)
+            else if (_interacting && !_nearRune && !_inPlacementArea) //Drop item you are currently holding
             {
                 StopInteracting();
-            }else if (_interacting && !_nearRune && _inPlacementArea)
+            }
+            else if (_interacting && !_nearRune && _inPlacementArea)
             {
                 print("Plank placement");
                 SquishObject squishObject = _interactingObj.getGameObject().GetComponent<SquishObject>();
@@ -478,5 +469,11 @@ public class InteractWithObject : MonoBehaviour
         _movement.enabled = true;
         GetComponent<InputSetUp>().enabled = true;
         cooldown = false;
+    }
+
+
+    public void ChangeInPlacementBool(bool newValue)
+    {
+        _inPlacementArea = newValue;
     }
 }

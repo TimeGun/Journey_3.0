@@ -12,11 +12,10 @@ public class PlayerPresentInTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            _playerInPlacementArea.PlayerInTrigger = true;
-
+            
             InteractWithObject interactWithObject = other.GetComponent<InteractWithObject>();
             interactWithObject.PlankPlacement = transform.root.GetComponent<PlankPlacement>();
-            interactWithObject.InPlacementArea = true;
+            other.SendMessage("ChangeInPlacementBool", true);
         }
     }
     
@@ -26,7 +25,7 @@ public class PlayerPresentInTrigger : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             _playerInPlacementArea.PlayerInTrigger = false;
-            other.GetComponent<InteractWithObject>().InPlacementArea = false;
+            other.SendMessage("ChangeInPlacementBool", false);
         }
     }
 }
