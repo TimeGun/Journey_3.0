@@ -19,16 +19,16 @@ public class BridgeSideTrigger : MonoBehaviour, IPlaceableArea
         set => _plankPlacedOnSide = value;
     }
 
-    public bool PlankPlaceDown
+    public bool PlankPlaceDownBool
     {
-        get => _plankPlaceDown;
-        set => _plankPlaceDown = value;
+        get => _plankPlacedDownBool;
+        set => _plankPlacedDownBool = value;
     }
 
 
     [SerializeField] private GameObject _plankPlacedOnSide;
 
-    [SerializeField] private bool _plankPlaceDown;
+    [SerializeField] private bool _plankPlacedDownBool;
 
     [SerializeField] private GameObject _centerOfPlankObject;
 
@@ -72,12 +72,12 @@ public class BridgeSideTrigger : MonoBehaviour, IPlaceableArea
 
     public bool GetPlankPlacedDown()
     {
-        return _plankPlaceDown;
+        return _plankPlacedDownBool;
     }
 
     public void SetPlankPlacedDown(bool value)
     {
-        _plankPlaceDown = value;
+        _plankPlacedDownBool = value;
     }
 
     public bool AdjustPositionBool()
