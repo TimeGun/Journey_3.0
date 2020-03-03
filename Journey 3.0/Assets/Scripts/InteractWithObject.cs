@@ -44,12 +44,12 @@ public class InteractWithObject : MonoBehaviour
 
     public AudioClip clip;
 
-    private PlankPlacement _plankPlacement;
+    [SerializeField] private IPlaceableArea _plankPlacementArea;
 
-    public PlankPlacement PlankPlacement
+    public IPlaceableArea PlankPlacement
     {
-        get => _plankPlacement;
-        set => _plankPlacement = value;
+        get => _plankPlacementArea;
+        set => _plankPlacementArea = value;
     }
 
 
@@ -141,9 +141,9 @@ public class InteractWithObject : MonoBehaviour
                 }
                 else if (type == typeof(PickUpObject))
                 {
-                    if (_plankPlacement != null)
+                    if (_plankPlacementArea != null)
                     {
-                        if (_plankPlacement.Plank != null && _plankPlacement.Plank != obj)
+                        if (_plankPlacementArea.GetPlank() != null && _plankPlacementArea.GetPlank() != obj)
                         {
                             cooldown = true;
                             _interacting = true;
@@ -177,11 +177,11 @@ public class InteractWithObject : MonoBehaviour
                 _interactingObj = obj.GetComponent<IInteractible>();
                 _coroutine = StartCoroutine(TurnToGrab(obj));
 
-                if (obj == _plankPlacement.Plank)
+                if (obj == _plankPlacementArea.GetPlank())
                 {
-                    _plankPlacement.Plank = null;
-                    _plankPlacement.PlankIsPlaceDown = false;
-                    _plankPlacement.UpdatePositionAdjustBool();
+                    _plankPlacementArea.SetPlank(null);
+                    _plankPlacementArea.SetPlankPlacedDown(false);
+                    //_plankPlacementArea.UpdatePositionAdjustBool();
                 }
             }
             else if (_interacting && !_nearRune && !_inPlacementArea) //Drop item you are currently holding
@@ -327,7 +327,7 @@ public class InteractWithObject : MonoBehaviour
 
         
         Quaternion _targetRotation =
-            Quaternion.LookRotation(_plankPlacement.CenterOfGapObj.transform.right, Vector3.up);
+            Quaternion.LookRotation(_plankPlacementArea.GetCenterObject().transform.right, Vector3.up);
 
         _targetRotation.eulerAngles =
             new Vector3(transform.rotation.x, _targetRotation.eulerAngles.y, transform.rotation.z);
@@ -345,20 +345,37 @@ public class InteractWithObject : MonoBehaviour
         print(interactible);
 
 
-        _plankPlacement.Plank = interactible;
+        _plankPlacementArea.SetPlank(interactible); 
         
         StopInteracting();
         
-        _plankPlacement.PlankIsPlaceDown = true;
-        _plankPlacement.UpdatePositionAdjustBool();
+        _plankPlacementArea.SetPlankPlacedDown(true);
+
+        if (_plankPlacementArea.AdjustPositionBool())
+        {
+            PositionAdjustment positionAdjustment =
+                _plankPlacementArea.GetCenterObject().GetComponent<PositionAdjustment>();
+            PositionAdjustmentDouble positionAdjustmentDouble =
+                _plankPlacementArea.GetCenterObject().GetComponent<PositionAdjustmentDouble>();
+
+            if (positionAdjustment != null)
+            {
+                positionAdjustment.PlankPlacedDown = true;
+            }
+
+            if (positionAdjustmentDouble != null)
+            {
+                positionAdjustmentDouble.PlankPlacedDown = true;
+            }
+        }
         
         interactible.GetComponent<Rigidbody>().isKinematic = true;
         interactible.GetComponent<Collider>().isTrigger = true;
         
-        _plankPlacement.Plank.transform.position = _plankPlacement.CenterOfGapObj.transform.position;
-        _plankPlacement.Plank.transform.rotation = _plankPlacement.CenterOfGapObj.transform.rotation;
+        _plankPlacementArea.GetPlank().transform.position = _plankPlacementArea.GetCenterObject().transform.position;
+        _plankPlacementArea.GetPlank().transform.rotation = _plankPlacementArea.GetCenterObject().transform.rotation;
         
-        _plankPlacement.Plank.transform.rotation = _plankPlacement.Plank.transform.rotation * Quaternion.AngleAxis(90f, _plankPlacement.Plank.transform.up);
+        _plankPlacementArea.GetPlank().transform.rotation = _plankPlacementArea.GetPlank().transform.rotation * Quaternion.AngleAxis(90f, _plankPlacementArea.GetPlank().transform.up);
 
         
         
@@ -475,5 +492,10 @@ public class InteractWithObject : MonoBehaviour
     public void ChangeInPlacementBool(bool newValue)
     {
         _inPlacementArea = newValue;
+    }
+
+    public void SetPlacementArea(IPlaceableArea newPlacementArea)
+    {
+        _plankPlacementArea = newPlacementArea;
     }
 }

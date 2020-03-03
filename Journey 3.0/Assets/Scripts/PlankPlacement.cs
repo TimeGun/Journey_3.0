@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlankPlacement : MonoBehaviour
+public class PlankPlacement : MonoBehaviour, IPlaceableArea
 {
     [SerializeField] private GameObject _centerOfGapObj;
 
@@ -11,29 +11,41 @@ public class PlankPlacement : MonoBehaviour
     [SerializeField] private GameObject _plank;
     
 
-    public GameObject Plank
-    {
-        get => _plank;
-        set => _plank = value;
-    }
-
-
-    public GameObject CenterOfGapObj
-    {
-        get => _centerOfGapObj;
-        set => _centerOfGapObj = value;
-    }
-
-    public bool PlankIsPlaceDown
-    {
-        get => _plankIsPlacedDown;
-        set => _plankIsPlacedDown = value;
-    }
-
     private bool _plankIsPlacedDown;
 
     public void UpdatePositionAdjustBool()
     {
         _positionAdjustment.PlankPlacedDown = _plankIsPlacedDown;
+    }
+    
+
+    public GameObject GetCenterObject()
+    {
+        return _centerOfGapObj;
+    }
+
+    public GameObject GetPlank()
+    {
+        return GetPlank();
+    }
+
+    public void SetPlank(GameObject value)
+    {
+        _plank = value; 
+    }
+
+    public bool GetPlankPlacedDown()
+    {
+        return _plankIsPlacedDown;
+    }
+
+    public void SetPlankPlacedDown(bool value)
+    {
+        _plankIsPlacedDown = value;
+    }
+
+    public bool AdjustPositionBool()
+    {
+        return true;
     }
 }

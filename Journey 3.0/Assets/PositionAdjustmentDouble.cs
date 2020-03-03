@@ -9,9 +9,6 @@ public class PositionAdjustmentDouble : MonoBehaviour
     [SerializeField] private bool _plankPlacedDown = false;
     
     
-    
-   
-
     public bool PlankPlacedDown
     {
         get => _plankPlacedDown;
@@ -36,8 +33,7 @@ public class PositionAdjustmentDouble : MonoBehaviour
 
     void Update()
     {
-        
-        //if the player is in the placement area and a plank hasnt been placed yet
+        //if the player is in the placement area and a plank hasn't been placed yet
         if (_bridgeSideTrigger.PlayerInThisTrigger && !_bridgeSideTrigger.PlankPlacedOnSide)
         {
             AdjustPosition();
