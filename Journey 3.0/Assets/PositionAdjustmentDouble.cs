@@ -36,17 +36,14 @@ public class PositionAdjustmentDouble : MonoBehaviour
         //if the player is in the placement area and a plank hasn't been placed yet
         if (_bridgeSideTrigger.PlayerInThisTrigger && !_bridgeSideTrigger.PlankPlaceDownBool)
         {
-            print("Player and bool off");
             AdjustPosition();
             col.isTrigger = false;
         }else if (!_bridgeSideTrigger.PlankPlaceDownBool)
         {
-            print("bool off");
             col.isTrigger = false;
         }
         else
         {
-            print("bool on");
             col.isTrigger = true;
         }
     }

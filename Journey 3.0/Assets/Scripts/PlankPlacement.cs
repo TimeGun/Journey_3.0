@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.HighDefinition;
 
 public class PlankPlacement : MonoBehaviour, IPlaceableArea
 {
@@ -26,7 +28,7 @@ public class PlankPlacement : MonoBehaviour, IPlaceableArea
 
     public GameObject GetPlank()
     {
-        return GetPlank();
+        return _plank;
     }
 
     public void SetPlank(GameObject value)
