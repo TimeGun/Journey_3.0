@@ -13,7 +13,15 @@ public class PickUpObject : MonoBehaviour, IInteractible
     private Transform _hand;
 
     private bool _carried;
-    
+
+    [SerializeField] private bool _placedDown;
+
+    public bool PlacedDown
+    {
+        get => _placedDown;
+        set => _placedDown = value;
+    }
+
 
     [SerializeField] private ListOfIKSettings _listOfIkSettings;
 

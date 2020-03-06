@@ -35,7 +35,7 @@ public class BridgeSideTrigger : MonoBehaviour, IPlaceableArea
     [SerializeField] private GameObject _plank;
 
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Player"))
         {
