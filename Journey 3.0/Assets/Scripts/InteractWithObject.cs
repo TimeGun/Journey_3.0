@@ -11,11 +11,11 @@ public class InteractWithObject : MonoBehaviour
     private InputSetUp _inputSetUp;
 
     [SerializeField] private bool _interacting;
-    
+
     [SerializeField] private bool _nearRune;
 
     [SerializeField] private bool _inPlacementArea;
-    
+
 
     public bool NearRune
     {
@@ -64,13 +64,12 @@ public class InteractWithObject : MonoBehaviour
 
     void Update()
     {
-
         _nearRune = CheckNearRune();
 
         if (_inputSetUp.Controls.PlayerFreeMovement.Interact.triggered && !cooldown)
         {
             print("input detected");
-            
+
             if (_nearRune && _objectDetection.Items.Count > 1)
             {
                 print("why would this be called");
@@ -80,15 +79,16 @@ public class InteractWithObject : MonoBehaviour
 
                 if (_interacting)
                 {
-                    if (rune.GetComponent<HoldInteractipleOnRune>() != null && rune.GetComponent<HoldInteractipleOnRune>().ItemOnRuneBool)
+                    if (rune.GetComponent<HoldInteractipleOnRune>() != null &&
+                        rune.GetComponent<HoldInteractipleOnRune>().ItemOnRuneBool)
                     {
                         return;
                     }
-                    
+
                     cooldown = true;
                     _movement.ControllerVeclocity = Vector3.zero;
                     _movement.enabled = false;
-                    
+
                     interactible = _interactingObj.getGameObject();
 
                     GameObject[] temp = new GameObject[] {rune, interactible};
@@ -106,12 +106,12 @@ public class InteractWithObject : MonoBehaviour
                         cooldown = true;
                         _movement.ControllerVeclocity = Vector3.zero;
                         _movement.enabled = false;
-                        
+
                         interactible = rune.GetComponent<HoldInteractipleOnRune>().ItemOnRune;
                         _interactingObj = rune.GetComponent<HoldInteractipleOnRune>().ItemOnRune
                             .GetComponent<IInteractible>();
                         GameObject[] temp = new GameObject[] {rune, interactible};
-                        
+
                         _coroutine = StartCoroutine(UseRune(temp));
                     }
                     else
@@ -119,7 +119,7 @@ public class InteractWithObject : MonoBehaviour
                         cooldown = true;
                         _movement.ControllerVeclocity = Vector3.zero;
                         _movement.enabled = false;
-                        
+
                         interactible = ReturnCloserObject();
 
                         GameObject[] temp = new GameObject[] {rune, interactible};
@@ -127,12 +127,12 @@ public class InteractWithObject : MonoBehaviour
                     }
                 }
             }
-            else if (!_interacting && !_nearRune && _objectDetection.Items.Count > 0 && !_inPlacementArea) // pickup items in general
+            else if (!_interacting && !_nearRune && _objectDetection.Items.Count > 0 && !_inPlacementArea
+            ) // pickup items in general
             {
                 print("general pickup fucked");
-                
-                
-                
+
+
                 GameObject obj = ReturnCloserObject();
                 _interactingObj = obj.GetComponent<IInteractible>();
 
@@ -144,26 +144,22 @@ public class InteractWithObject : MonoBehaviour
                     _interacting = true;
                     _movement.ControllerVeclocity = Vector3.zero;
                     _movement.enabled = false;
-                    
+
                     _coroutine = StartCoroutine(TurnToPush(obj));
                 }
                 else if (type == typeof(PickUpObject))
                 {
                     print("Test 1");
-                    if (_plankPlacementArea != null)
+                    if (_plankPlacementArea != null && _plankPlacementArea.GetPlank() != null &&
+                        _plankPlacementArea.GetPlank() != obj)
                     {
-                        print("Test 2");
+                        print("Test 3");
+                        cooldown = true;
+                        _interacting = true;
+                        _movement.ControllerVeclocity = Vector3.zero;
+                        _movement.enabled = false;
 
-                        if (_plankPlacementArea.GetPlank() != null && _plankPlacementArea.GetPlank() != obj)
-                        {
-                            print("Test 3");
-                            cooldown = true;
-                            _interacting = true;
-                            _movement.ControllerVeclocity = Vector3.zero;
-                            _movement.enabled = false;
-                            
-                            _coroutine = StartCoroutine(TurnToGrab(obj));
-                        }
+                        _coroutine = StartCoroutine(TurnToGrab(obj));
                     }
                     else
                     {
@@ -173,12 +169,13 @@ public class InteractWithObject : MonoBehaviour
                         _interacting = true;
                         _movement.ControllerVeclocity = Vector3.zero;
                         _movement.enabled = false;
-                        
+
                         _coroutine = StartCoroutine(TurnToGrab(obj));
                     }
                 }
             }
-            else if (!_interacting && !_nearRune && _objectDetection.Items.Count > 0 && _inPlacementArea) // pickup of item whilst in the placement zone (bridge)
+            else if (!_interacting && !_nearRune && _objectDetection.Items.Count > 0 && _inPlacementArea
+            ) // pickup of item whilst in the placement zone (bridge)
             {
                 GameObject obj = ReturnCloserObject();
 
@@ -193,8 +190,8 @@ public class InteractWithObject : MonoBehaviour
                 _interacting = true;
                 _movement.ControllerVeclocity = Vector3.zero;
                 _movement.enabled = false;
-                
-                
+
+
                 _interactingObj = obj.GetComponent<IInteractible>();
                 _coroutine = StartCoroutine(TurnToGrab(obj));
 
@@ -213,7 +210,7 @@ public class InteractWithObject : MonoBehaviour
             {
                 print("Plank placement while in zone");
                 SquishObject squishObject = _interactingObj.getGameObject().GetComponent<SquishObject>();
-                
+
                 if (squishObject != null && squishObject.Squished)
                 {
                     StartCoroutine(PlacePlank(_interactingObj.getGameObject()));
@@ -225,8 +222,9 @@ public class InteractWithObject : MonoBehaviour
     private float ReturnAngleToObj(Vector3 objPosition)
     {
         Vector3 toObject = objPosition - _chestHeight.position;
-        Vector3 toObjectStraight = new Vector3(objPosition.x, _chestHeight.position.y, objPosition.z) - _chestHeight.position;
-        
+        Vector3 toObjectStraight =
+            new Vector3(objPosition.x, _chestHeight.position.y, objPosition.z) - _chestHeight.position;
+
         return Vector3.Angle(toObject, toObjectStraight);
     }
 
@@ -297,23 +295,23 @@ public class InteractWithObject : MonoBehaviour
     IEnumerator TurnToGrab(GameObject interactible)
     {
         _movement.enabled = false;
-        
+
         Quaternion _targetRotation =
             Quaternion.LookRotation(interactible.transform.position - transform.position, Vector3.up);
 
         _targetRotation.eulerAngles =
             new Vector3(transform.rotation.x, _targetRotation.eulerAngles.y, transform.rotation.z);
-        
-        
+
+
         while (Quaternion.Angle(transform.rotation, _targetRotation) > 10f)
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, _targetRotation, Time.deltaTime * _turnSpeed);
 
             yield return new WaitForEndOfFrame();
         }
-        
+
         float angleFromForward = ReturnAngleToObj(interactible.transform.position);
-        
+
         if (angleFromForward > 10f && interactible.transform.position.y < _chestHeight.position.y)
         {
             gameObject.SendMessage("PickUpLow");
@@ -323,37 +321,36 @@ public class InteractWithObject : MonoBehaviour
             gameObject.SendMessage("PickUpHigh");
         }
 
-        float animationTime = _movement.ReturnCurrentClipLength()/2f;
-        
+        float animationTime = _movement.ReturnCurrentClipLength() / 2f;
+
         yield return new WaitForSeconds(animationTime);
 
         _source.PlayOneShot(clip);
         _interactingObj.StartInteraction(handPosition);
-        
+
         yield return new WaitForEndOfFrame();
-        
-        
+
+
         yield return new WaitUntil(() => !_animator.IsInTransition(0));
         print("Transition finished");
-        
+
         _movement.enabled = true;
         cooldown = false;
     }
-    
-    
+
+
     IEnumerator PlacePlank(GameObject interactible)
     {
         _movement.enabled = false;
-        
 
-        
+
         Quaternion _targetRotation =
             Quaternion.LookRotation(_plankPlacementArea.GetCenterObject().transform.right, Vector3.up);
 
         _targetRotation.eulerAngles =
             new Vector3(transform.rotation.x, _targetRotation.eulerAngles.y, transform.rotation.z);
-        
-        
+
+
         while (Quaternion.Angle(transform.rotation, _targetRotation) > 10f)
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, _targetRotation, Time.deltaTime * _turnSpeed);
@@ -362,15 +359,15 @@ public class InteractWithObject : MonoBehaviour
         }
 
         _source.PlayOneShot(clip);
-        
+
         print(interactible);
 
         interactible.GetComponent<PickUpObject>().PlacedDown = true;
 
-        _plankPlacementArea.SetPlank(interactible); 
-        
+        _plankPlacementArea.SetPlank(interactible);
+
         StopInteracting();
-        
+
         _plankPlacementArea.SetPlankPlacedDown(true);
 
         if (_plankPlacementArea.AdjustPositionBool())
@@ -390,34 +387,32 @@ public class InteractWithObject : MonoBehaviour
                 positionAdjustmentDouble.PlankPlacedDown = true;
             }
         }
-        
+
         interactible.GetComponent<Rigidbody>().isKinematic = true;
         interactible.GetComponent<Collider>().isTrigger = true;
-        
+
         _plankPlacementArea.GetPlank().transform.position = _plankPlacementArea.GetCenterObject().transform.position;
         _plankPlacementArea.GetPlank().transform.rotation = _plankPlacementArea.GetCenterObject().transform.rotation;
-        
-        _plankPlacementArea.GetPlank().transform.rotation = _plankPlacementArea.GetPlank().transform.rotation * Quaternion.AngleAxis(90f, _plankPlacementArea.GetPlank().transform.up);
 
-        
-        
-        
+        _plankPlacementArea.GetPlank().transform.rotation = _plankPlacementArea.GetPlank().transform.rotation *
+                                                            Quaternion.AngleAxis(90f,
+                                                                _plankPlacementArea.GetPlank().transform.up);
+
+
         yield return new WaitForEndOfFrame();
-        
-        
+
+
         yield return new WaitUntil(() => !_animator.IsInTransition(0));
-        
+
         _movement.enabled = true;
         cooldown = false;
     }
-    
-    
-    
+
 
     IEnumerator UseRune(GameObject[] runeAndInteractible)
     {
         bool adjustCoolDown = false;
-        
+
         GameObject rune = runeAndInteractible[0];
         GameObject interactible = runeAndInteractible[1];
 
@@ -441,28 +436,27 @@ public class InteractWithObject : MonoBehaviour
             {
                 interactible.transform.rotation = Quaternion.Euler(0, interactible.transform.rotation.eulerAngles.y, 0);
                 interactible.transform.position = holdInteractipleOnRune.ObjectPlaceArea.position;
-                
+
                 StopInteracting();
 
                 Collider col = interactible.GetComponent<Collider>();
                 Renderer rend = interactible.GetComponentInChildren<Renderer>();
 
-                
-                
+
                 yield return new WaitForEndOfFrame();
-                
+
                 float ySize = rend.bounds.size.y;
-                
+
                 col.isTrigger = true;
-                
-                interactible.transform.position = interactible.transform.position + new Vector3(0, ySize/2f, 0);
-                
+
+                interactible.transform.position = interactible.transform.position + new Vector3(0, ySize / 2f, 0);
+
                 rune.GetComponent<OpenForPlayer>().ItemPresentHeightOffset = ySize;
-                
+
                 interactible.GetComponent<Rigidbody>().isKinematic = true;
-                
+
                 holdInteractipleOnRune.ItemOnRune = interactible;
-                
+
                 holdInteractipleOnRune.ItemOnRuneBool = true;
             }
             else
