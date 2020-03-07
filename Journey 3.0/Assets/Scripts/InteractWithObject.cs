@@ -69,8 +69,12 @@ public class InteractWithObject : MonoBehaviour
 
         if (_inputSetUp.Controls.PlayerFreeMovement.Interact.triggered && !cooldown)
         {
+            print("input detected");
+            
             if (_nearRune && _objectDetection.Items.Count > 1)
             {
+                print("why would this be called");
+
                 GameObject rune = _rune.getGameObject();
                 GameObject interactible;
 
@@ -125,6 +129,10 @@ public class InteractWithObject : MonoBehaviour
             }
             else if (!_interacting && !_nearRune && _objectDetection.Items.Count > 0 && !_inPlacementArea) // pickup items in general
             {
+                print("general pickup fucked");
+                
+                
+                
                 GameObject obj = ReturnCloserObject();
                 _interactingObj = obj.GetComponent<IInteractible>();
 
@@ -141,10 +149,14 @@ public class InteractWithObject : MonoBehaviour
                 }
                 else if (type == typeof(PickUpObject))
                 {
+                    print("Test 1");
                     if (_plankPlacementArea != null)
                     {
+                        print("Test 2");
+
                         if (_plankPlacementArea.GetPlank() != null && _plankPlacementArea.GetPlank() != obj)
                         {
+                            print("Test 3");
                             cooldown = true;
                             _interacting = true;
                             _movement.ControllerVeclocity = Vector3.zero;
@@ -155,7 +167,8 @@ public class InteractWithObject : MonoBehaviour
                     }
                     else
                     {
-                        print("general pickup fucked");
+                        print("Test 4");
+
                         cooldown = true;
                         _interacting = true;
                         _movement.ControllerVeclocity = Vector3.zero;
@@ -171,11 +184,11 @@ public class InteractWithObject : MonoBehaviour
 
                 if (_plankPlacementArea.GetPlank() == null && obj.GetComponent<PickUpObject>().PlacedDown)
                 {
-                    print("returned here");
+                    print("in placement zone but returned here because of plank being placed down");
                     return;
                 }
 
-                print("plank specific pickup");
+                print("plank specific pickup whilst in zone");
                 cooldown = true;
                 _interacting = true;
                 _movement.ControllerVeclocity = Vector3.zero;
@@ -198,7 +211,7 @@ public class InteractWithObject : MonoBehaviour
             }
             else if (_interacting && !_nearRune && _inPlacementArea) //Place plank
             {
-                print("Plank placement");
+                print("Plank placement while in zone");
                 SquishObject squishObject = _interactingObj.getGameObject().GetComponent<SquishObject>();
                 
                 if (squishObject != null && squishObject.Squished)
