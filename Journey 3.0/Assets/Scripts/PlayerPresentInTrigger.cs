@@ -6,16 +6,16 @@ using UnityEngine;
 public class PlayerPresentInTrigger : MonoBehaviour
 {
     [SerializeField] private PlayerInPlacementArea _playerInPlacementArea;
+    [SerializeField] private PlankPlacement _plankPlacement;
     
     //player has entered the trigger
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            
-            InteractWithObject interactWithObject = other.GetComponent<InteractWithObject>();
-            interactWithObject.PlankPlacement = transform.root.GetComponent<PlankPlacement>();
+            _playerInPlacementArea.PlayerInTrigger = true;
             other.SendMessage("ChangeInPlacementBool", true);
+            other.SendMessage("SetPlacementArea", _plankPlacement);
         }
     }
     

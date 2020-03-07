@@ -6,19 +6,15 @@ public class PositionAdjustment : MonoBehaviour
 {
     [SerializeField] private PlayerInPlacementArea _playerInPlacementArea;
 
-    [SerializeField] private bool _plankPlacedDown = false;
+
+    [SerializeField] private PlankPlacement plankPlacement;
 
     public PlayerInPlacementArea PlayerInPlacementArea
     {
         get => _playerInPlacementArea;
         set => _playerInPlacementArea = value;
     }
-
-    public bool PlankPlacedDown
-    {
-        get => _plankPlacedDown;
-        set => _plankPlacedDown = value;
-    }
+    
 
     public GameObject PlayerObject
     {
@@ -39,11 +35,11 @@ public class PositionAdjustment : MonoBehaviour
     void Update()
     {
         //if the player is in the placement area and a plank hasnt been placed yet
-        if (_playerInPlacementArea.PlayerInTrigger && !_plankPlacedDown)
+        if (_playerInPlacementArea.PlayerInTrigger && !plankPlacement.GetPlankPlacedDown())
         {
             AdjustPosition();
             col.isTrigger = false;
-        }else if (!_plankPlacedDown)
+        }else if (!plankPlacement.GetPlankPlacedDown())
         {
             col.isTrigger = false;
         }

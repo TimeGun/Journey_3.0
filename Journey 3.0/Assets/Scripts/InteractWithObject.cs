@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using System.Linq;
 
 public class InteractWithObject : MonoBehaviour
 {
@@ -68,12 +69,9 @@ public class InteractWithObject : MonoBehaviour
 
         if (_inputSetUp.Controls.PlayerFreeMovement.Interact.triggered && !cooldown)
         {
-            print("input detected");
 
             if (_nearRune && _objectDetection.Items.Count > 1)
             {
-                print("why would this be called");
-
                 GameObject rune = _rune.getGameObject();
                 GameObject interactible;
 
@@ -127,10 +125,8 @@ public class InteractWithObject : MonoBehaviour
                     }
                 }
             }
-            else if (!_interacting && !_nearRune && _objectDetection.Items.Count > 0 && !_inPlacementArea
-            ) // pickup items in general
+            else if (!_interacting && !_nearRune && _objectDetection.Items.Count > 0 && !_inPlacementArea) // pickup items in general
             {
-                print("general pickup fucked");
 
 
                 GameObject obj = ReturnCloserObject();
@@ -149,21 +145,22 @@ public class InteractWithObject : MonoBehaviour
                 }
                 else if (type == typeof(PickUpObject))
                 {
-                    print("Test 1");
                     if (_plankPlacementArea != null && _plankPlacementArea.GetPlank() != null &&
                         _plankPlacementArea.GetPlank() != obj)
                     {
-                        print("Test 3");
                         cooldown = true;
                         _interacting = true;
                         _movement.ControllerVeclocity = Vector3.zero;
                         _movement.enabled = false;
 
                         _coroutine = StartCoroutine(TurnToGrab(obj));
+                    }else if (_plankPlacementArea != null && _plankPlacementArea.GetPlank() != null &&
+                              _plankPlacementArea.GetPlank() == obj)
+                    {
+                        return;
                     }
                     else
                     {
-                        print("Test 4");
 
                         cooldown = true;
                         _interacting = true;
@@ -174,8 +171,7 @@ public class InteractWithObject : MonoBehaviour
                     }
                 }
             }
-            else if (!_interacting && !_nearRune && _objectDetection.Items.Count > 0 && _inPlacementArea
-            ) // pickup of item whilst in the placement zone (bridge)
+            else if (!_interacting && !_nearRune && _objectDetection.Items.Count > 0 && _inPlacementArea) // pickup of item whilst in the placement zone (bridge)
             {
                 GameObject obj = ReturnCloserObject();
 
@@ -211,7 +207,7 @@ public class InteractWithObject : MonoBehaviour
                 print("Plank placement while in zone");
                 SquishObject squishObject = _interactingObj.getGameObject().GetComponent<SquishObject>();
 
-                if (squishObject != null && squishObject.Squished)
+                if (squishObject != null && squishObject.Squished && !_plankPlacementArea.GetPlankPlacedDown())
                 {
                     StartCoroutine(PlacePlank(_interactingObj.getGameObject()));
                 }
@@ -328,6 +324,22 @@ public class InteractWithObject : MonoBehaviour
         _source.PlayOneShot(clip);
         _interactingObj.StartInteraction(handPosition);
 
+        if (_interactingObj.getGameObject().GetComponent<SquishObject>())
+        {
+            print("gas lad");
+
+            var placeableAreas = FindObjectsOfType<MonoBehaviour>().OfType<IPlaceableArea>();
+
+            foreach (IPlaceableArea placeableArea in placeableAreas)
+            {
+                if (placeableArea.GetPlank() == _interactingObj.getGameObject())
+                {
+                    placeableArea.SetPlankPlacedDown(false);
+                    placeableArea.SetPlank(null);
+                }
+            }
+        }
+
         yield return new WaitForEndOfFrame();
 
 
@@ -370,7 +382,7 @@ public class InteractWithObject : MonoBehaviour
 
         _plankPlacementArea.SetPlankPlacedDown(true);
 
-        if (_plankPlacementArea.AdjustPositionBool())
+        /*if (_plankPlacementArea.AdjustPositionBool())
         {
             PositionAdjustment positionAdjustment =
                 _plankPlacementArea.GetCenterObject().GetComponent<PositionAdjustment>();
@@ -386,7 +398,7 @@ public class InteractWithObject : MonoBehaviour
             {
                 positionAdjustmentDouble.PlankPlacedDown = true;
             }
-        }
+        }*/
 
         interactible.GetComponent<Rigidbody>().isKinematic = true;
         interactible.GetComponent<Collider>().isTrigger = true;

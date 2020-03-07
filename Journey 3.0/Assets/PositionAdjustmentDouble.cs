@@ -6,14 +6,7 @@ public class PositionAdjustmentDouble : MonoBehaviour
 {
     [SerializeField] private BridgeSideTrigger _bridgeSideTrigger;
 
-    [SerializeField] private bool _plankPlacedDown = false;
     
-    
-    public bool PlankPlacedDown
-    {
-        get => _plankPlacedDown;
-        set => _plankPlacedDown = value;
-    }
 
     public GameObject PlayerObject
     {

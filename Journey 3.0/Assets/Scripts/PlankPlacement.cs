@@ -15,11 +15,6 @@ public class PlankPlacement : MonoBehaviour, IPlaceableArea
 
     private bool _plankIsPlacedDown;
 
-    public void UpdatePositionAdjustBool()
-    {
-        _positionAdjustment.PlankPlacedDown = _plankIsPlacedDown;
-    }
-    
 
     public GameObject GetCenterObject()
     {
