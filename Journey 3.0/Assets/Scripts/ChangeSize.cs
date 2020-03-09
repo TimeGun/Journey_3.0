@@ -9,7 +9,12 @@ public class ChangeSize : MonoBehaviour
 
     private Vector3 largeScale;
 
-    private bool _small;
+    [SerializeField] private bool _small;
+
+    public bool Small
+    {
+        get => _small;
+    }
 
     public bool startSmall;
 
@@ -47,7 +52,7 @@ public class ChangeSize : MonoBehaviour
         
         Vector3 targetScale;
         
-        //_gravityCheck.enabled = false;
+        _gravityCheck.enabled = true;
 
         if (_small)
         {
@@ -82,6 +87,6 @@ public class ChangeSize : MonoBehaviour
             yield return new WaitForFixedUpdate();
         }
 
-        //_gravityCheck.enabled = true;
+        _gravityCheck.enabled = true;
     }
 }
