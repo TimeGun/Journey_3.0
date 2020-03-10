@@ -9,7 +9,7 @@ public class SquishObject : MonoBehaviour
     [SerializeField] private Mesh _newMesh;
     [SerializeField] private Material _newMaterial;
 
-    private bool _squished;
+    [SerializeField] private bool _squished;
 
     public bool Squished
     {
