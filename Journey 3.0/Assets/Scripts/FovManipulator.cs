@@ -82,7 +82,7 @@ public class FovManipulator : MonoBehaviour
     {             
             playerEnter = Trigger.GetComponent<DetectPlayer>().PlayerEntered;        //bool set true first frame player enters the  trigger collider. Set in detect player script
             playerInZone = Trigger.GetComponent<DetectPlayer>().PlayerInCollider;        //bool set true when the player is in the trigger collider 
-            currentDist = Vector3.Distance(Player.transform.position, TargetObj.transform.position);        //current distance between p[layer and target obj
+            currentDist = Vector3.Distance(Player.transform.position, TargetObj.transform.position);        //current distance between player and target obj
         
             if (playerEnter)
             {
@@ -91,7 +91,7 @@ public class FovManipulator : MonoBehaviour
             else if (playerInZone)
             {
                 _currentFov = Map(currentDist, _startDist, 0, _startFOV, targetFov);     //Map Function
-                //Debug.Log(_startDist);
+                Debug.Log(_startDist);
                 //Debug.Log(currentFov);
                 activeCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.FieldOfView = _currentFov;        //set active camera fov to currentfov value
             }
