@@ -6,14 +6,10 @@ using UnityEngine;
 public class SeeSawAnimation : MonoBehaviour
 {
     [SerializeField] private Animator _anim;
-    
-    private void OnTriggerEnter(Collider other)
-    {
-        _anim.SetBool("PlayerPresent", true);
-    }
 
-    private void OnTriggerExit(Collider other)
+
+    public void SetAnimationBoolS(string boolName, bool value)
     {
-        _anim.SetBool("PlayerPresent", false);
+        _anim.SetBool(boolName, value);
     }
 }
