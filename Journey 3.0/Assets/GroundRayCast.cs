@@ -35,10 +35,11 @@ public class GroundRayCast : MonoBehaviour
             
             Ray ray = new Ray(transform.position, Vector3.down);
             
-            Debug.DrawLine(transform.position, transform.position + (Vector3.down * 0.2f),  Color.red);
+            Debug.DrawLine(transform.position, transform.position + (Vector3.down * 5f),  Color.red);
 
-            if (Physics.Raycast(ray, out hit, 0.2f, _mask))
+            if (Physics.SphereCast(transform.position + (Vector3.up), 0.3f,  Vector3.down, out hit, 0.3f + 1f, _mask))
             {
+                print("ayyy lamo");
                 if (hit.transform.gameObject.layer == 13 && _seeSawAnimation == null)
                 {
                     _seeSawAnimation = hit.transform.GetComponentInParent<SeeSawAnimation>();
