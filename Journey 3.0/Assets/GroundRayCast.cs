@@ -85,7 +85,6 @@ public class GroundRayCast : MonoBehaviour
                 if (_upHigh)
                 {
                     _seeSawAnimation.SetAnimationBoolS("Height", true);
-                    _seeSawAnimation.LaunchRock();
                     _upHigh = false;
                     yield return new WaitForSeconds(1f);
                 }
