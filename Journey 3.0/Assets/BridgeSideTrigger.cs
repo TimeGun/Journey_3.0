@@ -53,6 +53,8 @@ public class BridgeSideTrigger : MonoBehaviour, IPlaceableArea
             other.SendMessage("ChangeInPlacementBool", false);
         }
     }
+    
+    
 
 
     public GameObject GetCenterObject()

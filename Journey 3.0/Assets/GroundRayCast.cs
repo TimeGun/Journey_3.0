@@ -10,8 +10,10 @@ public class GroundRayCast : MonoBehaviour
 
 
     [SerializeField] private bool _standingOnSeesaw;
+
+    [SerializeField] private bool _upHigh;
     
-    private SeeSawAnimation _seeSawAnimation;
+    [SerializeField] private SeeSawAnimation _seeSawAnimation;
 
     // Start is called before the first frame update
     void Start()
@@ -23,6 +25,11 @@ public class GroundRayCast : MonoBehaviour
     void Update()
     {
         
+    }
+
+    void ChangeHigh(bool value)
+    {
+        _upHigh = value;
     }
 
 
@@ -39,10 +46,14 @@ public class GroundRayCast : MonoBehaviour
 
             if (Physics.SphereCast(transform.position + (Vector3.up), 0.3f,  Vector3.down, out hit, 0.3f + 1f, _mask))
             {
-                print("ayyy lamo");
                 if (hit.transform.gameObject.layer == 13 && _seeSawAnimation == null)
                 {
                     _seeSawAnimation = hit.transform.GetComponentInParent<SeeSawAnimation>();
+                }
+
+                if (hit.transform.gameObject.layer == 15)
+                {
+                    ChangeHigh(true);
                 }
             }
             else
@@ -53,13 +64,27 @@ public class GroundRayCast : MonoBehaviour
                     _seeSawAnimation = null;
                 }
             }
-
+            
             if (_seeSawAnimation != null)
             {
                 _seeSawAnimation.SetAnimationBoolS("PlayerPresent", true);
+                
+                if (_upHigh)
+                {
+                    _seeSawAnimation.SetAnimationBoolS("Height", true);
+                    _seeSawAnimation.LaunchRock();
+                    _upHigh = false;
+                    yield return new WaitForSeconds(1f);
+                }
+                else
+                {
+                    _seeSawAnimation.SetAnimationBoolS("Height", false);
+                }
             }
 
-            yield return new WaitForSeconds(1/raycastsPerSecond);
+            
+
+            yield return new WaitForEndOfFrame();
         }
     }
 }

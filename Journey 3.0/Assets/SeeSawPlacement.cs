@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -46,5 +47,13 @@ public class SeeSawPlacement : MonoBehaviour, IPlaceableArea
     public bool AdjustPositionBool()
     {
         return false;
+    }
+
+    private void Update()
+    {
+        if (_boulderPlacedDown)
+        {
+            _boulder.transform.position = _boulderPlacement.transform.position;
+        }
     }
 }
