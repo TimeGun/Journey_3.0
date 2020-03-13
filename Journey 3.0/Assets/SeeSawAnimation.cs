@@ -9,6 +9,9 @@ public class SeeSawAnimation : MonoBehaviour
 
     [SerializeField] private SeeSawPlacement _seeSawPlacement;
 
+    [SerializeField] private Mesh mesh;
+    [SerializeField] private Material material;
+
 
     public void SetAnimationBoolS(string boolName, bool value)
     {
@@ -18,6 +21,10 @@ public class SeeSawAnimation : MonoBehaviour
 
     public void LaunchRock()
     {
-        print("test");
+        if (_seeSawPlacement.GetPlank() != null)
+        {
+            _seeSawPlacement.GetPlank().GetComponent<MeshFilter>().mesh = mesh;
+            _seeSawPlacement.GetPlank().GetComponent<Renderer>().material = material;
+        }
     }
 }

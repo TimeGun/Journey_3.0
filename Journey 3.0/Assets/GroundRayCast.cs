@@ -46,6 +46,18 @@ public class GroundRayCast : MonoBehaviour
 
             if (Physics.SphereCast(transform.position + (Vector3.up), 0.3f,  Vector3.down, out hit, 0.3f + 1f, _mask))
             {
+                if (hit.transform.gameObject.layer == 8)
+                {
+                    ChangeHigh(false);
+                    
+                    if (_seeSawAnimation != null)
+                    {
+                        print("sent message");
+                        _seeSawAnimation.SetAnimationBoolS("PlayerPresent", false);
+                        _seeSawAnimation = null;
+                    }
+                }
+
                 if (hit.transform.gameObject.layer == 13 && _seeSawAnimation == null)
                 {
                     _seeSawAnimation = hit.transform.GetComponentInParent<SeeSawAnimation>();
@@ -60,6 +72,7 @@ public class GroundRayCast : MonoBehaviour
             {
                 if (_seeSawAnimation != null)
                 {
+                    print("sent message");
                     _seeSawAnimation.SetAnimationBoolS("PlayerPresent", false);
                     _seeSawAnimation = null;
                 }
@@ -84,7 +97,7 @@ public class GroundRayCast : MonoBehaviour
 
             
 
-            yield return new WaitForEndOfFrame();
+            yield return new WaitForSeconds(1f/raycastsPerSecond);
         }
     }
 }
