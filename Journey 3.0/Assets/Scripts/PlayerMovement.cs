@@ -84,6 +84,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private AudioSource _walkSource;
 
 
+    private bool _remoteControl;
+    private GameObject _objectToFollow;
+
+
     void Start()
     {
         if (cam == null)
@@ -113,48 +117,67 @@ public class PlayerMovement : MonoBehaviour
             _controller.radius = _originalRange;
         }
 
-        _input = _inputSetUp.LeftStick;
-
-        grounded = _controller.isGrounded;
-        _timeDelta = Time.deltaTime;
-
-        CalculateDirection();
-
-        if (_controller.isGrounded)
+        if (!_remoteControl)
         {
-            if (Mathf.Abs(_input.magnitude) > 0.05f && !_pushing)
+            _input = _inputSetUp.LeftStick;
+
+            grounded = _controller.isGrounded;
+            _timeDelta = Time.deltaTime;
+
+            CalculateDirection();
+
+            if (_controller.isGrounded)
             {
-                Rotate();
+                if (Mathf.Abs(_input.magnitude) > 0.05f && !_pushing)
+                {
+                    Rotate();
+                }
+
+                SetMove();
+
+                if (_inputSetUp.Controls.PlayerFreeMovement.Jump.triggered && _jump && ! _pushing)
+                {
+                    Jump();
+                }
             }
 
-            SetMove();
 
-            if (_inputSetUp.Controls.PlayerFreeMovement.Jump.triggered && _jump && ! _pushing)
+            ApplyGravity();
+
+            _controller.Move(_movementDirection * _timeDelta);
+            if (_controller.velocity.magnitude >= 0.5f)
             {
-                Jump();
-            }
-        }
+                float walkSoundPitch = Map(_controller.velocity.magnitude, 0f, _speed, 0.6f, 1.35f);
 
-
-        ApplyGravity();
-
-        _controller.Move(_movementDirection * _timeDelta);
-        if (_controller.velocity.magnitude >= 0.5f)
-        {
-            float walkSoundPitch = Map(_controller.velocity.magnitude, 0f, _speed, 0.6f, 1.35f);
-
-            _walkSource.pitch = walkSoundPitch;
+                _walkSource.pitch = walkSoundPitch;
             
-            if (!_walkSource.isPlaying)
+                if (!_walkSource.isPlaying)
+                {
+                    _walkSource.Play();
+                }
+            }else
             {
-                _walkSource.Play();
+                _walkSource.Stop();
             }
-        }else
-        {
-            _walkSource.Stop();
-        }
 
-        SetAnimation();
+            SetAnimation();
+        }
+        else
+        {
+            transform.position = _objectToFollow.transform.position;
+            transform.rotation = _objectToFollow.transform.rotation;
+        }
+    }
+
+    public void StartRemoteControlledMovement(GameObject objToFollow)
+    {
+        _objectToFollow = objToFollow;
+        _remoteControl = true;
+    }
+
+    public void StopRemoteControlledMovement()
+    {
+        _remoteControl = false;
     }
 
     private void SetAnimation()
