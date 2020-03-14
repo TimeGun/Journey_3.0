@@ -88,6 +88,11 @@ public class PlayerMovement : MonoBehaviour
     private GameObject _objectToFollow;
 
 
+    private Vector3 lastPos;
+
+    [SerializeField] private float remoteAnimationVelocityMultiplier;
+
+
     void Start()
     {
         if (cam == null)
@@ -164,9 +169,26 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
+            lastPos = transform.position;
             transform.position = _objectToFollow.transform.position;
+            
             transform.rotation = _objectToFollow.transform.rotation;
+
+            SetRemoteAnimation();
         }
+    }
+
+    private void SetRemoteAnimation()
+    {
+
+        float velocity = Vector3.Distance(lastPos, transform.position) * remoteAnimationVelocityMultiplier;
+        print(velocity);
+        
+        _anim.SetFloat("velocity", velocity);
+
+        float walkSpeed = Map(velocity, 0f, _speed, _minWalkSpeed, _maxWalkSpeed);
+        
+        _anim.SetFloat("walkSpeed", walkSpeed);
     }
 
     public void StartRemoteControlledMovement(GameObject objToFollow)
@@ -191,12 +213,12 @@ public class PlayerMovement : MonoBehaviour
         _anim.SetBool("pushing", _pushing);
     }
 
-    void PickUpLow()
+    public void PickUpLow()
     {
         _anim.SetTrigger("pickUp");
     }
 
-    void PickUpHigh()
+    public void PickUpHigh()
     {
         _anim.SetTrigger("grab");
     }
