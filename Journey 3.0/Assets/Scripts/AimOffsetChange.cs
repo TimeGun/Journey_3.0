@@ -10,110 +10,67 @@ public class AimOffsetChange : MonoBehaviour
     private CinemachineTrackedDolly TD;
     private CinemachineComposer comp;
     public float newOffset;
-    private float startOffset = 1000f;
-    //public GameObject cameraTrigger1;
-    //public GameObject cameraTrigger2;
+    private float startOffset;
     public GameObject cameraTrigger1;
     public GameObject cameraTrigger2;
 
     private bool playerEntered;
     private bool firstTrigger;
-    private bool secondTrigger;
-
-
-    private bool playerInZone1;
-    private bool playerInZone2;
-
+    private bool secondTrigger; 
     public float rateOfChange;
-    private bool runOnce = true;
     private bool afterTrigger;
 
     private bool changeBoolCoroutineRunning;
 
-    private bool valueIncreasing;
+    private bool valueIncreasing;       
     // Start is called before the first frame update
     void Start()
     {
-        vcam = targetCamera.GetComponent<CinemachineVirtualCamera>();
+        vcam = targetCamera.GetComponent<CinemachineVirtualCamera>();                
         TD = vcam.GetCinemachineComponent<CinemachineTrackedDolly>();
-        comp = vcam.GetCinemachineComponent<CinemachineComposer>();
-        startOffset = comp.m_TrackedObjectOffset.y;
-        //Need to figure out when to start coroutine
-        //StartCoroutine(MoveToValue());
+        comp = vcam.GetCinemachineComponent<CinemachineComposer>();                //Need to use this to access the LookAt target
+        startOffset = comp.m_TrackedObjectOffset.y;                                //Assign start offset to the offset set in the inspector when it starts
+      
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        firstTrigger = cameraTrigger1.GetComponent<DetectPlayer>().PlayerEntered;
-        secondTrigger = cameraTrigger2.GetComponent<DetectPlayer>().PlayerEntered;
+        firstTrigger = cameraTrigger1.GetComponent<DetectPlayer>().PlayerEntered;   //Use this to trigger when y offset decreases
+        secondTrigger = cameraTrigger2.GetComponent<DetectPlayer>().PlayerEntered;  //Use this to trigger when y offset increases
 
 
         if (firstTrigger)
         {
-            afterTrigger = false;
+            afterTrigger = false;        //this is used to begin decreasing the value of the offset
+            
         }
         else if (secondTrigger)
         {
-            afterTrigger = true;
+            afterTrigger = true;        //this is used to begin increasing the value of the offset
         }
        
         
             if (afterTrigger == false)
             {
-                
-                
                StartCoroutine(DecreaseValue());
-              
             }
             else if (afterTrigger)
             {
-                
-                
-              
                 StartCoroutine(IncreaseValue());
             }
-
-
-            if (changeBoolCoroutineRunning == false)
-            {
-              //StartCoroutine(ChangeBool());  
-            }
-
-            //afterTrigger = !afterTrigger;
-            
-            //Debug.Log("Offset: " + comp.m_TrackedObjectOffset.y);
-            Debug.Log("StartOffset: " + startOffset);
-            //Debug.Log("afterTrigger = " + afterTrigger);
-            /*if (changeBoolCoroutineRunning == false)
-            {
-                StartCoroutine(ChangeBool());                
-            }*/
-            
-
-        
-        /*if (playerInZone1)
-        {
-            afterTrigger = false;
-        }
-
-        if (playerInZone2)
-        {
-            afterTrigger = true;
-        }*/
     }
     
     IEnumerator DecreaseValue()
     {
 
-        valueIncreasing = false;
-            Debug.Log("In Coroutine");
-            while (comp.m_TrackedObjectOffset.y > startOffset + 0.05f && valueIncreasing == false)
+        valueIncreasing = false;        //used to ensure offset value is not increasing in IncreaseValue() while it is decreasing here
+          
+            while (comp.m_TrackedObjectOffset.y > startOffset + 0.05f && valueIncreasing == false)          //+0.05 is used because offset will never reach the startoffset value
               {
-                  Debug.Log("Decreasing Value");
                   comp.m_TrackedObjectOffset.y =
-                        Mathf.Lerp(comp.m_TrackedObjectOffset.y, startOffset, rateOfChange / 1000);
-                  yield return new WaitForSeconds(Time.deltaTime);
+                        Mathf.Lerp(comp.m_TrackedObjectOffset.y, startOffset, rateOfChange / 1000);        //lerp y offset of the lookat target to the startoffset value over time
+                  yield return new WaitForSeconds(Time.deltaTime);            //wait for as frame to avoid changing value instantly
 
               }
             
@@ -122,21 +79,20 @@ public class AimOffsetChange : MonoBehaviour
     IEnumerator IncreaseValue()
     {
         valueIncreasing = true;
-         while (comp.m_TrackedObjectOffset.y < newOffset - 0.05f && valueIncreasing)
+         while (comp.m_TrackedObjectOffset.y < newOffset - 0.05f && valueIncreasing)                        //-0.05 is used because offset will never reach newoffset value
               {
-                   Debug.Log("Increasing Value");
                    comp.m_TrackedObjectOffset.y =
-                         Mathf.Lerp(comp.m_TrackedObjectOffset.y, newOffset, rateOfChange / 1000);
-                   yield return new WaitForSeconds(Time.deltaTime);
+                         Mathf.Lerp(comp.m_TrackedObjectOffset.y, newOffset, rateOfChange / 1000);           //lerp y offset of the lookat target to the newoffset value over time
+                   yield return new WaitForSeconds(Time.deltaTime);            //wait for as frame to avoid changing value instantly
               }
     }
     
     
     
-    IEnumerator ChangeBool()
+    IEnumerator ChangeBool(int framesToWait)            //not used - Used to change a bool - waits for an amount of time before this can be called again
     {
         changeBoolCoroutineRunning = true;
-        yield return new WaitForSeconds(Time.deltaTime * 2f);
+        yield return new WaitForSeconds(Time.deltaTime * framesToWait);
         
         afterTrigger = !afterTrigger;
         Debug.Log("CR AfterTrigger = " + afterTrigger);
