@@ -11,11 +11,15 @@ public class AimOffsetChange : MonoBehaviour
     private CinemachineComposer comp;
     public float newOffset;
     private float startOffset = 1000f;
+    //public GameObject cameraTrigger1;
+    //public GameObject cameraTrigger2;
     public GameObject cameraTrigger1;
     public GameObject cameraTrigger2;
-    //public GameObject cameraTrigger;
 
-    //private bool playerEntered;
+    private bool playerEntered;
+    private bool firstTrigger;
+    private bool secondTrigger;
+
 
     private bool playerInZone1;
     private bool playerInZone2;
@@ -25,6 +29,8 @@ public class AimOffsetChange : MonoBehaviour
     private bool afterTrigger;
 
     private bool changeBoolCoroutineRunning;
+
+    private bool valueIncreasing;
     // Start is called before the first frame update
     void Start()
     {
@@ -37,35 +43,56 @@ public class AimOffsetChange : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        //playerEntered = cameraTrigger.GetComponent<DetectPlayer>().PlayerEntered;
-        playerInZone1 = cameraTrigger1.GetComponent<DetectPlayer>().PlayerInCollider;
-        playerInZone2 = cameraTrigger2.GetComponent<DetectPlayer>().PlayerInCollider;
-        Debug.Log("Zone1" + playerInZone1);
-        Debug.Log("Zone2" + playerInZone2);
+        firstTrigger = cameraTrigger1.GetComponent<DetectPlayer>().PlayerEntered;
+        secondTrigger = cameraTrigger2.GetComponent<DetectPlayer>().PlayerEntered;
 
-        /*if (playerEntered)
+
+        if (firstTrigger)
         {
-            if (startOffset == 1000)
+            afterTrigger = false;
+        }
+        else if (secondTrigger)
+        {
+            afterTrigger = true;
+        }
+       
+        
+            if (afterTrigger == false)
             {
-                startOffset = comp.m_TrackedObjectOffset.y;
+                
+                
+               StartCoroutine(DecreaseValue());
+              
             }
+            else if (afterTrigger)
+            {
+                
+                
+              
+                StartCoroutine(IncreaseValue());
+            }
+
+
+            if (changeBoolCoroutineRunning == false)
+            {
+              //StartCoroutine(ChangeBool());  
+            }
+
+            //afterTrigger = !afterTrigger;
             
-            
-            StartCoroutine(MoveToValue());
             //Debug.Log("Offset: " + comp.m_TrackedObjectOffset.y);
             Debug.Log("StartOffset: " + startOffset);
             //Debug.Log("afterTrigger = " + afterTrigger);
-            if (changeBoolCoroutineRunning == false)
+            /*if (changeBoolCoroutineRunning == false)
             {
                 StartCoroutine(ChangeBool());                
-            }
+            }*/
             
 
-        }*/
-
-        if (playerInZone1)
+        
+        /*if (playerInZone1)
         {
             afterTrigger = false;
         }
@@ -73,48 +100,43 @@ public class AimOffsetChange : MonoBehaviour
         if (playerInZone2)
         {
             afterTrigger = true;
-        }
+        }*/
     }
     
-    IEnumerator MoveToValue()
+    IEnumerator DecreaseValue()
     {
-        while (true)
-        {
 
+        valueIncreasing = false;
+            Debug.Log("In Coroutine");
+            while (comp.m_TrackedObjectOffset.y > startOffset + 0.05f && valueIncreasing == false)
+              {
+                  Debug.Log("Decreasing Value");
+                  comp.m_TrackedObjectOffset.y =
+                        Mathf.Lerp(comp.m_TrackedObjectOffset.y, startOffset, rateOfChange / 1000);
+                  yield return new WaitForSeconds(Time.deltaTime);
 
-            //Debug.Log("In Coroutine");
-            if (afterTrigger)
-            {
-                while (comp.m_TrackedObjectOffset.y < newOffset - 0.05f)
-                {
-                    Debug.Log("Increasing Value");
-                    comp.m_TrackedObjectOffset.y =
-                        Mathf.Lerp(comp.m_TrackedObjectOffset.y, newOffset, rateOfChange / 100);
-                    yield return new WaitForSeconds(Time.deltaTime);
-//            Debug.Log(TD.m_AutoDolly.m_PositionOffset);
-//            Debug.Log(newOffset);
-                }
-            }
-            else if (afterTrigger == false)
-            {
-                while (comp.m_TrackedObjectOffset.y > startOffset + 0.05f)
-                {
-                    Debug.Log("Decreasing Value");
-                    comp.m_TrackedObjectOffset.y =
-                        Mathf.Lerp(comp.m_TrackedObjectOffset.y, startOffset, rateOfChange / 100);
-                    yield return new WaitForSeconds(Time.deltaTime);
-//            Debug.Log(TD.m_AutoDolly.m_PositionOffset);
-//            Debug.Log(newOffset);
-                }
-            }
+              }
+            
         }
 
-
+    IEnumerator IncreaseValue()
+    {
+        valueIncreasing = true;
+         while (comp.m_TrackedObjectOffset.y < newOffset - 0.05f && valueIncreasing)
+              {
+                   Debug.Log("Increasing Value");
+                   comp.m_TrackedObjectOffset.y =
+                         Mathf.Lerp(comp.m_TrackedObjectOffset.y, newOffset, rateOfChange / 1000);
+                   yield return new WaitForSeconds(Time.deltaTime);
+              }
     }
+    
+    
+    
     IEnumerator ChangeBool()
     {
         changeBoolCoroutineRunning = true;
-        yield return new WaitForSeconds(Time.deltaTime * 60f);
+        yield return new WaitForSeconds(Time.deltaTime * 2f);
         
         afterTrigger = !afterTrigger;
         Debug.Log("CR AfterTrigger = " + afterTrigger);

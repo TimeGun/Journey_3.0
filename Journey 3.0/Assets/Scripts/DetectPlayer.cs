@@ -11,7 +11,6 @@ public class DetectPlayer : MonoBehaviour
     private bool playerInCollider;
     private bool firstDetection;
     private int testInt = 0;
-
     private bool playerEnterBool;
 
     public bool PlayerDetected
@@ -29,7 +28,11 @@ public class DetectPlayer : MonoBehaviour
         get { return playerInCollider; }
     }
 
-
+    public bool PlayerExited
+    {
+        get { return _playerExited; }
+        
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -47,30 +50,37 @@ public class DetectPlayer : MonoBehaviour
     }
 
 
-    private void OnTriggerEnter(Collider col)
+    private IEnumerator OnTriggerEnter(Collider col)
     {
-        if (col.gameObject.CompareTag("Player"))
+        if (col.gameObject.CompareTag("Player") && col.isTrigger == false)
         {
             _playerEntered = true;
-            StartCoroutine(MakePlayerEnterFalse());
+            yield return new WaitForFixedUpdate();
+            yield return new WaitForFixedUpdate();
+            _playerEntered = false;
+//            StartCoroutine(MakePlayerEnterFalse());   
 //            Debug.Log(_playerEntered);
             //playerEntered = false;
 
         }
     }
 
-    private void OnTriggerExit(Collider col)
+    private IEnumerator OnTriggerExit(Collider col)
     {
-        if (col.gameObject.CompareTag("Player"))
+        if (col.gameObject.CompareTag("Player")&& col.isTrigger == false)
         {            
             _playerExited = true;
+            yield return new WaitForFixedUpdate();
+            yield return new WaitForFixedUpdate();
+            _playerExited = false;
+            Debug.Log("Exited");
             playerInCollider = false;
         }
     }
 
     private void OnTriggerStay(Collider col)
     {
-        if (col.gameObject.CompareTag("Player"))
+        if (col.gameObject.CompareTag("Player")&& col.isTrigger == false)
         {
             playerInCollider = true;
            
@@ -93,10 +103,10 @@ public class DetectPlayer : MonoBehaviour
         
         while (_playerEntered)
         {
-            //Debug.Log("in coroutine");
+            Debug.Log("in coroutine");
             yield return new WaitForSeconds(Time.deltaTime);
+            //yield return new WaitForEndOfFrame();
             _playerEntered = false;
-           
         }
     }
     
