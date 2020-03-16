@@ -63,11 +63,11 @@ public class MixingCamera : MonoBehaviour
         if (followTarget)
         {
             
-            if (vcam.m_Weight1 > 300 || vcam.m_Weight1 < -300)
+ /*           if (vcam.m_Weight1 > 300 || vcam.m_Weight1 < -300)
             {
                 Debug.LogError("Weight: " + vcam.m_Weight1 + " X Pos: " + followTarget.transform.position.x + " Y Pos: " + followTarget.transform.position.y);
             }
-            if (playerDetected)
+*/            if (playerDetected)
             {
                 
                 if (playerStartPos == Vector3.zero)

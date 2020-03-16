@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.Playables;
-
+using UnityEngine.Serialization;
 
 
 public class TimelineController : MonoBehaviour
@@ -13,7 +13,7 @@ public class TimelineController : MonoBehaviour
     public PlayableDirector playableDirector;
     private int _startPriority;
     public int targetPriority;
-    public GameObject targetCamera;
+    [FormerlySerializedAs("targetCamera")] public GameObject timelineCamera;
     private CinemachineVirtualCamera vcam;
     private double _timelineLength;
     private bool cinematicStarted;
@@ -25,7 +25,7 @@ public class TimelineController : MonoBehaviour
     void Start()
     {
         //Debug.Log(playableDirector.duration);
-        vcam = targetCamera.GetComponent<CinemachineVirtualCamera>();
+        vcam = timelineCamera.GetComponent<CinemachineVirtualCamera>();
         print(vcam);
         _startPriority = vcam.Priority;
         _timelineLength = playableDirector.duration;
@@ -64,7 +64,7 @@ public class TimelineController : MonoBehaviour
         if (_playerEntered && cinematicStarted == false)
         {
             Debug.Log("yurt");
-            if (targetCamera != null)
+            if (timelineCamera != null)
             {
                 StartCoroutine(PriorityChange());
             }

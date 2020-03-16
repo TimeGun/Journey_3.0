@@ -57,6 +57,8 @@ public class DetectPlayer : MonoBehaviour
             _playerEntered = true;
             yield return new WaitForFixedUpdate();
             yield return new WaitForFixedUpdate();
+            yield return new WaitForFixedUpdate();
+
             _playerEntered = false;
 //            StartCoroutine(MakePlayerEnterFalse());   
 //            Debug.Log(_playerEntered);
@@ -73,7 +75,7 @@ public class DetectPlayer : MonoBehaviour
             yield return new WaitForFixedUpdate();
             yield return new WaitForFixedUpdate();
             _playerExited = false;
-            Debug.Log("Exited");
+//            Debug.Log("Exited");
             playerInCollider = false;
         }
     }
