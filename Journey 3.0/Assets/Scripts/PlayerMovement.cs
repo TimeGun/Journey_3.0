@@ -170,6 +170,7 @@ public class PlayerMovement : MonoBehaviour
         else
         {
             lastPos = transform.position;
+            
             transform.position = _objectToFollow.transform.position;
             
             transform.rotation = _objectToFollow.transform.rotation;
@@ -182,7 +183,6 @@ public class PlayerMovement : MonoBehaviour
     {
 
         float velocity = Vector3.Distance(lastPos, transform.position) * remoteAnimationVelocityMultiplier;
-        print(velocity);
         
         _anim.SetFloat("velocity", velocity);
 
