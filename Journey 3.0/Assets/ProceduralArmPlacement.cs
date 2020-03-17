@@ -63,7 +63,7 @@ public class ProceduralArmPlacement : MonoBehaviour
                     
                         Quaternion handRot = AdjustHandRotation(rightRaycastHit.normal);
 
-                        RightArmIK.Instance.SetProceduralTargetAndHint(rightRaycastHit.point + (rightRaycastHit.normal * _wallSeperationBuffer), handRot);
+                        RightArmIK.Instance.SetProceduralTargetAndHint(rightRaycastHit.point + (rightRaycastHit.normal * _wallSeperationBuffer), handRot, 1f);
                     }
                 }
                 rightRayCol = Color.red;
@@ -100,7 +100,7 @@ public class ProceduralArmPlacement : MonoBehaviour
                         
                         Quaternion handRot = AdjustHandRotation(leftRaycastHit.normal);
 
-                        LeftArmIK.Instance.SetProceduralTargetAndHint(leftRaycastHit.point + (leftRaycastHit.normal * _wallSeperationBuffer), handRot);
+                        LeftArmIK.Instance.SetProceduralTargetAndHint(leftRaycastHit.point + (leftRaycastHit.normal * _wallSeperationBuffer), handRot, 1f);
                     }
                 }
 

@@ -111,7 +111,7 @@ public class PickUpObject : MonoBehaviour, IInteractible
             _listOfIkSettings = _hand.root.GetComponent<PlayerIKPositions>()._settings;
         }
 
-        RightArmIK.Instance.SetIkTargetAndHint(_listOfIkSettings._premadeIKSettings[0]);
+        RightArmIK.Instance.SetIkTargetAndHint(_listOfIkSettings._premadeIKSettings[0], 0.8f);
         
     }
 }

@@ -33,7 +33,7 @@ public class LeftArmIK : MonoBehaviour
 
     public static LeftArmIK Instance;
     
-    
+    private float inUseLerpPercentage;
 
 
     // Start is called before the first frame update
@@ -47,7 +47,7 @@ public class LeftArmIK : MonoBehaviour
     {
         if (_inUse || _tempUse)
         {
-            _ikConstraint.weight = Mathf.Lerp(_ikConstraint.weight, 0.8f, Time.deltaTime * 4f);
+            _ikConstraint.weight = Mathf.Lerp(_ikConstraint.weight, inUseLerpPercentage, Time.deltaTime * 4f);
         }
         else
         {
@@ -56,16 +56,19 @@ public class LeftArmIK : MonoBehaviour
     }
 
 
-    public void SetIkTargetAndHint(IKSettings _settings)
+    public void SetIkTargetAndHint(IKSettings _settings, float lerpPercentage)
     {
+        inUseLerpPercentage = lerpPercentage;
+        
         target.localPosition = _settings.targetPos;
         target.localRotation = _settings.targetRot;
         hint.localPosition = _settings.hintPos;
         _inUse = true;
     }
 
-    public void SetProceduralTargetAndHint(Vector3 position, Quaternion handRotation)
+    public void SetProceduralTargetAndHint(Vector3 position, Quaternion handRotation, float lerpPercentage)
     {
+        inUseLerpPercentage = lerpPercentage;
         target.position = position;
         target.localRotation = handRotation;
     }
