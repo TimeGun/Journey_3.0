@@ -23,6 +23,12 @@ public class ProceduralArmPlacement : MonoBehaviour
     private bool setRightArm;
 
     private bool setLeftArm;
+
+
+    public bool oneHanded;
+    
+    private bool rightHandOn;
+    private bool leftHandOn;
     
     void Start()
     {
@@ -47,20 +53,26 @@ public class ProceduralArmPlacement : MonoBehaviour
 
             if (Physics.Raycast(rightArmRay, out rightRaycastHit, _wallDistanceCheck, _wallMask))
             {
-                rightRayCol = Color.red;
-                if (!RightArmIK.Instance.InUse)
+                if (oneHanded && !leftHandOn || !oneHanded)
                 {
-                    print("set right arm");
-                    RightArmIK.Instance.TempUse = true;
+                    if (!RightArmIK.Instance.InUse)
+                    {
+                        print("set right arm");
+                        RightArmIK.Instance.TempUse = true;
+                        rightHandOn = true;
                     
-                    Quaternion handRot = AdjustHandRotation(rightRaycastHit.normal);
+                        Quaternion handRot = AdjustHandRotation(rightRaycastHit.normal);
 
-                    RightArmIK.Instance.SetProceduralTargetAndHint(rightRaycastHit.point + (rightRaycastHit.normal * _wallSeperationBuffer), handRot);
+                        RightArmIK.Instance.SetProceduralTargetAndHint(rightRaycastHit.point + (rightRaycastHit.normal * _wallSeperationBuffer), handRot);
+                    }
                 }
+                rightRayCol = Color.red;
+                
             }
             else
             {
                 RightArmIK.Instance.TempUse = false;
+                rightHandOn = false;
             }
 
             Debug.DrawRay(rightArmRay.origin, rightArmRay.direction * _wallDistanceCheck, rightRayCol, 0.05f);
@@ -77,20 +89,27 @@ public class ProceduralArmPlacement : MonoBehaviour
             
             if (Physics.Raycast(leftArmRay, out leftRaycastHit, _wallDistanceCheck, _wallMask))
             {
-                leftRayCol = Color.red;
-                if (!LeftArmIK.Instance.InUse)
+                if (oneHanded && !rightHandOn || !oneHanded)
                 {
-                    print("set left arm");
-                    LeftArmIK.Instance.TempUse = true;
+                    leftRayCol = Color.red;
+                    if (!LeftArmIK.Instance.InUse)
+                    {
+                        print("set left arm");
+                        LeftArmIK.Instance.TempUse = true;
+                        leftHandOn = true;
+                        
+                        Quaternion handRot = AdjustHandRotation(leftRaycastHit.normal);
 
-                    Quaternion handRot = AdjustHandRotation(leftRaycastHit.normal);
-
-                    LeftArmIK.Instance.SetProceduralTargetAndHint(leftRaycastHit.point + (leftRaycastHit.normal * _wallSeperationBuffer), handRot);
+                        LeftArmIK.Instance.SetProceduralTargetAndHint(leftRaycastHit.point + (leftRaycastHit.normal * _wallSeperationBuffer), handRot);
+                    }
                 }
+
+                
             }
             else
             {
                 LeftArmIK.Instance.TempUse = false;
+                leftHandOn = false;
             }
             
             Debug.DrawRay(leftArmRay.origin, leftArmRay.direction * _wallDistanceCheck, leftRayCol, 0.1f);
