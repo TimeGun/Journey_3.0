@@ -8,6 +8,8 @@ using UnityEngine.Animations.Rigging;
 public class RightArmIK : MonoBehaviour
 {
 
+    public bool debugPosition;
+    
     [SerializeField] private bool _inUse = false;
 
     public bool InUse
@@ -32,6 +34,8 @@ public class RightArmIK : MonoBehaviour
 
     public static RightArmIK Instance;
 
+    private IKSettings lastIkSetting;
+
 
     // Start is called before the first frame update
     void Start()
@@ -42,9 +46,14 @@ public class RightArmIK : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (debugPosition && lastIkSetting != null)
+        {
+            SetIkTargetAndHint(lastIkSetting);
+        }
+
         if (_inUse || _tempUse)
         {
-            _ikConstraint.weight = Mathf.Lerp(_ikConstraint.weight, 1f, Time.deltaTime * 4f);
+            _ikConstraint.weight = Mathf.Lerp(_ikConstraint.weight, 0.8f, Time.deltaTime * 4f);
         }
         else
         {
@@ -55,6 +64,7 @@ public class RightArmIK : MonoBehaviour
 
     public void SetIkTargetAndHint(IKSettings _settings)
     {
+        lastIkSetting = _settings;
         target.localPosition = _settings.targetPos;
         target.localRotation = _settings.targetRot;
         hint.localPosition = _settings.hintPos;
