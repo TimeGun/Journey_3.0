@@ -9,6 +9,21 @@ public class LeftArmIK : MonoBehaviour
 {
 
     [SerializeField] private bool _inUse = false;
+    
+    [SerializeField] private bool _tempUse;
+
+    public bool InUse
+    {
+        get => _inUse;
+        set => _inUse = value;
+    }
+
+    public bool TempUse
+    {
+        get => _tempUse;
+        set => _tempUse = value;
+    }
+
 
     [SerializeField] private TwoBoneIKConstraint _ikConstraint;
     
@@ -17,6 +32,8 @@ public class LeftArmIK : MonoBehaviour
     [SerializeField] private Transform hint;
 
     public static LeftArmIK Instance;
+    
+    
 
 
     // Start is called before the first frame update
@@ -28,13 +45,13 @@ public class LeftArmIK : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (_inUse)
+        if (_inUse || _tempUse)
         {
-            _ikConstraint.weight = Mathf.Lerp(_ikConstraint.weight, 0.75f, Time.deltaTime);
+            _ikConstraint.weight = Mathf.Lerp(_ikConstraint.weight, 1f, Time.deltaTime * 4f);
         }
         else
         {
-            _ikConstraint.weight = Mathf.Lerp(_ikConstraint.weight, 0, Time.deltaTime * 10f);
+            _ikConstraint.weight = Mathf.Lerp(_ikConstraint.weight, 0, Time.deltaTime * 6f);
         }
     }
 
@@ -51,7 +68,6 @@ public class LeftArmIK : MonoBehaviour
     {
         target.position = position;
         target.localRotation = handRotation;
-        _inUse = true;
     }
 
     public void StopIK()

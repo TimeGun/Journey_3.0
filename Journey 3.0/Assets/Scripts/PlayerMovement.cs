@@ -115,7 +115,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (carryingObject)
         {
-            _controller.radius = _originalRange * 1.5f;
+            _controller.radius = _originalRange * 1.35f;
         }
         else
         {
