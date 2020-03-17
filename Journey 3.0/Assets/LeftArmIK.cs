@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Animations.Rigging;
 
 
-public class RightArmIK : MonoBehaviour
+public class LeftArmIK : MonoBehaviour
 {
 
     [SerializeField] private bool _inUse = false;
@@ -16,7 +16,7 @@ public class RightArmIK : MonoBehaviour
 
     [SerializeField] private Transform hint;
 
-    public static RightArmIK Instance;
+    public static LeftArmIK Instance;
 
 
     // Start is called before the first frame update
@@ -59,4 +59,3 @@ public class RightArmIK : MonoBehaviour
         _inUse = false;
     }
 }
-
