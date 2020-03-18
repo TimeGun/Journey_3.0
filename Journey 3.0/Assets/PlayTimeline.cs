@@ -34,7 +34,7 @@ public class PlayTimeline : MonoBehaviour
             _playerEntered = cameraTrigger.GetComponent<DetectPlayer>().PlayerEntered;    //Use a coroutine to check if the player has entered every x amount of frames
 
         }
-        Debug.Log(_playerEntered);
+//        Debug.Log(_playerEntered);
         if (_playerEntered && cinematicStarted == false)
         {
             StartCoroutine(StartTimeline());

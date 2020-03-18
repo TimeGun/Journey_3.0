@@ -32,6 +32,15 @@ public class CameraZone : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        if (targetCamera1.GetComponent<CinemachineVirtualCameraBase>() == null)
+        {
+            Debug.LogWarning(targetCamera1 + " is not a Camera Object");
+        }
+        if (targetCamera2.GetComponent<CinemachineVirtualCameraBase>() == null)
+        {
+            Debug.LogWarning(targetCamera2 + " is not a Camera Object");
+        }
+        
         if (FindCam1)
         {
             targetCamera1 = GameObject.Find(Cam1Name);
