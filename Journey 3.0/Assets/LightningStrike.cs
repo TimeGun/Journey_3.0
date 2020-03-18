@@ -73,7 +73,14 @@ public class LightningStrike : MonoBehaviour
             }
             
             player.GetComponent<ReceiveImpact>().AddImpact(pushDirection , forceToPushPlayer);
+            
+            
         }
+
+        
+
+        yield return new WaitForSeconds(2f);
+        Destroy(gameObject);
     }
 
     private void OnDrawGizmos()

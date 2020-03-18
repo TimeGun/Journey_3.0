@@ -13,6 +13,11 @@ public class SpawnLightning : MonoBehaviour
 
     private Coroutine coroutine;
 
+    private void Start()
+    {
+        _player = GameObject.Find("Player");
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
