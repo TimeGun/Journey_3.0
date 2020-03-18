@@ -16,7 +16,7 @@ public class ReceiveImpact : MonoBehaviour
     // call this function to add an impact force:
     public void AddImpact(Vector3 direction, float forceToApply){
         direction.Normalize();
-        if (direction.y < 0) direction.y = -direction.y; // reflect down force on the ground
+        //if (direction.y < 0) direction.y = -direction.y; // reflect down force on the ground
         impact += direction.normalized * forceToApply / mass;
     }
  

@@ -9,26 +9,33 @@ public class SpawnLightning : MonoBehaviour
 
     [SerializeField] private GameObject _lightningPrefab;
     
-    [SerializeField] private float _timeBetweenStrike;
+    [SerializeField] [Range(0.5f, 10f)] private float _timeBetweenStrike;
 
     private Coroutine coroutine;
+
+    private bool withinZone;
 
     private void Start()
     {
         _player = GameObject.Find("Player");
+
+        StartCoroutine(SpawnLightningPrefab());
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            coroutine = StartCoroutine(SpawnLightningPrefab());
+            withinZone = true;
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        StopCoroutine(coroutine);
+        if (other.CompareTag("Player"))
+        {
+            withinZone = false;
+        }
     }
 
     public void StartLightningBattle()
@@ -40,9 +47,13 @@ public class SpawnLightning : MonoBehaviour
     {
         while(true)
         {
-            yield return new WaitForSeconds(_timeBetweenStrike);
+            if (withinZone)
+            {
+                yield return new WaitForSeconds(_timeBetweenStrike);
 
-            Instantiate(_lightningPrefab, _player.transform.position, transform.rotation);
+                Instantiate(_lightningPrefab, _player.transform.position, transform.rotation);
+            }
+            yield return new WaitForEndOfFrame();
         }
     }
 }
