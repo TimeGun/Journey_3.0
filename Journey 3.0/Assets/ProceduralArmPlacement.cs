@@ -35,13 +35,10 @@ public class ProceduralArmPlacement : MonoBehaviour
         StartCoroutine(ArmPlacementRaycast());
     }
 
-    void Update()
-    {
-        
-    }
 
     IEnumerator ArmPlacementRaycast()
     {
+        print("test");
         while (true)
         {
             //raycast right arm

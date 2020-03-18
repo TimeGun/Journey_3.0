@@ -40,7 +40,7 @@ public class RightArmIK : MonoBehaviour
 
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         Instance = this;
     }
