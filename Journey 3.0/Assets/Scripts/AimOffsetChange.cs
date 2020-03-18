@@ -1,10 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 using Cinemachine;
 
 public class AimOffsetChange : MonoBehaviour
 {
+    public enum AxisEnum {x,y,z};
+
+    private string axisString;
+    public AxisEnum axisToTrack;
     public GameObject targetCamera;
     private CinemachineVirtualCamera vcam;
     private CinemachineTrackedDolly TD;
@@ -26,6 +31,28 @@ public class AimOffsetChange : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
+        switch (axisToTrack)
+        {
+            case (AxisEnum.x):
+            {
+                axisString = "x";
+                break;
+            }
+            case (AxisEnum.y):
+            {
+                axisString = "y";
+                break;
+            }
+            case (AxisEnum.z):
+            {
+                axisString = "z";
+                break;
+            }
+        }
+            
+        
+        
         vcam = targetCamera.GetComponent<CinemachineVirtualCamera>();                
         TD = vcam.GetCinemachineComponent<CinemachineTrackedDolly>();
         comp = vcam.GetCinemachineComponent<CinemachineComposer>();                //Need to use this to access the LookAt target

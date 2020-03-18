@@ -30,6 +30,7 @@ public class MixingCamera : MonoBehaviour
     private CinemachineMixingCamera vcam;
     public GameObject cameraTrigger;
     
+    
     void Start()
     {
         
