@@ -29,6 +29,7 @@ public class AimOffsetChange : MonoBehaviour
 
     private bool inIVCoroutine;
     private bool inDVCoroutine;
+    
 
     private bool changeBoolCoroutineRunning;
 
@@ -36,11 +37,6 @@ public class AimOffsetChange : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
-        
-            
-        
-        
         vcam = targetCamera.GetComponent<CinemachineVirtualCamera>();                
         TD = vcam.GetCinemachineComponent<CinemachineTrackedDolly>();
         comp = vcam.GetCinemachineComponent<CinemachineComposer>();                //Need to use this to access the LookAt target
@@ -56,8 +52,10 @@ public class AimOffsetChange : MonoBehaviour
         firstTrigger = cameraTrigger1.GetComponent<DetectPlayer>().PlayerEntered;   //Use this to trigger when  offset decreases
         secondTrigger = cameraTrigger2.GetComponent<DetectPlayer>().PlayerEntered;  //Use this to trigger when  offset increases
   
-
-
+        //Debug.Log("Start Offset: " + startOffset);
+        //Debug.Log("New Offset: " + newOffset);
+        //Debug.Log("Current Offset: " + currentOffset);
+        
         if (firstTrigger)
         {
             afterTrigger = false;        //this is used to begin decreasing the value of the offset
@@ -69,11 +67,11 @@ public class AimOffsetChange : MonoBehaviour
         }
 
         
-            if (afterTrigger == false && currentOffset > startOffset + 0.05f)
+            if (afterTrigger == false && firstTrigger)
             {
                StartCoroutine(DecreaseValue());
             }
-            else if (afterTrigger && currentOffset < newOffset - 0.05f)
+            else if (afterTrigger && secondTrigger)
             {
 
                 StartCoroutine(IncreaseValue());
@@ -84,27 +82,55 @@ public class AimOffsetChange : MonoBehaviour
     {
 
         valueIncreasing = false;        //used to ensure offset value is not increasing in IncreaseValue() while it is decreasing here
-
+        if (startOffset > newOffset)        //e.g SO = 0, NO = -28
+        {
+            
+            while (currentOffset > newOffset + 0.05f && valueIncreasing == false)                        //-0.05 is used because offset will never reach newoffset value
+            {
+                    
+                targetOffset = newOffset;
+                AssignAxis();                             //lerp offset of the lookat target to the newoffset value over time
+                yield return new WaitForSeconds(Time.deltaTime);            //wait for as frame to avoid changing value instantly
+            }
+        }
+        else                 //e.g SO = 0, NO = 3.5
+        {
             while (currentOffset > startOffset + 0.05f && valueIncreasing == false)          //+0.05 is used because offset will never reach the startoffset value
-              {
-                 AssignAxis();                                                     //lerp offset of the lookat target to the startoffset value over time
-                  yield return new WaitForSeconds(Time.deltaTime);            //wait for as frame to avoid changing value instantly
+            {
+                targetOffset = startOffset;
+                AssignAxis();                                                     //lerp offset of the lookat target to the startoffset value over time
+                yield return new WaitForSeconds(Time.deltaTime);            //wait for as frame to avoid changing value instantly
 
-              }
+            }
+        }
+            
     }
 
     IEnumerator IncreaseValue()
     {
         
         valueIncreasing = true;
+        if (startOffset > newOffset)
+        {
+            //Debug.Log("please dont Increase");      
+            while (currentOffset < startOffset - 0.05f && valueIncreasing)          //+0.05 is used because offset will never reach the startoffset value
+            {
+                targetOffset = startOffset;
+                AssignAxis();                                                     //lerp offset of the lookat target to the startoffset value over time
+                yield return new WaitForSeconds(Time.deltaTime);            //wait for as frame to avoid changing value instantly
 
-        
-         while (currentOffset < newOffset - 0.05f && valueIncreasing)                        //-0.05 is used because offset will never reach newoffset value
-              {
-                            
-                  AssignAxis();                             //lerp offset of the lookat target to the newoffset value over time
-                  yield return new WaitForSeconds(Time.deltaTime);            //wait for as frame to avoid changing value instantly
-              }
+            }
+        }
+        else
+        {
+            while (currentOffset < newOffset - 0.05f && valueIncreasing)                        //-0.05 is used because offset will never reach newoffset value
+            {
+                targetOffset = newOffset;
+                AssignAxis();                             //lerp offset of the lookat target to the newoffset value over time
+                yield return new WaitForSeconds(Time.deltaTime);            //wait for as frame to avoid changing value instantly
+            }
+        }
+         
 
         
     }
@@ -149,14 +175,14 @@ public class AimOffsetChange : MonoBehaviour
     void AssignAxis()
     {
         
-        if (valueIncreasing)
+        /*if (valueIncreasing)
         {
             targetOffset = newOffset;
         }
         else if (valueIncreasing == false)
         {
             targetOffset = startOffset;
-        }
+        }*/
         
         switch (axisToTrack)
         {
