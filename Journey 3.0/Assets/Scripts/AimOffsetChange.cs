@@ -24,6 +24,11 @@ public class AimOffsetChange : MonoBehaviour
     private bool secondTrigger; 
     public float rateOfChange;
     private bool afterTrigger;
+    private float currentOffset;
+    private float targetOffset;
+
+    private bool inIVCoroutine;
+    private bool inDVCoroutine;
 
     private bool changeBoolCoroutineRunning;
 
@@ -31,40 +36,26 @@ public class AimOffsetChange : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
-        switch (axisToTrack)
-        {
-            case (AxisEnum.x):
-            {
-                axisString = "x";
-                break;
-            }
-            case (AxisEnum.y):
-            {
-                axisString = "y";
-                break;
-            }
-            case (AxisEnum.z):
-            {
-                axisString = "z";
-                break;
-            }
-        }
+        
+        
             
         
         
         vcam = targetCamera.GetComponent<CinemachineVirtualCamera>();                
         TD = vcam.GetCinemachineComponent<CinemachineTrackedDolly>();
         comp = vcam.GetCinemachineComponent<CinemachineComposer>();                //Need to use this to access the LookAt target
-        startOffset = comp.m_TrackedObjectOffset.y;                                //Assign start offset to the offset set in the inspector when it starts
-      
+        CheckAxis();
+        startOffset = currentOffset;                             //Assign start offset to the offset set in the inspector when it starts
+        
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        firstTrigger = cameraTrigger1.GetComponent<DetectPlayer>().PlayerEntered;   //Use this to trigger when y offset decreases
-        secondTrigger = cameraTrigger2.GetComponent<DetectPlayer>().PlayerEntered;  //Use this to trigger when y offset increases
+        CheckAxis();
+        firstTrigger = cameraTrigger1.GetComponent<DetectPlayer>().PlayerEntered;   //Use this to trigger when  offset decreases
+        secondTrigger = cameraTrigger2.GetComponent<DetectPlayer>().PlayerEntered;  //Use this to trigger when  offset increases
+  
 
 
         if (firstTrigger)
@@ -74,16 +65,17 @@ public class AimOffsetChange : MonoBehaviour
         }
         else if (secondTrigger)
         {
-            afterTrigger = true;        //this is used to begin increasing the value of the offset
+            afterTrigger = true;    //this is used to begin increasing the value of the offset
         }
-       
+
         
-            if (afterTrigger == false)
+            if (afterTrigger == false && currentOffset > startOffset + 0.05f)
             {
                StartCoroutine(DecreaseValue());
             }
-            else if (afterTrigger)
+            else if (afterTrigger && currentOffset < newOffset - 0.05f)
             {
+
                 StartCoroutine(IncreaseValue());
             }
     }
@@ -92,26 +84,29 @@ public class AimOffsetChange : MonoBehaviour
     {
 
         valueIncreasing = false;        //used to ensure offset value is not increasing in IncreaseValue() while it is decreasing here
-          
-            while (comp.m_TrackedObjectOffset.y > startOffset + 0.05f && valueIncreasing == false)          //+0.05 is used because offset will never reach the startoffset value
+
+            while (currentOffset > startOffset + 0.05f && valueIncreasing == false)          //+0.05 is used because offset will never reach the startoffset value
               {
-                  comp.m_TrackedObjectOffset.y =
-                        Mathf.Lerp(comp.m_TrackedObjectOffset.y, startOffset, rateOfChange / 1000);        //lerp y offset of the lookat target to the startoffset value over time
+                 AssignAxis();                                                     //lerp offset of the lookat target to the startoffset value over time
                   yield return new WaitForSeconds(Time.deltaTime);            //wait for as frame to avoid changing value instantly
 
               }
-            
-        }
+    }
 
     IEnumerator IncreaseValue()
     {
+        
         valueIncreasing = true;
-         while (comp.m_TrackedObjectOffset.y < newOffset - 0.05f && valueIncreasing)                        //-0.05 is used because offset will never reach newoffset value
+
+        
+         while (currentOffset < newOffset - 0.05f && valueIncreasing)                        //-0.05 is used because offset will never reach newoffset value
               {
-                   comp.m_TrackedObjectOffset.y =
-                         Mathf.Lerp(comp.m_TrackedObjectOffset.y, newOffset, rateOfChange / 1000);           //lerp y offset of the lookat target to the newoffset value over time
-                   yield return new WaitForSeconds(Time.deltaTime);            //wait for as frame to avoid changing value instantly
+                            
+                  AssignAxis();                             //lerp offset of the lookat target to the newoffset value over time
+                  yield return new WaitForSeconds(Time.deltaTime);            //wait for as frame to avoid changing value instantly
               }
+
+        
     }
     
     
@@ -122,7 +117,67 @@ public class AimOffsetChange : MonoBehaviour
         yield return new WaitForSeconds(Time.deltaTime * framesToWait);
         
         afterTrigger = !afterTrigger;
-        Debug.Log("CR AfterTrigger = " + afterTrigger);
+  
         changeBoolCoroutineRunning = false;
+    }
+
+    void CheckAxis()
+    {
+        switch (axisToTrack)
+        {
+            case (AxisEnum.x):
+            {
+                axisString = "x";
+                currentOffset = comp.m_TrackedObjectOffset.x;
+                break;
+            }
+            case (AxisEnum.y):
+            {
+                axisString = "y";
+                currentOffset = comp.m_TrackedObjectOffset.y;
+                break;
+            }
+            case (AxisEnum.z):
+            {
+                axisString = "z";
+                currentOffset = comp.m_TrackedObjectOffset.z;
+                break;
+            }
+        }
+    }
+
+    void AssignAxis()
+    {
+        
+        if (valueIncreasing)
+        {
+            targetOffset = newOffset;
+        }
+        else if (valueIncreasing == false)
+        {
+            targetOffset = startOffset;
+        }
+        
+        switch (axisToTrack)
+        {
+            case (AxisEnum.x):
+            {
+                comp.m_TrackedObjectOffset.x =
+                    Mathf.Lerp(comp.m_TrackedObjectOffset.x, targetOffset, rateOfChange / 1000); 
+                break;
+            }
+            case (AxisEnum.y):
+            {
+                comp.m_TrackedObjectOffset.y =
+                    Mathf.Lerp(comp.m_TrackedObjectOffset.y, targetOffset, rateOfChange / 1000); 
+                break;
+            }
+            case (AxisEnum.z):
+            {
+                comp.m_TrackedObjectOffset.z =
+                    Mathf.Lerp(comp.m_TrackedObjectOffset.z, targetOffset, rateOfChange / 1000); 
+                break;
+            }
+        }
     }
 }
