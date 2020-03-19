@@ -22,6 +22,13 @@ public class PlayerMovement : MonoBehaviour
 
 
     [SerializeField] private float _speed = 5f;
+
+    public float Speed
+    {
+        get => _speed;
+        set => _speed = value;
+    }
+
     [SerializeField] private float _pushSpeed = 2f;
 
     
@@ -34,6 +41,12 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private float _minWalkSpeed = 1f;
     [SerializeField] private float _maxWalkSpeed = 20f;
+
+    public float MaxWalkSpeed
+    {
+        get => _maxWalkSpeed;
+        set => _maxWalkSpeed = value;
+    }
 
 
     private Vector2 _input;

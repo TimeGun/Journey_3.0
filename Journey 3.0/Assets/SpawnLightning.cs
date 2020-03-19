@@ -27,6 +27,7 @@ public class SpawnLightning : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             withinZone = true;
+            _player.GetComponent<MountainSlopeSpeed>().enabled = true;
         }
     }
 
@@ -35,6 +36,7 @@ public class SpawnLightning : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             withinZone = false;
+            _player.GetComponent<MountainSlopeSpeed>().enabled = false;
         }
     }
 
@@ -51,9 +53,40 @@ public class SpawnLightning : MonoBehaviour
             {
                 yield return new WaitForSeconds(_timeBetweenStrike);
 
-                Instantiate(_lightningPrefab, _player.transform.position, transform.rotation);
+                Vector3 spawnPos = _player.transform.position;
+
+
+                Vector3 playerVelocity = _player.GetComponent<CharacterController>().velocity;
+                
+
+                Vector3 to = (spawnPos + transform.forward) - spawnPos;
+
+                Vector3 from = (spawnPos + playerVelocity) - spawnPos;
+
+                float angle = Vector3.Angle(to, from);
+                
+                
+                float velocityMultiplier = Map(angle, 180f, 0, 0, 1);
+                
+                spawnPos += playerVelocity * velocityMultiplier;
+                
+                
+                Instantiate(_lightningPrefab, spawnPos, transform.rotation);
             }
+            
             yield return new WaitForEndOfFrame();
         }
     }
+    
+    public float Map(float a, float b, float c, float d, float e)
+    {
+        
+        float cb = c - b;
+        float de = e - d;
+        float howFar = (a - b) / cb;
+        return d + howFar * de;
+        
+        //float a = value you want mapped t
+    }
+
 }

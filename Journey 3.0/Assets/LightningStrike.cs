@@ -28,7 +28,10 @@ public class LightningStrike : MonoBehaviour
 
     private GameObject player;
 
-    [SerializeField] private LayerMask mask; 
+    [SerializeField] private LayerMask mask;
+
+
+    [SerializeField] private float stunDuration;
     
     void Start()
     {
@@ -69,17 +72,24 @@ public class LightningStrike : MonoBehaviour
             if (Physics.Raycast( ray, out hit, 2f, mask))
             {
                 pushDirection = Vector3.Cross(hit.normal, transform.right);
-                print(pushDirection);
             }
-            
+
+            player.GetComponent<PlayerMovement>().DisableThis();
             player.GetComponent<ReceiveImpact>().AddImpact(pushDirection , forceToPushPlayer);
-            
-            
         }
 
         
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(stunDuration);
+        
+        
+        player.GetComponent<PlayerMovement>().enabled = true;
+
+        float remainingWaitTime = 2f - stunDuration;
+        
+        if(remainingWaitTime > 0)
+            yield return new WaitForSeconds(remainingWaitTime);
+
         Destroy(gameObject);
     }
 
