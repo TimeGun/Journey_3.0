@@ -131,14 +131,16 @@ public class PushObject : MonoBehaviour, IInteractible
         if (_rb == null)
             _rb = GetComponent<Rigidbody>();
 
-        _rb.isKinematic = false;
+        _rb.constraints = RigidbodyConstraints.FreezeRotation;
     }
 
     public void StopInteraction()
     {
         _pushing = false;
         _movement.Pushing = false;
-        _rb.isKinematic = true;
+        //_rb.isKinematic = true;
+        _rb.constraints = RigidbodyConstraints.FreezeAll;
+
     }
 
     private void OnDrawGizmos()

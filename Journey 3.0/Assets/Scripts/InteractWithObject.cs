@@ -326,7 +326,6 @@ public class InteractWithObject : MonoBehaviour
 
         if (_interactingObj.getGameObject().GetComponent<SquishObject>())
         {
-            print("gas lad");
 
             var placeableAreas = FindObjectsOfType<MonoBehaviour>().OfType<IPlaceableArea>();
 
@@ -344,7 +343,6 @@ public class InteractWithObject : MonoBehaviour
 
 
         yield return new WaitUntil(() => !_animator.IsInTransition(0));
-        print("Transition finished");
 
         _movement.enabled = true;
         cooldown = false;
@@ -436,7 +434,7 @@ public class InteractWithObject : MonoBehaviour
         if (rune.GetComponent<GrowObject>() != null)
         {
             ChangeSize _change = interactible.GetComponent<ChangeSize>();
-            _change.StartCoroutine(_change.ChangeSizeOfObject());
+            _change.StartChangeSize();
         }
 
         if (rune.GetComponent<HoldInteractipleOnRune>() != null)

@@ -38,7 +38,6 @@ public class ProceduralArmPlacement : MonoBehaviour
 
     IEnumerator ArmPlacementRaycast()
     {
-        print("test");
         while (true)
         {
             //raycast right arm

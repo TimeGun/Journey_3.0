@@ -71,7 +71,7 @@ public class SpawnLightning : MonoBehaviour
                 spawnPos += playerVelocity * velocityMultiplier;
                 
                 
-                Instantiate(_lightningPrefab, spawnPos, transform.rotation);
+                //Instantiate(_lightningPrefab, spawnPos, transform.rotation);
             }
             
             yield return new WaitForEndOfFrame();

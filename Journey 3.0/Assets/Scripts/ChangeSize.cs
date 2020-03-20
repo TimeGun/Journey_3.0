@@ -20,12 +20,12 @@ public class ChangeSize : MonoBehaviour
 
     private Rigidbody _rb;
 
-    private GravityCheck _gravityCheck;
 
     [SerializeField] float _growSpeed = 2f;
 
     public float _growthMultiplier = 2f;
 
+    private bool changingSize;
 
 
     private void Start()
@@ -44,15 +44,23 @@ public class ChangeSize : MonoBehaviour
         }
 
         _rb = GetComponent<Rigidbody>();
-        _gravityCheck = GetComponent<GravityCheck>();
     }
+
+    public void StartChangeSize()
+    {
+        if (!changingSize)
+        {
+            StartCoroutine(ChangeSizeOfObject());
+        }
+    }
+    
 
     public IEnumerator ChangeSizeOfObject()
     {
+        changingSize = true;
         
         Vector3 targetScale;
         
-        _gravityCheck.enabled = true;
 
         if (_small)
         {
@@ -61,7 +69,7 @@ public class ChangeSize : MonoBehaviour
             if (changeMode)
             {
                 Destroy(GetComponent<PickUpObject>());
-                PushObject pusher = gameObject.AddComponent(typeof(PushObject)) as PushObject;
+                
             }
 
             _small = false;
@@ -72,8 +80,12 @@ public class ChangeSize : MonoBehaviour
 
             if (changeMode)
             {
+                GetComponent<AudioSource>().Stop();
                 Destroy(GetComponent<PushObject>());
                 PickUpObject picker = gameObject.AddComponent(typeof(PickUpObject)) as PickUpObject;
+                GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+
+                print(GetComponent<Rigidbody>().constraints);
             }
 
             _small = true;
@@ -87,6 +99,12 @@ public class ChangeSize : MonoBehaviour
             yield return new WaitForFixedUpdate();
         }
 
-        _gravityCheck.enabled = true;
+        if (changeMode && _small == false)
+        {
+            PushObject pusher = gameObject.AddComponent(typeof(PushObject)) as PushObject;
+            GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+        }
+
+        changingSize = false;
     }
 }

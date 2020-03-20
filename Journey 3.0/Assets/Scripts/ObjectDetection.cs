@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
 public class ObjectDetection : MonoBehaviour
@@ -17,7 +15,7 @@ public class ObjectDetection : MonoBehaviour
     }
     
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
 
         IInteractible itemToPickUp = other.GetComponent<IInteractible>();
