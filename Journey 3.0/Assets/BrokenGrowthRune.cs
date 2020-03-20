@@ -13,11 +13,11 @@ public class BrokenGrowthRune : MonoBehaviour
     }
 
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerStay(Collider other)
     {
         ChangeSize changeSize = other.GetComponent<ChangeSize>();
 
-        if (changeSize != null)
+        if (changeSize != null && changeSize.Small)
         {
             if (player == null)
             {

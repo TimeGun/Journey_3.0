@@ -97,6 +97,8 @@ public class PickUpObject : MonoBehaviour, IInteractible
 
         _rb.isKinematic = true;
 
+        _rb.constraints = RigidbodyConstraints.None;
+
         _hand = parent;
 
         _hand.root.GetComponent<PlayerMovement>().carryingObject = true;

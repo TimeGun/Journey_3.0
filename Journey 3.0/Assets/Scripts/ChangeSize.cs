@@ -68,8 +68,9 @@ public class ChangeSize : MonoBehaviour
 
             if (changeMode)
             {
-                Destroy(GetComponent<PickUpObject>());
-                
+                PickUpObject pickUpObject = GetComponent<PickUpObject>();
+                pickUpObject.StopInteraction();
+                Destroy(pickUpObject);
             }
 
             _small = false;
@@ -81,11 +82,13 @@ public class ChangeSize : MonoBehaviour
             if (changeMode)
             {
                 GetComponent<AudioSource>().Stop();
-                Destroy(GetComponent<PushObject>());
-                PickUpObject picker = gameObject.AddComponent(typeof(PickUpObject)) as PickUpObject;
+                PushObject pushObject = GetComponent<PushObject>();
+                
+                pushObject.StopInteraction();
+                
+                Destroy(pushObject);
+                
                 GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-
-                print(GetComponent<Rigidbody>().constraints);
             }
 
             _small = true;
@@ -103,6 +106,9 @@ public class ChangeSize : MonoBehaviour
         {
             PushObject pusher = gameObject.AddComponent(typeof(PushObject)) as PushObject;
             GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+        }else if (changeMode && _small)
+        {
+            PickUpObject picker = gameObject.AddComponent(typeof(PickUpObject)) as PickUpObject;
         }
 
         changingSize = false;

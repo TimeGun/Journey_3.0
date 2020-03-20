@@ -138,9 +138,7 @@ public class PushObject : MonoBehaviour, IInteractible
     {
         _pushing = false;
         _movement.Pushing = false;
-        //_rb.isKinematic = true;
         _rb.constraints = RigidbodyConstraints.FreezeAll;
-
     }
 
     private void OnDrawGizmos()

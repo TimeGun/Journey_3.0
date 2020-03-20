@@ -69,7 +69,6 @@ public class InteractWithObject : MonoBehaviour
 
         if (_inputSetUp.Controls.PlayerFreeMovement.Interact.triggered && !cooldown)
         {
-
             if (_nearRune && _objectDetection.Items.Count > 1)
             {
                 GameObject rune = _rune.getGameObject();
@@ -125,10 +124,9 @@ public class InteractWithObject : MonoBehaviour
                     }
                 }
             }
-            else if (!_interacting && !_nearRune && _objectDetection.Items.Count > 0 && !_inPlacementArea) // pickup items in general
+            else if (!_interacting && !_nearRune && _objectDetection.Items.Count > 0 && !_inPlacementArea
+            ) // pickup items in general
             {
-
-
                 GameObject obj = ReturnCloserObject();
                 _interactingObj = obj.GetComponent<IInteractible>();
 
@@ -154,14 +152,14 @@ public class InteractWithObject : MonoBehaviour
                         _movement.enabled = false;
 
                         _coroutine = StartCoroutine(TurnToGrab(obj));
-                    }else if (_plankPlacementArea != null && _plankPlacementArea.GetPlank() != null &&
-                              _plankPlacementArea.GetPlank() == obj)
+                    }
+                    else if (_plankPlacementArea != null && _plankPlacementArea.GetPlank() != null &&
+                             _plankPlacementArea.GetPlank() == obj)
                     {
                         return;
                     }
                     else
                     {
-
                         cooldown = true;
                         _interacting = true;
                         _movement.ControllerVeclocity = Vector3.zero;
@@ -171,7 +169,8 @@ public class InteractWithObject : MonoBehaviour
                     }
                 }
             }
-            else if (!_interacting && !_nearRune && _objectDetection.Items.Count > 0 && _inPlacementArea) // pickup of item whilst in the placement zone (bridge)
+            else if (!_interacting && !_nearRune && _objectDetection.Items.Count > 0 && _inPlacementArea
+            ) // pickup of item whilst in the placement zone (bridge)
             {
                 GameObject obj = ReturnCloserObject();
 
@@ -326,7 +325,6 @@ public class InteractWithObject : MonoBehaviour
 
         if (_interactingObj.getGameObject().GetComponent<SquishObject>())
         {
-
             var placeableAreas = FindObjectsOfType<MonoBehaviour>().OfType<IPlaceableArea>();
 
             foreach (IPlaceableArea placeableArea in placeableAreas)
@@ -439,7 +437,6 @@ public class InteractWithObject : MonoBehaviour
 
         if (rune.GetComponent<HoldInteractipleOnRune>() != null)
         {
-            print("Hold on Rune");
             HoldInteractipleOnRune holdInteractipleOnRune = rune.GetComponent<HoldInteractipleOnRune>();
 
             if (!holdInteractipleOnRune.ItemOnRuneBool)
