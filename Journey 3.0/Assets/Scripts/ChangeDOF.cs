@@ -67,7 +67,7 @@ public class ChangeDOF : MonoBehaviour
     
     IEnumerator SwitchDepthOfField()
     {
-        while ( true)
+        while ( DOF.nearFocusEnd.value < nearBlurEnd - 0.05 || DOF.nearFocusEnd.value > nearBlurEnd + 0.05)
         {
             DOF.nearFocusStart.value = Mathf.Lerp(DOF.nearFocusStart.value, nearBlurStart, rateOfChange/100); 
             DOF.nearFocusEnd.value = Mathf.Lerp(DOF.nearFocusEnd.value, nearBlurEnd,  rateOfChange/100); 
@@ -81,7 +81,7 @@ public class ChangeDOF : MonoBehaviour
 
     IEnumerator RevertDepthOfField()
     {
-        while ( true)
+        while (DOF.nearFocusEnd.value < initialNearBlurEnd - 0.05 || DOF.nearFocusEnd.value > initialNearBlurEnd + 0.05 )
         {
             DOF.nearFocusStart.value = Mathf.Lerp(DOF.nearFocusStart.value, initialNearBlurStart, rateOfChange/100); 
             DOF.nearFocusEnd.value = Mathf.Lerp(DOF.nearFocusEnd.value, initialNearBlurEnd,  rateOfChange/100); 
