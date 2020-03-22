@@ -17,6 +17,10 @@ public class ChangeDOF : MonoBehaviour
 
     public float rateOfChange;
 
+    private float initialNearBlurStart;
+    private float initialNearBlurEnd;
+    private float initialFarFocusStart;
+    private float initialFarFocusEnd;
 
     
     
@@ -31,7 +35,12 @@ public class ChangeDOF : MonoBehaviour
             DOF = tempDof;
         }
 
-        
+        initialNearBlurStart = DOF.nearFocusStart.value;
+        initialNearBlurEnd = DOF.nearFocusEnd.value;
+        initialFarFocusStart = DOF.farFocusStart.value;
+        initialFarFocusEnd = DOF.farFocusEnd.value;
+
+
     }
 
     // Update is called once per frame
@@ -39,15 +48,47 @@ public class ChangeDOF : MonoBehaviour
     {
         if (switchDOF)
         {
-            
-            
-            DOF.nearFocusStart.value = Mathf.Lerp(DOF.nearFocusStart.value, nearBlurStart, rateOfChange/100); 
-            DOF.nearFocusEnd.value = Mathf.Lerp(DOF.nearFocusEnd.value, nearBlurEnd,  rateOfChange/100); 
-            DOF.farFocusStart.value = Mathf.Lerp(DOF.farFocusStart.value, farFocusStart,  rateOfChange/100); 
-            DOF.farFocusEnd.value = Mathf.Lerp(DOF.farFocusEnd.value, farFocusEnd,  rateOfChange/100); 
+
+            StartCoroutine(SwitchDepthOfField());
+
         }
         
     }
 
-   
+    public void StartSwitchDepthOfField()
+    {
+        StartCoroutine(SwitchDepthOfField());
+    }
+    
+    public void StartRevertSwitchDepthOfField()
+    {
+        StartCoroutine(RevertDepthOfField());
+    }
+    
+    IEnumerator SwitchDepthOfField()
+    {
+        while ( true)
+        {
+            DOF.nearFocusStart.value = Mathf.Lerp(DOF.nearFocusStart.value, nearBlurStart, rateOfChange/100); 
+            DOF.nearFocusEnd.value = Mathf.Lerp(DOF.nearFocusEnd.value, nearBlurEnd,  rateOfChange/100); 
+            DOF.farFocusStart.value = Mathf.Lerp(DOF.farFocusStart.value, farFocusStart,  rateOfChange/100); 
+            DOF.farFocusEnd.value = Mathf.Lerp(DOF.farFocusEnd.value, farFocusEnd,  rateOfChange/100);
+            yield return new WaitForSeconds(Time.deltaTime);
+            Debug.Log("in depth of field"); 
+        }
+        
+    }
+
+    IEnumerator RevertDepthOfField()
+    {
+        while ( true)
+        {
+            DOF.nearFocusStart.value = Mathf.Lerp(DOF.nearFocusStart.value, initialNearBlurStart, rateOfChange/100); 
+            DOF.nearFocusEnd.value = Mathf.Lerp(DOF.nearFocusEnd.value, initialNearBlurEnd,  rateOfChange/100); 
+            DOF.farFocusStart.value = Mathf.Lerp(DOF.farFocusStart.value, initialFarFocusStart,  rateOfChange/100); 
+            DOF.farFocusEnd.value = Mathf.Lerp(DOF.farFocusEnd.value, initialFarFocusEnd,  rateOfChange/100);
+            yield return new WaitForSeconds(Time.deltaTime);
+            Debug.Log("in revert depth of field"); 
+        }
+    }
 }
