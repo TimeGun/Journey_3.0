@@ -52,6 +52,11 @@ public class ChangeSize : MonoBehaviour
         {
             StartCoroutine(ChangeSizeOfObject());
         }
+        else
+        {
+            StopAllCoroutines();
+            StartCoroutine(ChangeSizeOfObject());
+        }
     }
     
 
@@ -69,8 +74,11 @@ public class ChangeSize : MonoBehaviour
             if (changeMode)
             {
                 PickUpObject pickUpObject = GetComponent<PickUpObject>();
-                pickUpObject.StopInteraction();
-                Destroy(pickUpObject);
+                if (pickUpObject != null)
+                {
+                    pickUpObject.StopInteraction();
+                    Destroy(pickUpObject);
+                }
             }
 
             _small = false;
@@ -83,11 +91,13 @@ public class ChangeSize : MonoBehaviour
             {
                 GetComponent<AudioSource>().Stop();
                 PushObject pushObject = GetComponent<PushObject>();
-                
-                pushObject.StopInteraction();
-                
-                Destroy(pushObject);
-                
+
+                if (pushObject != null)
+                {
+                    pushObject.StopInteraction();
+
+                    Destroy(pushObject);
+                }
                 GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
             }
 

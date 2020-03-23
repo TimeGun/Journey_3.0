@@ -15,7 +15,7 @@ public class PushObject : MonoBehaviour, IInteractible
 
     private float _distanceToPushingObject;
 
-    [SerializeField] private float _minDistance = 1.4f;
+    [SerializeField] private float _minDistance = 1.5f;
 
     private InteractWithObject _interactWithObject;
 
@@ -28,6 +28,8 @@ public class PushObject : MonoBehaviour, IInteractible
     private Collider _col;
 
     private AudioSource _source;
+
+    public bool isInteracting = true;
 
 
     public float _audioDistance = 0.02f;
@@ -60,7 +62,7 @@ public class PushObject : MonoBehaviour, IInteractible
                 Ray ray = new Ray(playerChest.position, _player.transform.forward);
 
                 RaycastHit hit;
-                
+
                 _movement.info.distance = _distanceToPushingObject + internalDistance;
                 _movement.info.position = playerChest.position;
 
@@ -101,6 +103,7 @@ public class PushObject : MonoBehaviour, IInteractible
 
     public void StartInteraction(Transform parent)
     {
+        isInteracting = true;
         _pushing = true;
         _player = parent.root.gameObject;
 
@@ -136,8 +139,26 @@ public class PushObject : MonoBehaviour, IInteractible
 
     public void StopInteraction()
     {
+        isInteracting = false;
         _pushing = false;
         _movement.Pushing = false;
+
+        RaycastHit hit;
+
+        Physics.Raycast(playerChest.position, playerChest.transform.forward, out hit, 2f);
+
+        print(hit.transform.gameObject);
+        
+        while (_player.GetComponent<CharacterController>().bounds
+            .Contains(hit.point))
+        {
+            Vector3 dirVector = transform.position - playerChest.position;
+            
+            dirVector.Normalize();
+
+            _player.transform.position -= dirVector * 0.2f;
+        }
+
         _rb.constraints = RigidbodyConstraints.FreezeAll;
     }
 
