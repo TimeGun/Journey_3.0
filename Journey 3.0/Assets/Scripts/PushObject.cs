@@ -68,7 +68,7 @@ public class PushObject : MonoBehaviour, IInteractible
 
                 if (!Physics.Raycast(ray, _distanceToPushingObject + internalDistance, mask))
                 {
-                    _rb.MovePosition(Vector3.Lerp(transform.position, _position, Time.deltaTime * 25f));
+                    _rb.MovePosition(_position);
 
 
                     if (_movement.PushingBoulder())
@@ -113,6 +113,7 @@ public class PushObject : MonoBehaviour, IInteractible
 
     private void SetUpPushing()
     {
+        GetComponentInChildren<AdjustBounceRotation>().AsignPushObject(this);
         _movement = _player.GetComponent<PlayerMovement>();
         _movement.ControllerVeclocity = Vector3.zero;
         _movement.Pushing = true;
@@ -142,7 +143,9 @@ public class PushObject : MonoBehaviour, IInteractible
         isInteracting = false;
         _pushing = false;
         _movement.Pushing = false;
-
+        
+        /*
+         
         RaycastHit hit;
 
         Physics.Raycast(playerChest.position, playerChest.transform.forward, out hit, 2f);
@@ -158,6 +161,7 @@ public class PushObject : MonoBehaviour, IInteractible
 
             _player.transform.position -= dirVector * 0.2f;
         }
+        */
 
         _rb.constraints = RigidbodyConstraints.FreezeAll;
     }
