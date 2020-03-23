@@ -17,6 +17,8 @@ public class SlightCameraControl : MonoBehaviour
     
     [SerializeField] private GameObject _currentVirtualCamera;
 
+    private OffsetOptions _offsetOptions;
+
     void Start()
     {
         _inputSetUp = GetComponent<InputSetUp>();
@@ -38,6 +40,9 @@ public class SlightCameraControl : MonoBehaviour
     {
         _currentVirtualCamera =
             _cinemachineBrain.ActiveVirtualCamera.VirtualCameraGameObject;
+
+        _offsetOptions = _currentVirtualCamera.GetComponent<OffsetOptions>();
+        
         _cameraOffset = _currentVirtualCamera.GetComponent<CinemachineCameraOffset>();
     }
     
@@ -57,7 +62,7 @@ public class SlightCameraControl : MonoBehaviour
             _input = _inputSetUp.RightStick;
             
         
-            _cameraOffset.m_Offset = Vector3.Lerp(_cameraOffset.m_Offset, new Vector3(_input.x, _input.y, 0f) * _cameraOffset.m_offsetMultiplier, Time.deltaTime);
+            _cameraOffset.m_Offset = Vector3.Lerp(_cameraOffset.m_Offset, new Vector3(_input.x, _input.y, 0f) * _offsetOptions.OffsetMultiplier, Time.deltaTime);
             
             yield return new WaitForEndOfFrame();
         }
