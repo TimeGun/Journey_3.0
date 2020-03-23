@@ -16,11 +16,12 @@ public class SlightCameraControl : MonoBehaviour
     [SerializeField] private CinemachineBrain _cinemachineBrain;
     
     [SerializeField] private GameObject _currentVirtualCamera;
-    
-    
+
     void Start()
     {
         _inputSetUp = GetComponent<InputSetUp>();
+        
+        
         //_mainCamera = API.GlobalReferences.MainCamera;
 
         if (_mainCamera == null)
@@ -30,9 +31,7 @@ public class SlightCameraControl : MonoBehaviour
 
         _cinemachineBrain = _mainCamera.GetComponent<CinemachineBrain>();
         
-        SetVirtualCamera();
-        
-        StartCoroutine(UdateCameraOffset());
+        StartCoroutine(UpdateCameraOffset());
     }
 
     private void SetVirtualCamera()
@@ -43,15 +42,14 @@ public class SlightCameraControl : MonoBehaviour
     }
     
 
-    IEnumerator UdateCameraOffset()
+    IEnumerator UpdateCameraOffset()
     {
+        
+        
         while (true)
         {
-            print("what??");
-            
-            if(_cinemachineBrain.IsBlending)
+            if(_cinemachineBrain.IsBlending || _currentVirtualCamera == null)
             {
-                print("yeet, yeet mufuka");
                 yield return new WaitUntil(() => !_cinemachineBrain.IsBlending);
                 SetVirtualCamera();
             }
@@ -59,7 +57,7 @@ public class SlightCameraControl : MonoBehaviour
             _input = _inputSetUp.RightStick;
             
         
-            _cameraOffset.m_Offset = Vector3.Lerp(_cameraOffset.m_Offset, new Vector3(_input.x, _input.y, 0f), Time.deltaTime);
+            _cameraOffset.m_Offset = Vector3.Lerp(_cameraOffset.m_Offset, new Vector3(_input.x, _input.y, 0f) * _cameraOffset.m_offsetMultiplier, Time.deltaTime);
             
             yield return new WaitForEndOfFrame();
         }
