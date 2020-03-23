@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class InputSetUp : MonoBehaviour
+public class  InputSetUp : MonoBehaviour
 {
     private InputMaster _controls;
 
@@ -20,7 +20,13 @@ public class InputSetUp : MonoBehaviour
         get => _leftStick;
     }
 
-    
+    public Vector2 _rightStick;
+
+    public Vector2 RightStick
+    {
+        get => _rightStick;
+    }
+
 
     private float _valueInteractDown;
 
@@ -37,6 +43,9 @@ public class InputSetUp : MonoBehaviour
 
         _controls.PlayerFreeMovement.Movement.performed += ctx => _leftStick = ctx.ReadValue<Vector2>();
         _controls.PlayerFreeMovement.Movement.canceled += ctx => _leftStick = Vector2.zero;
+
+        _controls.PlayerFreeMovement.Aim.performed += ctx => _rightStick = ctx.ReadValue<Vector2>();
+        _controls.PlayerFreeMovement.Aim.canceled += ctx => _rightStick = Vector2.zero;
 
         _controls.PlayerFreeMovement.InteractDown.performed += ctx => _valueInteractDown = ctx.ReadValue<float>();
         _controls.PlayerFreeMovement.InteractDown.canceled += ctx => _valueInteractDown = 0;

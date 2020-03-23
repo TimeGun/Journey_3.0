@@ -49,6 +49,14 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Axis"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Aim"",
+                    ""type"": ""Button"",
+                    ""id"": ""8cd2662a-cefe-4afb-96fd-81d6ac26cb22"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -134,7 +142,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""id"": ""f7991acf-ef8a-42b3-b2eb-29340b2d958c"",
                     ""path"": ""<Gamepad>/leftStick"",
                     ""interactions"": """",
-                    ""processors"": ""StickDeadzone(min=0.15,max=0.925)"",
+                    ""processors"": ""StickDeadzone"",
                     ""groups"": ""Gamepad"",
                     ""action"": ""Movement"",
                     ""isComposite"": false,
@@ -183,6 +191,72 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""action"": ""InteractDown"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d7ac35a5-e712-4bd7-b889-dca8d07443d8"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": ""StickDeadzone"",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""Arrow Keys"",
+                    ""id"": ""29227b0c-e2d0-4e68-9738-7fddd360e5d8"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Aim"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""1c4bfb07-8115-4f68-8f27-50390ec19ec9"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""47d57584-90f1-4d20-b6cf-acdade98e68e"",
+                    ""path"": ""<Keyboard>/downArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""0caeacf0-92f7-471a-b113-0e14b29ed4d9"",
+                    ""path"": ""<Keyboard>/leftArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""01b6b80d-f5f8-4ca0-9428-d7bc575a451c"",
+                    ""path"": ""<Keyboard>/rightArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
                 }
             ]
         }
@@ -218,6 +292,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_PlayerFreeMovement_Movement = m_PlayerFreeMovement.FindAction("Movement", throwIfNotFound: true);
         m_PlayerFreeMovement_Interact = m_PlayerFreeMovement.FindAction("Interact", throwIfNotFound: true);
         m_PlayerFreeMovement_InteractDown = m_PlayerFreeMovement.FindAction("InteractDown", throwIfNotFound: true);
+        m_PlayerFreeMovement_Aim = m_PlayerFreeMovement.FindAction("Aim", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -271,6 +346,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
     private readonly InputAction m_PlayerFreeMovement_Movement;
     private readonly InputAction m_PlayerFreeMovement_Interact;
     private readonly InputAction m_PlayerFreeMovement_InteractDown;
+    private readonly InputAction m_PlayerFreeMovement_Aim;
     public struct PlayerFreeMovementActions
     {
         private @InputMaster m_Wrapper;
@@ -279,6 +355,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         public InputAction @Movement => m_Wrapper.m_PlayerFreeMovement_Movement;
         public InputAction @Interact => m_Wrapper.m_PlayerFreeMovement_Interact;
         public InputAction @InteractDown => m_Wrapper.m_PlayerFreeMovement_InteractDown;
+        public InputAction @Aim => m_Wrapper.m_PlayerFreeMovement_Aim;
         public InputActionMap Get() { return m_Wrapper.m_PlayerFreeMovement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -300,6 +377,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @InteractDown.started -= m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface.OnInteractDown;
                 @InteractDown.performed -= m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface.OnInteractDown;
                 @InteractDown.canceled -= m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface.OnInteractDown;
+                @Aim.started -= m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface.OnAim;
+                @Aim.performed -= m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface.OnAim;
+                @Aim.canceled -= m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface.OnAim;
             }
             m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface = instance;
             if (instance != null)
@@ -316,6 +396,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @InteractDown.started += instance.OnInteractDown;
                 @InteractDown.performed += instance.OnInteractDown;
                 @InteractDown.canceled += instance.OnInteractDown;
+                @Aim.started += instance.OnAim;
+                @Aim.performed += instance.OnAim;
+                @Aim.canceled += instance.OnAim;
             }
         }
     }
@@ -344,5 +427,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
         void OnMovement(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
         void OnInteractDown(InputAction.CallbackContext context);
+        void OnAim(InputAction.CallbackContext context);
     }
 }
