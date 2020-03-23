@@ -76,7 +76,11 @@ public class ChangeSize : MonoBehaviour
                 PickUpObject pickUpObject = GetComponent<PickUpObject>();
                 if (pickUpObject != null)
                 {
-                    pickUpObject.StopInteraction();
+                    if (pickUpObject.isActive())
+                    {
+                        pickUpObject.StopInteraction();
+                    }
+
                     Destroy(pickUpObject);
                 }
             }
@@ -94,7 +98,11 @@ public class ChangeSize : MonoBehaviour
 
                 if (pushObject != null)
                 {
-                    pushObject.StopInteraction();
+                    if (pushObject.isInteracting)
+                    {
+                        pushObject.StopInteraction();
+                    }
+
 
                     Destroy(pushObject);
                 }
