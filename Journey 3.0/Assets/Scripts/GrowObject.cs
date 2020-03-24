@@ -5,6 +5,7 @@ using UnityEngine;
 public class GrowObject : MonoBehaviour, IInteractible, IRune
 {
     [SerializeField] private ObjectsOnAltarPlate _objectsOnAltarPlate;
+
     void Start()
     {
         
@@ -41,6 +42,9 @@ public class GrowObject : MonoBehaviour, IInteractible, IRune
         InteractWithObject interactWithObject = player.GetComponent<InteractWithObject>();
 
 
+        
+        
+
         for (int i = 0; i < _objectsOnAltarPlate.ItemsOnAltar.Count; i++)
         {
             ChangeSize changeSize = _objectsOnAltarPlate.ItemsOnAltar[i].GetComponent<ChangeSize>();
@@ -51,7 +55,8 @@ public class GrowObject : MonoBehaviour, IInteractible, IRune
             }
         }
 
-
+        
+        
         interactWithObject.Cooldown = false;
         movement.enabled = true;
         

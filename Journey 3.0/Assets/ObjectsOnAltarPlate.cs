@@ -5,8 +5,7 @@ using UnityEngine;
 public class ObjectsOnAltarPlate : MonoBehaviour
 {
     [SerializeField] List <GameObject> _itemsOnAltar = new List<GameObject>();
-    
-    
+
 
 
     public List<GameObject> ItemsOnAltar
