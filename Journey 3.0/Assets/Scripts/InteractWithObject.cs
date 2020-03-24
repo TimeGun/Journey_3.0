@@ -70,33 +70,21 @@ public class InteractWithObject : MonoBehaviour
 
         if (_inputSetUp.Controls.PlayerFreeMovement.Interact.triggered && !cooldown)
         {
-            if (_nearRune && _objectDetection.Items.Count > 1)
+            if (_nearRune && _objectDetection.Items.Count > 1 || _nearRune && _rune.getGameObject().GetComponent<GrowObject>())
             {
-                GameObject rune = _rune.getGameObject();
-                GameObject interactible;
-
-                if (_interacting)
+                if (_rune.getGameObject().GetComponent<GrowObject>() != null)
                 {
-                    if (rune.GetComponent<HoldInteractipleOnRune>() != null &&
-                        rune.GetComponent<HoldInteractipleOnRune>().ItemOnRuneBool)
-                    {
-                        return;
-                    }
-
-                    cooldown = true;
-                    _movement.ControllerVeclocity = Vector3.zero;
-                    _movement.enabled = false;
-
-                    interactible = _interactingObj.getGameObject();
-
-                    GameObject[] temp = new GameObject[] {rune, interactible};
-                    _coroutine = StartCoroutine(UseRune(temp));
+                    StartCoroutine(UseGrowthRune());
                 }
                 else
                 {
-                    if (rune.GetComponent<HoldInteractipleOnRune>() != null)
+                    GameObject rune = _rune.getGameObject();
+                    GameObject interactible;
+
+                    if (_interacting)
                     {
-                        if (!rune.GetComponent<HoldInteractipleOnRune>().ItemOnRuneBool)
+                        if (rune.GetComponent<HoldInteractipleOnRune>() != null &&
+                            rune.GetComponent<HoldInteractipleOnRune>().ItemOnRuneBool)
                         {
                             return;
                         }
@@ -105,23 +93,42 @@ public class InteractWithObject : MonoBehaviour
                         _movement.ControllerVeclocity = Vector3.zero;
                         _movement.enabled = false;
 
-                        interactible = rune.GetComponent<HoldInteractipleOnRune>().ItemOnRune;
-                        _interactingObj = rune.GetComponent<HoldInteractipleOnRune>().ItemOnRune
-                            .GetComponent<IInteractible>();
-                        GameObject[] temp = new GameObject[] {rune, interactible};
+                        interactible = _interactingObj.getGameObject();
 
+                        GameObject[] temp = new GameObject[] {rune, interactible};
                         _coroutine = StartCoroutine(UseRune(temp));
                     }
                     else
                     {
-                        cooldown = true;
-                        _movement.ControllerVeclocity = Vector3.zero;
-                        _movement.enabled = false;
+                        if (rune.GetComponent<HoldInteractipleOnRune>() != null)
+                        {
+                            if (!rune.GetComponent<HoldInteractipleOnRune>().ItemOnRuneBool)
+                            {
+                                return;
+                            }
 
-                        interactible = ReturnCloserObject();
+                            cooldown = true;
+                            _movement.ControllerVeclocity = Vector3.zero;
+                            _movement.enabled = false;
 
-                        GameObject[] temp = new GameObject[] {rune, interactible};
-                        _coroutine = StartCoroutine(UseRune(temp));
+                            interactible = rune.GetComponent<HoldInteractipleOnRune>().ItemOnRune;
+                            _interactingObj = rune.GetComponent<HoldInteractipleOnRune>().ItemOnRune
+                                .GetComponent<IInteractible>();
+                            GameObject[] temp = new GameObject[] {rune, interactible};
+
+                            _coroutine = StartCoroutine(UseRune(temp));
+                        }
+                        else
+                        {
+                            cooldown = true;
+                            _movement.ControllerVeclocity = Vector3.zero;
+                            _movement.enabled = false;
+
+                            interactible = ReturnCloserObject();
+
+                            GameObject[] temp = new GameObject[] {rune, interactible};
+                            _coroutine = StartCoroutine(UseRune(temp));
+                        }
                     }
                 }
             }
@@ -525,5 +532,10 @@ public class InteractWithObject : MonoBehaviour
     public void SetPlacementArea(IPlaceableArea newPlacementArea)
     {
         _plankPlacementArea = newPlacementArea;
+    }
+
+    IEnumerator UseGrowthRune()
+    {
+        
     }
 }
