@@ -41,6 +41,12 @@ public class InteractWithObject : MonoBehaviour
 
     [SerializeField] private bool cooldown;
 
+    public bool Cooldown
+    {
+        get => cooldown;
+        set => cooldown = value;
+    }
+
     public AudioSource _source;
 
     public AudioClip clip;
@@ -74,7 +80,11 @@ public class InteractWithObject : MonoBehaviour
             {
                 if (_rune.getGameObject().GetComponent<GrowObject>() != null)
                 {
-                    StartCoroutine(UseGrowthRune());
+                    cooldown = true;
+                    _movement.ControllerVeclocity = Vector3.zero;
+                    _movement.enabled = false;
+                    
+                    StartCoroutine(UseGrowthRune(_rune.getGameObject()));
                 }
                 else
                 {
@@ -534,8 +544,21 @@ public class InteractWithObject : MonoBehaviour
         _plankPlacementArea = newPlacementArea;
     }
 
-    IEnumerator UseGrowthRune()
+    IEnumerator UseGrowthRune(GameObject rune)
     {
+        Quaternion _targetRotation =
+            Quaternion.LookRotation(rune.transform.position - transform.position, Vector3.up);
+
+        _targetRotation.eulerAngles =
+            new Vector3(transform.rotation.x, _targetRotation.eulerAngles.y, transform.rotation.z);
+
+        while (Quaternion.Angle(transform.rotation, _targetRotation) > 10f)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, _targetRotation, Time.deltaTime * _turnSpeed);
+            yield return new WaitForEndOfFrame();
+        }
         
+        //start the growth rune interaction with any this transform
+        rune.GetComponent<GrowObject>().StartInteraction(transform);
     }
 }
