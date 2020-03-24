@@ -69,8 +69,9 @@ public class PushObject : MonoBehaviour, IInteractible
 
                 _movement.info.distance = _distanceToPushingObject + internalDistance;
                 _movement.info.position = playerChest.position;
+                
 
-                if (!Physics.Raycast(ray, out hit, _distanceToPushingObject + internalDistance, mask))
+                if (!Physics.SphereCast(ray, 0.2f, out hit, _distanceToPushingObject + internalDistance, mask))
                 {
                     _rb.MovePosition(Vector3.Lerp(transform.position, _position, _positionLerpSpeed));
 
@@ -84,8 +85,6 @@ public class PushObject : MonoBehaviour, IInteractible
                         _source.Stop();
                     }
                 }
-
-                print(hit.transform.gameObject);
             }
             else
             {
