@@ -98,7 +98,7 @@ public class ChangeSize : MonoBehaviour
 
                 if (pushObject != null)
                 {
-                    if (pushObject.isInteracting)
+                    if (pushObject.isActive())
                     {
                         pushObject.StopInteraction();
                     }

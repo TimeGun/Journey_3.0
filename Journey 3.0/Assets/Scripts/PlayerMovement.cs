@@ -61,6 +61,8 @@ public class PlayerMovement : MonoBehaviour
 
     private float _originalRange;
 
+    public bool pushingForward;
+
     public Vector3 MovementDirection
     {
         get => _movementDirection;
@@ -268,7 +270,7 @@ public class PlayerMovement : MonoBehaviour
         Vector3 forward = Vector3.Scale(cam.forward, new Vector3(1, 0, 1)).normalized;
 
         Vector3 movement = (right * _input.x) + (forward * _input.y);
-
+        
         if (!_pushing)
         {
             _movementDirection = movement;
@@ -285,6 +287,7 @@ public class PlayerMovement : MonoBehaviour
                 _movementDirection *= _pushSpeed * _input.magnitude;
                 localPushDirection = -1f * _input.magnitude;
                 pushingBoulder = true;
+                pushingForward = false;
             }
             else if (Vector3.Angle(transform.forward, movement) < 60f && _input.magnitude > 0.1f)
             {
@@ -300,6 +303,7 @@ public class PlayerMovement : MonoBehaviour
                     _movementDirection *= _pushSpeed * _input.magnitude;
                     localPushDirection = 1f * _input.magnitude;
                     pushingBoulder = true;
+                    pushingForward = true;
                 }
                 else
                 {

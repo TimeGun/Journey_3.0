@@ -29,7 +29,9 @@ public class PushObject : MonoBehaviour, IInteractible
 
     private AudioSource _source;
 
-    public bool isInteracting = true;
+    [SerializeField] private float _positionLerpSpeed = 8f;
+
+    [SerializeField] [Range(0, 1)] private float _velocityBuffer = 0.15f;
 
 
     public float _audioDistance = 0.02f;
@@ -39,7 +41,7 @@ public class PushObject : MonoBehaviour, IInteractible
         _interactWithObject = GetComponent<InteractWithObject>();
         _inputSetUp = GetComponent<InputSetUp>();
 
-        string[] maskTargets = new string[] {"Ground", "Wall"};
+        string[] maskTargets = new string[] {"Ground", "Wall", "Default"};
         mask = LayerMask.GetMask(maskTargets);
 
         _col = GetComponent<Collider>();
@@ -54,6 +56,7 @@ public class PushObject : MonoBehaviour, IInteractible
             {
                 _position = _player.transform.TransformPoint(Vector3.forward * (_distanceToPushingObject));
 
+
                 _position.y = transform.position.y;
 
 
@@ -62,14 +65,14 @@ public class PushObject : MonoBehaviour, IInteractible
                 Ray ray = new Ray(playerChest.position, _player.transform.forward);
 
                 RaycastHit hit;
+                
 
                 _movement.info.distance = _distanceToPushingObject + internalDistance;
                 _movement.info.position = playerChest.position;
 
-                if (!Physics.Raycast(ray, _distanceToPushingObject + internalDistance, mask))
+                if (!Physics.Raycast(ray, out hit, _distanceToPushingObject + internalDistance, mask))
                 {
-                    _rb.MovePosition(_position);
-
+                    _rb.MovePosition(Vector3.Lerp(transform.position, _position, _positionLerpSpeed));
 
                     if (_movement.PushingBoulder())
                     {
@@ -81,6 +84,8 @@ public class PushObject : MonoBehaviour, IInteractible
                         _source.Stop();
                     }
                 }
+
+                print(hit.transform.gameObject);
             }
             else
             {
@@ -103,7 +108,7 @@ public class PushObject : MonoBehaviour, IInteractible
 
     public void StartInteraction(Transform parent)
     {
-        isInteracting = true;
+        gameObject.layer = 18;
         _pushing = true;
         _player = parent.root.gameObject;
 
@@ -140,28 +145,10 @@ public class PushObject : MonoBehaviour, IInteractible
 
     public void StopInteraction()
     {
-        isInteracting = false;
         _pushing = false;
         _movement.Pushing = false;
-        
-        /*
-         
-        RaycastHit hit;
 
-        Physics.Raycast(playerChest.position, playerChest.transform.forward, out hit, 2f);
-
-        print(hit.transform.gameObject);
-        
-        while (_player.GetComponent<CharacterController>().bounds
-            .Contains(hit.point))
-        {
-            Vector3 dirVector = transform.position - playerChest.position;
-            
-            dirVector.Normalize();
-
-            _player.transform.position -= dirVector * 0.2f;
-        }
-        */
+        gameObject.layer = 0;
 
         _rb.constraints = RigidbodyConstraints.FreezeAll;
     }

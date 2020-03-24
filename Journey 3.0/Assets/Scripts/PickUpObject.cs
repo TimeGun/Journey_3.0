@@ -75,6 +75,9 @@ public class PickUpObject : MonoBehaviour, IInteractible
 
         _col.isTrigger = false;
         _rb.isKinematic = false;
+        
+        _rb.velocity = Vector3.zero;
+        
         _carried = false;
         
         RightArmIK.Instance.StopIK();

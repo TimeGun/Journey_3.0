@@ -31,7 +31,7 @@ public class InteractWithObject : MonoBehaviour
     [SerializeField] private float _turnSpeed;
 
 
-    private IInteractible _interactingObj;
+    [SerializeField] private IInteractible _interactingObj;
 
     private IRune _rune;
 
@@ -63,8 +63,9 @@ public class InteractWithObject : MonoBehaviour
         _animator = GetComponent<Animator>();
     }
 
-    void Update()
+    void LateUpdate()
     {
+        print("Check script");
         _nearRune = CheckNearRune();
 
         if (_inputSetUp.Controls.PlayerFreeMovement.Interact.triggered && !cooldown)
@@ -225,7 +226,11 @@ public class InteractWithObject : MonoBehaviour
 
     public void StopInteracting()
     {
-        _interactingObj.StopInteraction();
+        if (_interactingObj != null)
+        {
+            _interactingObj.StopInteraction();
+        }
+
         _interactingObj = null;
         _interacting = false;
         if (_coroutine != null)
@@ -340,7 +345,7 @@ public class InteractWithObject : MonoBehaviour
         yield return new WaitForEndOfFrame();
 
 
-        yield return new WaitUntil(() => !_animator.IsInTransition(0));
+        //yield return new WaitUntil(() => !_animator.IsInTransition(0));
 
         _movement.enabled = true;
         cooldown = false;

@@ -28,9 +28,9 @@ public class AdjustBounceRotation : MonoBehaviour
         {
             if (_pushObject != null)
             {
-                if (_pushObject.isInteracting)
+                if (_pushObject.isActive())
                 {
-                    _collider.isTrigger = true;
+                    _collider.isTrigger = false;
                 }
                 else
                 {

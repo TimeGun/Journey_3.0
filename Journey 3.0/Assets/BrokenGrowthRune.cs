@@ -56,9 +56,9 @@ public class BrokenGrowthRune : MonoBehaviour
 
             PushObject pushObject = other.GetComponent<PushObject>();
 
-            if (pushObject != null && changeSize.changeMode && pushObject.isInteracting)
+            if (pushObject != null && changeSize.changeMode && pushObject.isActive())
             {
-                pushObject.StopInteraction();
+                player.GetComponent<InteractWithObject>().StopInteracting();
             }
 
 
