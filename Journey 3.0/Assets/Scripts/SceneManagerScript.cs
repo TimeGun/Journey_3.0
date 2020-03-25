@@ -42,6 +42,12 @@ public class SceneManagerScript : MonoBehaviour
             StartCoroutine(LoadBundle(LoadSpecificBundle));
             yield return new WaitUntil(() => loading == false);
 
+            Transform playerSpawn = GameObject.FindWithTag("PlayerSpawn").transform;
+
+            API.GlobalReferences.PlayerRef.transform.position = playerSpawn.position;
+
+            API.GlobalReferences.PlayerRef.transform.rotation = playerSpawn.rotation;
+            
             API.GlobalReferences.PlayerRef.GetComponent<PlayerMovement>().enabled = true;
         }
         else
