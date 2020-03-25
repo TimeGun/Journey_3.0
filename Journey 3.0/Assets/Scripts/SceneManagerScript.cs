@@ -11,13 +11,7 @@ public class SceneManagerScript : MonoBehaviour
     private SceneBundleSO currentBundle;
 
     public static SceneManagerScript instance;
-
-    [SerializeField] private int maximumNumberOfSectionsLoaded = 4;
-
-    private int maximumNumberOfScenesLoaded;
-
-    private int sceneToUnloadIndex = 0;
-
+    
 
     public static int bundleIndex = 0;
 
@@ -28,7 +22,6 @@ public class SceneManagerScript : MonoBehaviour
     
     void Start()
     {
-        maximumNumberOfScenesLoaded = 2 + maximumNumberOfSectionsLoaded;
         instance = this;
         StartCoroutine(StartGameLoad());
     }
@@ -94,28 +87,21 @@ public class SceneManagerScript : MonoBehaviour
         API.InterestManagerScript.LoadNewPointsOfInterest(section);
         
         print(SceneManager.sceneCount);
-        print(maximumNumberOfScenesLoaded);
-        
-        if (SceneManager.sceneCount > maximumNumberOfScenesLoaded)
-        {
-            print("Unloading Scene");
-            StartCoroutine(UnloadScenes());
-        }
-        
+
         print("Bundle Loaded");
         loading = false;
         bundleIndex++;
     }
-
-    IEnumerator UnloadScenes()
+    
+    
+    public static IEnumerator UnloadScenes(string[] scenesToUnload)
     {
         yield return new WaitUntil(() => !API.GlobalReferences.MainCamera.GetComponent<CinemachineBrain>().IsBlending);
-        string sceneToUnloadName = "Section"+ sceneToUnloadIndex.ToString();
-        
-        SceneManager.UnloadSceneAsync(sceneToUnloadName);
 
-        sceneToUnloadIndex++;
-        
-        print("Scene Unloaded");
+        for (int i = 0; i < scenesToUnload.Length; i++) {
+            SceneManager.UnloadSceneAsync(scenesToUnload[i]);
+        }
+
+        print("Scenes Unloaded");
     }
 }
