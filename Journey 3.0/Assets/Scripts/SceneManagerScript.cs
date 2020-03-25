@@ -22,6 +22,8 @@ public class SceneManagerScript : MonoBehaviour
     [HideInInspector] public bool LoadSpecificBundle;
 
     [HideInInspector] public int sectionToLoad;
+
+    private Transform playerSpawn;
     
     
     void Start()
@@ -42,13 +44,7 @@ public class SceneManagerScript : MonoBehaviour
             StartCoroutine(LoadBundle(LoadSpecificBundle));
             yield return new WaitUntil(() => loading == false);
 
-            Transform playerSpawn = GameObject.FindWithTag("PlayerSpawn").transform;
-
-            API.GlobalReferences.PlayerRef.transform.position = playerSpawn.position;
-
-            API.GlobalReferences.PlayerRef.transform.rotation = playerSpawn.rotation;
             
-            API.GlobalReferences.PlayerRef.GetComponent<PlayerMovement>().enabled = true;
         }
         else
         {
@@ -70,16 +66,19 @@ public class SceneManagerScript : MonoBehaviour
     {
         if (loadCertainSection)
         {
+            instance.currentBundle = instance.gameScenes[instance.sectionToLoad];
+            
             yield return new WaitUntil(() => loading == false);
             
             loading = true;
             print("Bundle Loading");
             
-            for (int i = 0; i < instance.gameScenes[instance.sectionToLoad].scenes.Length; i++)
+            for (int i = 0; i < instance.currentBundle.scenes.Length; i++)
             {
-                SceneManager.LoadSceneAsync(instance.gameScenes[instance.sectionToLoad].scenes[i], LoadSceneMode.Additive);
+                SceneManager.LoadSceneAsync(instance.currentBundle.scenes[i], LoadSceneMode.Additive);
             }
 
+            
             SceneManager.sceneLoaded += instance.MergeScenes;
         }
         else
@@ -103,31 +102,82 @@ public class SceneManagerScript : MonoBehaviour
         }
     }
 
+    private void AssignPlayerTransform()
+    {
+        playerSpawn = GameObject.FindWithTag("PlayerSpawn").transform;
+        API.GlobalReferences.PlayerRef.transform.position = playerSpawn.position;
+
+        API.GlobalReferences.PlayerRef.transform.rotation = playerSpawn.rotation;
+            
+        API.GlobalReferences.PlayerRef.GetComponent<PlayerMovement>().enabled = true;
+    }
+
     private void MergeScenes(Scene scene, LoadSceneMode mode)
     {
-        if (scene.name != currentBundle.scenes[currentBundle.scenes.Length - 1])
-            return;
-
-        string sectionName = "Section" + bundleIndex.ToString();
-
-
-        Scene section = SceneManager.CreateScene(sectionName);
-        
-        
-        
-        for (int i = 0; i < currentBundle.scenes.Length; i++)
+        if (LoadSpecificBundle)
         {
-            SceneManager.MergeScenes(SceneManager.GetSceneByName(currentBundle.scenes[i]), section);
-        }
-        
-        
-        API.InterestManagerScript.LoadNewPointsOfInterest(section);
-        
-        print(SceneManager.sceneCount);
+            if (scene.name != currentBundle.scenes[currentBundle.scenes.Length - 1])
+                return;
+            
+            string sectionName = "Section" + currentBundle.ToString();
 
-        print("Bundle Loaded");
-        loading = false;
-        bundleIndex++;
+
+            Scene section = SceneManager.CreateScene(sectionName);
+        
+        
+        
+            for (int i = 0; i < currentBundle.scenes.Length; i++)
+            {
+                SceneManager.MergeScenes(SceneManager.GetSceneByName(currentBundle.scenes[i]), section);
+            }
+        
+        
+            API.InterestManagerScript.LoadNewPointsOfInterest(section);
+            
+            /*GameObject[] sceneOjbects = section.GetRootGameObjects();
+
+            for (int i = 0; i < sceneOjbects.Length; i++)
+            {
+                if (sceneOjbects[i].name == "PlayerSpawn")
+                {
+                    playerSpawn = sceneOjbects[i].transform;
+                }
+            }*/
+
+            print(SceneManager.sceneCount);
+
+            print("Bundle Loaded");
+            loading = false;
+            AssignPlayerTransform();
+        }
+        else
+        {
+            if (scene.name != currentBundle.scenes[currentBundle.scenes.Length - 1])
+                return;
+
+            string sectionName = "Section" + bundleIndex.ToString();
+
+
+            Scene section = SceneManager.CreateScene(sectionName);
+        
+        
+        
+            for (int i = 0; i < currentBundle.scenes.Length; i++)
+            {
+                SceneManager.MergeScenes(SceneManager.GetSceneByName(currentBundle.scenes[i]), section);
+            }
+        
+        
+            API.InterestManagerScript.LoadNewPointsOfInterest(section);
+        
+            print(SceneManager.sceneCount);
+
+            print("Bundle Loaded");
+            loading = false;
+            bundleIndex++;
+        }
+
+        
     }
     
     
