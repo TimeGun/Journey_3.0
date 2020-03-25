@@ -186,7 +186,11 @@ public class SceneManagerScript : MonoBehaviour
         yield return new WaitUntil(() => !API.GlobalReferences.MainCamera.GetComponent<CinemachineBrain>().IsBlending);
 
         for (int i = 0; i < scenesToUnload.Length; i++) {
-            SceneManager.UnloadSceneAsync(scenesToUnload[i]);
+
+            if (SceneManager.GetSceneByName(scenesToUnload[i]) != null)
+            {
+                SceneManager.UnloadSceneAsync(scenesToUnload[i]);
+            }
         }
 
         print("Scenes Unloaded");
