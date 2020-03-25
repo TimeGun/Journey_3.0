@@ -5,23 +5,19 @@ using UnityEngine;
 
 public class SceneLoadTrigger : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    [SerializeField] private string[] scenesToUnload;
 
     private void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("Player"))
         {
-            API.SceneManagerScript.StartCoroutine(SceneManagerScript.LoadBundle());
+            API.SceneManagerScript.StartCoroutine(SceneManagerScript.LoadBundle(false));
+
+            if (scenesToUnload.Length > 0)
+            {
+                API.SceneManagerScript.StartCoroutine(SceneManagerScript.UnloadScenes(scenesToUnload));
+            }
+
             Destroy(gameObject);
         }
     }

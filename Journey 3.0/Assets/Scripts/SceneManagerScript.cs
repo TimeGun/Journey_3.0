@@ -18,6 +18,10 @@ public class SceneManagerScript : MonoBehaviour
     public static bool loading = false;
 
     private bool baseSceneLoaded = false;
+
+    [HideInInspector] public bool LoadSpecificBundle;
+
+    [HideInInspector] public int sectionToLoad;
     
     
     void Start()
@@ -32,13 +36,23 @@ public class SceneManagerScript : MonoBehaviour
         SceneManager.sceneLoaded += LoadedBaseScene;
         
         yield return new WaitUntil(() => baseSceneLoaded == true);
-        
-        StartCoroutine(LoadBundle());
-        yield return new WaitUntil(() => loading == false);
-        StartCoroutine(LoadBundle());
-        yield return new WaitUntil(() => loading == false);
 
-        API.GlobalReferences.PlayerRef.GetComponent<PlayerMovement>().enabled = true;
+        if (LoadSpecificBundle)
+        {
+            StartCoroutine(LoadBundle(LoadSpecificBundle));
+            yield return new WaitUntil(() => loading == false);
+
+            API.GlobalReferences.PlayerRef.GetComponent<PlayerMovement>().enabled = true;
+        }
+        else
+        {
+            StartCoroutine(LoadBundle(false));
+            yield return new WaitUntil(() => loading == false);
+            StartCoroutine(LoadBundle(false));
+            yield return new WaitUntil(() => loading == false);
+
+            API.GlobalReferences.PlayerRef.GetComponent<PlayerMovement>().enabled = true; 
+        }
     }
 
     void LoadedBaseScene(Scene scene, LoadSceneMode mode)
@@ -46,24 +60,41 @@ public class SceneManagerScript : MonoBehaviour
         baseSceneLoaded = true;
     }
 
-    public static IEnumerator LoadBundle()
+    public static IEnumerator LoadBundle(bool loadCertainSection)
     {
-        yield return new WaitUntil(() => loading == false);
-
-        loading = true;
-        print("Bundle Loading");
-        
-        //Sets the current bundle to be the bundleIndex number
-        print(bundleIndex);
-        if(instance.gameScenes.Length > bundleIndex)
-            instance.currentBundle = instance.gameScenes[bundleIndex];
-        
-        for (int i = 0; i < instance.currentBundle.scenes.Length; i++)
+        if (loadCertainSection)
         {
-            SceneManager.LoadSceneAsync(instance.currentBundle.scenes[i], LoadSceneMode.Additive);
-        }
+            yield return new WaitUntil(() => loading == false);
+            
+            loading = true;
+            print("Bundle Loading");
+            
+            for (int i = 0; i < instance.gameScenes[instance.sectionToLoad].scenes.Length; i++)
+            {
+                SceneManager.LoadSceneAsync(instance.gameScenes[instance.sectionToLoad].scenes[i], LoadSceneMode.Additive);
+            }
 
-        SceneManager.sceneLoaded += instance.MergeScenes;
+            SceneManager.sceneLoaded += instance.MergeScenes;
+        }
+        else
+        {
+            yield return new WaitUntil(() => loading == false);
+
+            loading = true;
+            print("Bundle Loading");
+        
+            //Sets the current bundle to be the bundleIndex number
+            print(bundleIndex);
+            if(instance.gameScenes.Length > bundleIndex)
+                instance.currentBundle = instance.gameScenes[bundleIndex];
+        
+            for (int i = 0; i < instance.currentBundle.scenes.Length; i++)
+            {
+                SceneManager.LoadSceneAsync(instance.currentBundle.scenes[i], LoadSceneMode.Additive);
+            }
+
+            SceneManager.sceneLoaded += instance.MergeScenes;
+        }
     }
 
     private void MergeScenes(Scene scene, LoadSceneMode mode)
@@ -105,3 +136,5 @@ public class SceneManagerScript : MonoBehaviour
         print("Scenes Unloaded");
     }
 }
+
+
