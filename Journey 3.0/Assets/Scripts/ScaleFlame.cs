@@ -12,7 +12,7 @@ public class ScaleFlame : MonoBehaviour
     void Update()
     {
         float flameScale = Map(parent.localScale.x, 1.5f, 3f, 1f, 2.5f);
-        _effect.SetFloat("SizeMultiplier", flameScale);
+        _effect.SetFloat("SizeMultiplier 1", flameScale);
     }
     
     public float Map(float a, float b, float c, float d, float e)

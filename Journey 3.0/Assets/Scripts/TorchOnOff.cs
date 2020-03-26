@@ -9,16 +9,18 @@ public class TorchOnOff : MonoBehaviour
     
     private PickUpObject _pickUpObject;
     [SerializeField] private GameObject visualEffect;
-    // Start is called before the first frame update
+    [SerializeField] private GameObject pointLight;
+ 
     void Start()
     {
         _pickUpObject = GetComponent<PickUpObject>();
     }
 
-    // Update is called once per frame
+
     void Update()
     {
         isLit = _pickUpObject.Carried;
         visualEffect.SetActive(isLit);
+        pointLight.SetActive(isLit);
     }
 }

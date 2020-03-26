@@ -146,7 +146,7 @@ public class CameraZone : MonoBehaviour
             }
             else
             {
-                Gizmos.color = new Color(1, 0, 0, 0.1f);
+                Gizmos.color = new Color(1, 0, 0, 0.05f);
             }
 
 
@@ -155,7 +155,6 @@ public class CameraZone : MonoBehaviour
                 BoxCollider boxCol = (BoxCollider) col;
                 Gizmos.DrawCube(cameraTrigger.transform.TransformPoint(boxCol.center),
                     Vector3.Scale(boxCol.size, cameraTrigger.transform.localScale));
-                print(cameraTrigger.transform.TransformPoint(boxCol.center));
             }
             else if (col.GetType() == typeof(SphereCollider))
             {
