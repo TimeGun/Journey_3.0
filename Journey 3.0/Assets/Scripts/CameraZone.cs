@@ -138,32 +138,30 @@ public class CameraZone : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        print("draw time baby");
-        
-        if (playerInZone)
+        if (isActiveAndEnabled)
         {
-            Gizmos.color = new Color(1, 0, 0, 0.5f);
-        }
-        else
-        {
-            Gizmos.color = new Color(1, 0, 0, 0.1f);
-        }
-        
-        
-        if (col.GetType() == typeof(BoxCollider))
-        {
-            print("box");
+            if (playerInZone)
+            {
+                Gizmos.color = new Color(1, 0, 0, 0.5f);
+            }
+            else
+            {
+                Gizmos.color = new Color(1, 0, 0, 0.1f);
+            }
 
-            BoxCollider boxCol = (BoxCollider)col;
-            Gizmos.DrawCube(cameraTrigger.transform.TransformPoint(boxCol.center), Vector3.Scale(boxCol.size, cameraTrigger.transform.localScale));
-            print(cameraTrigger.transform.TransformPoint(boxCol.center));
-        }
-        else if (col.GetType() == typeof(SphereCollider))
-        {
-            print("sphere");
 
-            SphereCollider sphereCol = (SphereCollider)col;
-            Gizmos.DrawSphere(sphereCol.center, sphereCol.radius);
+            if (col.GetType() == typeof(BoxCollider))
+            {
+                BoxCollider boxCol = (BoxCollider) col;
+                Gizmos.DrawCube(cameraTrigger.transform.TransformPoint(boxCol.center),
+                    Vector3.Scale(boxCol.size, cameraTrigger.transform.localScale));
+                print(cameraTrigger.transform.TransformPoint(boxCol.center));
+            }
+            else if (col.GetType() == typeof(SphereCollider))
+            {
+                SphereCollider sphereCol = (SphereCollider) col;
+                Gizmos.DrawSphere(sphereCol.center, sphereCol.radius);
+            }
         }
     }
 }
