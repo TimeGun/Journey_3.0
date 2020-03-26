@@ -71,7 +71,6 @@ public class InteractWithObject : MonoBehaviour
 
     void LateUpdate()
     {
-        print("Check script");
         _nearRune = CheckNearRune();
 
         if (_inputSetUp.Controls.PlayerFreeMovement.Interact.triggered && !cooldown)
