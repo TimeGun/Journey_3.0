@@ -15,7 +15,8 @@ public class PlayTimeline : MonoBehaviour
     private CinemachineVirtualCamera vcam;
     private double _timelineLength;
     private bool cinematicStarted;
-//    public bool playTimeline;
+    public float playerFreezeTime;
+    public bool freezePlayerForEntireCinematic;
 
     public float timeBeforeFreeze;
     // Start is called before the first frame update
@@ -48,9 +49,16 @@ public class PlayTimeline : MonoBehaviour
 
     IEnumerator StartTimeline()
     {
+        if (freezePlayerForEntireCinematic)
+        {
+            playerFreezeTime = (float) _timelineLength;
+        }
+        
+       
+        
         vcam.Priority = targetPriority;
         playableDirector.Play();
-        //CinematicPlayerMoment.instance.FreezePlayer(timeBeforeFreeze, (float)_timelineLength, true);
+        CinematicPlayerMoment.instance.FreezePlayer(timeBeforeFreeze, playerFreezeTime, true);
         yield return new WaitForSeconds((float)_timelineLength);
         vcam.Priority = _startPriority;
     }
