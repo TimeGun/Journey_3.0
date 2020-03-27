@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ReturnBoulderPresent : MonoBehaviour
 {
-    private bool boulder = false;
+    [SerializeField] private bool boulder = false;
 
     public Transform pushableObj;
 

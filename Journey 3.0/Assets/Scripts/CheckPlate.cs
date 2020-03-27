@@ -41,8 +41,14 @@ public class CheckPlate : MonoBehaviour
 
     private void Update()
     {
-        _gateAnim.SetBool("playerWeight", player);
-        _platformAnim.SetBool("playerWeight", player);
+        if(_gateAnim.isActiveAndEnabled)
+            _gateAnim.SetBool("playerWeight", player);
+        if (_platformAnim.isActiveAndEnabled)
+        {
+            _platformAnim.SetBool("playerWeight", player);
+            print("animator is working");
+        }
+
 
         if (_ReturnBoulderPresent.Boulder)
         {

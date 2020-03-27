@@ -55,22 +55,23 @@ public class PushObject : MonoBehaviour, IInteractible
             if (_inputSetUp.ValueInteractDown >= 0.9f)
             {
                 _position = _player.transform.TransformPoint(Vector3.forward * (_distanceToPushingObject));
-
+                
 
                 _position.y = transform.position.y;
-
+            
 
                 float internalDistance = _col.bounds.extents.x;
 
-                Ray ray = new Ray(playerChest.position, _player.transform.forward);
+                Ray ray = new Ray(playerChest.position + (_player.transform.up/2f), _player.transform.forward);
 
                 RaycastHit hit;
                 
 
                 _movement.info.distance = _distanceToPushingObject + internalDistance;
-                _movement.info.position = playerChest.position;
+                _movement.info.position = ray.origin;
                 
-
+                
+                
                 if (!Physics.SphereCast(ray, 0.2f, out hit, _distanceToPushingObject + internalDistance, mask))
                 {
                     _rb.MovePosition(Vector3.Lerp(transform.position, _position, _positionLerpSpeed));
