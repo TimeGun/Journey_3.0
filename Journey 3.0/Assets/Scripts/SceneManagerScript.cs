@@ -119,7 +119,7 @@ public class SceneManagerScript : MonoBehaviour
             if (scene.name != currentBundle.scenes[currentBundle.scenes.Length - 1])
                 return;
             
-            string sectionName = "Section" + currentBundle.ToString();
+            string sectionName = "Section" + bundleIndex.ToString();
 
 
             Scene section = SceneManager.CreateScene(sectionName);
@@ -133,22 +133,13 @@ public class SceneManagerScript : MonoBehaviour
         
         
             API.InterestManagerScript.LoadNewPointsOfInterest(section);
-            
-            /*GameObject[] sceneOjbects = section.GetRootGameObjects();
-
-            for (int i = 0; i < sceneOjbects.Length; i++)
-            {
-                if (sceneOjbects[i].name == "PlayerSpawn")
-                {
-                    playerSpawn = sceneOjbects[i].transform;
-                }
-            }*/
 
             print(SceneManager.sceneCount);
 
             print("Bundle Loaded");
             loading = false;
             AssignPlayerTransform();
+            bundleIndex = sectionToLoad + 1;
         }
         else
         {
@@ -196,5 +187,3 @@ public class SceneManagerScript : MonoBehaviour
         print("Scenes Unloaded");
     }
 }
-
-
