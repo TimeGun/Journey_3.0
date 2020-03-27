@@ -82,12 +82,15 @@ public class MixingCamera : MonoBehaviour
                 switch (axisToTrack)
                 {
                     case (AxisEnum.X):
-                    
-                        vcam.m_Weight1 = Mathf.Abs(followTarget.transform.position.x) - (playerStartPos.x);
+                        
+                        vcam.m_Weight1 = Mathf.Abs(followTarget.transform.position.x) - Mathf.Abs(playerStartPos.x);
+                        Debug.Log("Player start Pos x" + Mathf.Abs(playerStartPos.x));
+                        Debug.Log("Follow Target" + Mathf.Abs(followTarget.transform.position.x));
+                        Debug.Log("vcam weight" + (Mathf.Abs(followTarget.transform.position.x) - Mathf.Abs(playerStartPos.x)));
                         vcam.m_Weight1 = vcam.m_Weight1 * xPositionDirection * finalCamMultiplier;
                         break;
                     case (AxisEnum.Z):
-                        vcam.m_Weight1 = Mathf.Abs(followTarget.transform.position.z) - (playerStartPos.z);
+                        vcam.m_Weight1 = Mathf.Abs(followTarget.transform.position.z) - Mathf.Abs(playerStartPos.z);
                         vcam.m_Weight1 = vcam.m_Weight1 * zPositionDirection * finalCamMultiplier;
                         break;
                     case (AxisEnum.XZ):
