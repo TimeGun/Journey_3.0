@@ -29,6 +29,7 @@ public class AimOffsetChange : MonoBehaviour
 
     private bool inIVCoroutine;
     private bool inDVCoroutine;
+    public float firstOffset;
     
 
     private bool changeBoolCoroutineRunning;
@@ -41,7 +42,9 @@ public class AimOffsetChange : MonoBehaviour
         TD = vcam.GetCinemachineComponent<CinemachineTrackedDolly>();
         comp = vcam.GetCinemachineComponent<CinemachineComposer>();                //Need to use this to access the LookAt target
         CheckAxis();
-        startOffset = currentOffset;                             //Assign start offset to the offset set in the inspector when it starts
+        startOffset = firstOffset;
+        
+        
         
     }
 
@@ -80,7 +83,7 @@ public class AimOffsetChange : MonoBehaviour
     
     IEnumerator DecreaseValue()
     {
-
+        
         valueIncreasing = false;        //used to ensure offset value is not increasing in IncreaseValue() while it is decreasing here
         if (startOffset > newOffset)        //e.g SO = 0, NO = -28
         {
