@@ -26,7 +26,6 @@ public class TimelineController : MonoBehaviour
     {
         //Debug.Log(playableDirector.duration);
         vcam = timelineCamera.GetComponent<CinemachineVirtualCamera>();
-        print(vcam);
         _startPriority = vcam.Priority;
         _timelineLength = playableDirector.duration;
 //        Debug.Log(_startPriority);

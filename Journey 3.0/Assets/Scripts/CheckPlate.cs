@@ -46,7 +46,6 @@ public class CheckPlate : MonoBehaviour
         if (_platformAnim.isActiveAndEnabled)
         {
             _platformAnim.SetBool("playerWeight", player);
-            print("animator is working");
         }
 
 
@@ -66,6 +65,7 @@ public class CheckPlate : MonoBehaviour
             } 
         }
     }
+    
 
     private void OnTriggerExit(Collider other)
     {

@@ -41,6 +41,17 @@ public class CameraZone : MonoBehaviour
 
     void Start()
     {
+
+        if (FindCam1)
+        {
+            StartCoroutine(AssignCameraObject1(Cam1Name));
+        }
+
+        if (FindCam2)
+        {
+            StartCoroutine(AssignCameraObject2(Cam2Name));
+        }
+
         col = cameraTrigger.GetComponent<Collider>();
 
         if (targetCamera1.GetComponent<CinemachineVirtualCameraBase>() == null)
@@ -53,14 +64,16 @@ public class CameraZone : MonoBehaviour
             Debug.LogWarning(targetCamera2 + " is not a Camera Object");
         }
 
-        if (FindCam1)
-        {
-            targetCamera1 = GameObject.Find(Cam1Name);
-        }
+        //initialPriority3 = targetCamera3.GetComponent<CinemachineVirtualCameraBase>().Priority;
+    }
 
-        if (FindCam2)
-        {
-            targetCamera2 = GameObject.Find(Cam2Name);
+    IEnumerator AssignCameraObject1(string cameraObj) {
+        yield return new WaitForEndOfFrame();
+
+        while (targetCamera1 == null) { 
+            targetCamera1 = GameObject.Find(Cam1Name);
+            yield return new WaitForEndOfFrame();
+            print("yeeeeet");
         }
 
         if (targetCamera1 != null)
@@ -72,6 +85,20 @@ public class CameraZone : MonoBehaviour
             }
         }
 
+
+    }
+
+    IEnumerator AssignCameraObject2(string cameraObj)
+    {
+        yield return new WaitForEndOfFrame();
+
+        while (targetCamera2 == null)
+        {
+            targetCamera2 = GameObject.Find(Cam2Name);
+            yield return new WaitForEndOfFrame();
+        }
+        
+
         if (targetCamera2 != null)
         {
             initialPriority2 = targetCamera2.GetComponent<CinemachineVirtualCameraBase>().Priority;
@@ -80,10 +107,8 @@ public class CameraZone : MonoBehaviour
                 Debug.LogWarning("Target Priority for target camera 2 is not set");
             }
         }
-
-
-        //initialPriority3 = targetCamera3.GetComponent<CinemachineVirtualCameraBase>().Priority;
     }
+
 
     // Update is called once per frame
     void Update()

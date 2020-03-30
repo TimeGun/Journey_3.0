@@ -71,7 +71,6 @@ public class SceneManagerScript : MonoBehaviour
             yield return new WaitUntil(() => loading == false);
             
             loading = true;
-            print("Bundle Loading");
             
             for (int i = 0; i < instance.currentBundle.scenes.Length; i++)
             {
@@ -86,10 +85,8 @@ public class SceneManagerScript : MonoBehaviour
             yield return new WaitUntil(() => loading == false);
 
             loading = true;
-            print("Bundle Loading");
         
             //Sets the current bundle to be the bundleIndex number
-            print(bundleIndex);
             if(instance.gameScenes.Length > bundleIndex)
                 instance.currentBundle = instance.gameScenes[bundleIndex];
         
@@ -134,9 +131,7 @@ public class SceneManagerScript : MonoBehaviour
         
             API.InterestManagerScript.LoadNewPointsOfInterest(section);
 
-            print(SceneManager.sceneCount);
 
-            print("Bundle Loaded");
             loading = false;
             AssignPlayerTransform();
             bundleIndex = sectionToLoad + 1;
@@ -161,9 +156,7 @@ public class SceneManagerScript : MonoBehaviour
         
             API.InterestManagerScript.LoadNewPointsOfInterest(section);
         
-            print(SceneManager.sceneCount);
 
-            print("Bundle Loaded");
             loading = false;
             bundleIndex++;
         }
@@ -184,6 +177,5 @@ public class SceneManagerScript : MonoBehaviour
             }
         }
 
-        print("Scenes Unloaded");
     }
 }
