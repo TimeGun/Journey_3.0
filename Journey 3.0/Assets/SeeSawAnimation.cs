@@ -37,9 +37,6 @@ public class SeeSawAnimation : MonoBehaviour
 
     public void LaunchRock()
     {
-        _seeSawPlacement.GetPlank().GetComponent<MeshFilter>().mesh = mesh;
-        _seeSawPlacement.GetPlank().GetComponent<Renderer>().material = material;
-
         _seeSawPlacement.GetPlank().GetComponent<Rigidbody>().AddForce(launchDirection.transform.forward * launchForce, ForceMode.Impulse);
     }
 
