@@ -21,11 +21,11 @@ public class TargetSphere : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (SceneManagerScript.bundleIndex == 3 && changeOffset == false)
+        /*if (SceneManagerScript.bundleIndex == 3 && changeOffset == false)
         {
             _offset.z = _offset.z * -1;
             changeOffset = true;
-        }
+        }*/
         transform.position = _player.transform.position + _offset;
         
     }
