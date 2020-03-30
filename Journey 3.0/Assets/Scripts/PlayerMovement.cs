@@ -63,6 +63,8 @@ public class PlayerMovement : MonoBehaviour
 
     public bool pushingForward;
 
+    public PushCollisionDetection _pushCollisionDetection;
+
     public Vector3 MovementDirection
     {
         get => _movementDirection;
@@ -295,10 +297,12 @@ public class PlayerMovement : MonoBehaviour
                 
                 Ray ray = new Ray(info.position, transform.forward);
 
-                
-                
-                if (!Physics.SphereCast(ray, 0.2f, out RaycastHit hit, info.distance, mask))
+                print(_pushCollisionDetection.IsCollidingWithWall());
+
+
+                if (!Physics.SphereCast(ray, 0.2f, out RaycastHit hit, info.distance, mask) && !_pushCollisionDetection.IsCollidingWithWall())
                 {
+                    print("here");
                     _movementDirection = transform.forward;
                     _movementDirection *= _pushSpeed * _input.magnitude;
                     localPushDirection = 1f * _input.magnitude;
@@ -307,6 +311,7 @@ public class PlayerMovement : MonoBehaviour
                 }
                 else
                 {
+                    print("here 22222");
                     pushingBoulder = false;
                     _movementDirection = forward * 0f;
                     localPushDirection = 0;

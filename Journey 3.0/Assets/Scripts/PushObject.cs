@@ -33,6 +33,8 @@ public class PushObject : MonoBehaviour, IInteractible
 
     [SerializeField] [Range(0, 1)] private float _velocityBuffer = 0.15f;
 
+    PushCollisionDetection _pushCollisionDetection;
+
 
     public float _audioDistance = 0.02f;
 
@@ -40,6 +42,8 @@ public class PushObject : MonoBehaviour, IInteractible
     {
         _interactWithObject = GetComponent<InteractWithObject>();
         _inputSetUp = GetComponent<InputSetUp>();
+
+        _pushCollisionDetection = GetComponentInChildren<PushCollisionDetection>();
 
         string[] maskTargets = new string[] {"Ground", "Wall", "Default"};
         mask = LayerMask.GetMask(maskTargets);
@@ -121,6 +125,7 @@ public class PushObject : MonoBehaviour, IInteractible
         GetComponentInChildren<AdjustBounceRotation>().AsignPushObject(this);
         _movement = _player.GetComponent<PlayerMovement>();
         _movement.ControllerVeclocity = Vector3.zero;
+        _movement._pushCollisionDetection = this._pushCollisionDetection;
         _movement.Pushing = true;
         playerChest = _player.GetComponent<InteractWithObject>()._chestHeight;
         _interactWithObject = _player.GetComponent<InteractWithObject>();
@@ -147,6 +152,8 @@ public class PushObject : MonoBehaviour, IInteractible
     {
         _pushing = false;
         _movement.Pushing = false;
+
+        _movement._pushCollisionDetection = null;
 
         gameObject.layer = 0;
 
