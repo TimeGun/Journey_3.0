@@ -11,7 +11,7 @@ public class SceneManagerScript : MonoBehaviour
     private SceneBundleSO currentBundle;
 
     public static SceneManagerScript instance;
-    
+
 
     public static int bundleIndex = 0;
 
@@ -23,9 +23,9 @@ public class SceneManagerScript : MonoBehaviour
 
     [HideInInspector] public int sectionToLoad;
 
-    private Transform playerSpawn;
-    
-    
+    private GameObject [] playerSpawn;
+
+
     void Start()
     {
         instance = this;
@@ -36,15 +36,13 @@ public class SceneManagerScript : MonoBehaviour
     {
         SceneManager.LoadSceneAsync("Base Scene", LoadSceneMode.Additive);
         SceneManager.sceneLoaded += LoadedBaseScene;
-        
+
         yield return new WaitUntil(() => baseSceneLoaded == true);
 
         if (LoadSpecificBundle)
         {
             StartCoroutine(LoadBundle(LoadSpecificBundle));
             yield return new WaitUntil(() => loading == false);
-
-            
         }
         else
         {
@@ -53,7 +51,7 @@ public class SceneManagerScript : MonoBehaviour
             StartCoroutine(LoadBundle(false));
             yield return new WaitUntil(() => loading == false);
 
-            API.GlobalReferences.PlayerRef.GetComponent<PlayerMovement>().enabled = true; 
+            API.GlobalReferences.PlayerRef.GetComponent<PlayerMovement>().enabled = true;
         }
     }
 
@@ -66,30 +64,66 @@ public class SceneManagerScript : MonoBehaviour
     {
         if (loadCertainSection)
         {
-            instance.currentBundle = instance.gameScenes[instance.sectionToLoad];
-            
-            yield return new WaitUntil(() => loading == false);
-            
-            loading = true;
-            
-            for (int i = 0; i < instance.currentBundle.scenes.Length; i++)
+            if (instance.sectionToLoad != 0)
             {
-                SceneManager.LoadSceneAsync(instance.currentBundle.scenes[i], LoadSceneMode.Additive);
-            }
+                instance.currentBundle = instance.gameScenes[instance.sectionToLoad - 1];
+                bundleIndex = instance.sectionToLoad - 1;
 
-            
-            SceneManager.sceneLoaded += instance.MergeScenes;
+                yield return new WaitUntil(() => loading == false);
+
+                loading = true;
+
+                for (int i = 0; i < instance.currentBundle.scenes.Length; i++)
+                {
+                    SceneManager.LoadSceneAsync(instance.currentBundle.scenes[i], LoadSceneMode.Additive);
+                }
+
+
+                SceneManager.sceneLoaded += instance.MergeScenes;
+
+                yield return new WaitUntil(() => loading == false);
+
+                instance.currentBundle = instance.gameScenes[instance.sectionToLoad];
+
+                yield return new WaitUntil(() => loading == false);
+
+                loading = true;
+
+                for (int i = 0; i < instance.currentBundle.scenes.Length; i++)
+                {
+                    SceneManager.LoadSceneAsync(instance.currentBundle.scenes[i], LoadSceneMode.Additive);
+                }
+
+                SceneManager.sceneLoaded += instance.MergeScenes;
+            }
+            else
+            {
+                bundleIndex = instance.sectionToLoad;
+                instance.currentBundle = instance.gameScenes[instance.sectionToLoad];
+
+                yield return new WaitUntil(() => loading == false);
+
+                loading = true;
+
+                for (int i = 0; i < instance.currentBundle.scenes.Length; i++)
+                {
+                    SceneManager.LoadSceneAsync(instance.currentBundle.scenes[i], LoadSceneMode.Additive);
+                }
+
+
+                SceneManager.sceneLoaded += instance.MergeScenes;
+            }
         }
         else
         {
             yield return new WaitUntil(() => loading == false);
 
             loading = true;
-        
+
             //Sets the current bundle to be the bundleIndex number
-            if(instance.gameScenes.Length > bundleIndex)
+            if (instance.gameScenes.Length > bundleIndex)
                 instance.currentBundle = instance.gameScenes[bundleIndex];
-        
+
             for (int i = 0; i < instance.currentBundle.scenes.Length; i++)
             {
                 SceneManager.LoadSceneAsync(instance.currentBundle.scenes[i], LoadSceneMode.Additive);
@@ -101,11 +135,11 @@ public class SceneManagerScript : MonoBehaviour
 
     private void AssignPlayerTransform()
     {
-        playerSpawn = GameObject.FindWithTag("PlayerSpawn").transform;
-        API.GlobalReferences.PlayerRef.transform.position = playerSpawn.position;
+        playerSpawn = GameObject.FindGameObjectsWithTag("PlayerSpawn");
+        API.GlobalReferences.PlayerRef.transform.position = playerSpawn[playerSpawn.Length-1].transform.position;
 
-        API.GlobalReferences.PlayerRef.transform.rotation = playerSpawn.rotation;
-            
+        API.GlobalReferences.PlayerRef.transform.rotation = playerSpawn[playerSpawn.Length-1].transform.rotation;
+        
         API.GlobalReferences.PlayerRef.GetComponent<PlayerMovement>().enabled = true;
     }
 
@@ -113,28 +147,27 @@ public class SceneManagerScript : MonoBehaviour
     {
         if (LoadSpecificBundle)
         {
-            if (scene.name != currentBundle.scenes[currentBundle.scenes.Length - 1])
+            if (scene.name != currentBundle.scenes[currentBundle.scenes.Length -1])
                 return;
-            
+
             string sectionName = "Section" + bundleIndex.ToString();
 
 
             Scene section = SceneManager.CreateScene(sectionName);
-        
-        
-        
+
+
             for (int i = 0; i < currentBundle.scenes.Length; i++)
             {
                 SceneManager.MergeScenes(SceneManager.GetSceneByName(currentBundle.scenes[i]), section);
             }
-        
-        
+
+
             API.InterestManagerScript.LoadNewPointsOfInterest(section);
 
 
             loading = false;
-            AssignPlayerTransform();
-            bundleIndex = sectionToLoad + 1;
+            if (bundleIndex == sectionToLoad) AssignPlayerTransform();
+            bundleIndex++;
         }
         else
         {
@@ -145,37 +178,33 @@ public class SceneManagerScript : MonoBehaviour
 
 
             Scene section = SceneManager.CreateScene(sectionName);
-        
-        
-        
+
+
             for (int i = 0; i < currentBundle.scenes.Length; i++)
             {
                 SceneManager.MergeScenes(SceneManager.GetSceneByName(currentBundle.scenes[i]), section);
             }
-        
-        
+
+
             API.InterestManagerScript.LoadNewPointsOfInterest(section);
-        
+
 
             loading = false;
             bundleIndex++;
         }
-
-        
     }
-    
-    
+
+
     public static IEnumerator UnloadScenes(string[] scenesToUnload)
     {
         yield return new WaitUntil(() => !API.GlobalReferences.MainCamera.GetComponent<CinemachineBrain>().IsBlending);
 
-        for (int i = 0; i < scenesToUnload.Length; i++) {
-
+        for (int i = 0; i < scenesToUnload.Length; i++)
+        {
             if (SceneManager.GetSceneByName(scenesToUnload[i]) != null)
             {
                 SceneManager.UnloadSceneAsync(scenesToUnload[i]);
             }
         }
-
     }
 }
