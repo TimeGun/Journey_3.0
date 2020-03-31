@@ -41,7 +41,7 @@ public class CinematicPlayerMoment : MonoBehaviour
             BlackBarsScript.instance.SetBars(false);
         }
 
-        _playerMovement.enabled = true;
+        _playerMovement.EnableThis();
         running = false;
     }
 }
