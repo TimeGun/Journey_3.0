@@ -164,7 +164,9 @@ public class CameraZone : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (isActiveAndEnabled && EditorApplication.isPlaying)
+#if UNITY_EDITOR
+        
+        if (isActiveAndEnabled)
         {
             if (playerInZone)
             {
@@ -188,5 +190,7 @@ public class CameraZone : MonoBehaviour
                 Gizmos.DrawSphere(sphereCol.center, sphereCol.radius);
             }
         }
+#endif
+
     }
 }
