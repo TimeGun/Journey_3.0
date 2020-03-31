@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DisableObject : MonoBehaviour
+public class EnableObject : MonoBehaviour
 {
     public GameObject Target;
     public GameObject cameraTrigger;
@@ -20,7 +20,7 @@ public class DisableObject : MonoBehaviour
         if (playerInZone && Target != null)
         {
             Target.GetComponent<DetectPlayer>().enabled = false;
-            Target.gameObject.SetActive(false);
+            Target.gameObject.SetActive(true);
         }
         
        
