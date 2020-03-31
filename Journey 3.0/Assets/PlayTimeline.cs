@@ -25,6 +25,10 @@ public class PlayTimeline : MonoBehaviour
         _timelineLength = playableDirector.duration;
         vcam = targetCamera.GetComponent<CinemachineVirtualCamera>();
         _startPriority = vcam.Priority;
+        if (freezePlayerForEntireCinematic)
+        {
+            playerFreezeTime = (float) _timelineLength;
+        }
     }
 
     // Update is called once per frame
@@ -49,10 +53,7 @@ public class PlayTimeline : MonoBehaviour
 
     IEnumerator StartTimeline()
     {
-        if (freezePlayerForEntireCinematic)
-        {
-            playerFreezeTime = (float) _timelineLength;
-        }
+        
         
        
         

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using Cinemachine;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 using UnityEngine.UIElements;
@@ -163,7 +164,7 @@ public class CameraZone : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (isActiveAndEnabled)
+        if (isActiveAndEnabled && EditorApplication.isPlaying)
         {
             if (playerInZone)
             {
