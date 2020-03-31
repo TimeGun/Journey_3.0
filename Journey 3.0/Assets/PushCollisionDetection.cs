@@ -9,6 +9,11 @@ public class PushCollisionDetection : MonoBehaviour
 
     [SerializeField] List<GameObject> collidingObjects = new List<GameObject>();
 
+    public List<GameObject> CollidingObjects
+    {
+        get => collidingObjects;
+    }
+
     [SerializeField] LayerMask mask;
 
     GameObject _player;

@@ -302,7 +302,6 @@ public class PlayerMovement : MonoBehaviour
 
                 if (!Physics.SphereCast(ray, 0.2f, out RaycastHit hit, info.distance, mask) && !_pushCollisionDetection.IsCollidingWithWall())
                 {
-                    print("here");
                     _movementDirection = transform.forward;
                     _movementDirection *= _pushSpeed * _input.magnitude;
                     localPushDirection = 1f * _input.magnitude;
@@ -311,11 +310,19 @@ public class PlayerMovement : MonoBehaviour
                 }
                 else
                 {
-                    print("here 22222");
+                    if (hit.transform.gameObject != null)
+                    {
+                        print(hit.transform.gameObject != null);
+                    }
+
+                    if (_pushCollisionDetection.IsCollidingWithWall())
+                    {
+                        print(_pushCollisionDetection.CollidingObjects);
+                    }
+
                     pushingBoulder = false;
                     _movementDirection = forward * 0f;
                     localPushDirection = 0;
-                    print(hit.transform.gameObject);
                 }
             }
             else

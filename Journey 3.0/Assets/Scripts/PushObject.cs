@@ -33,12 +33,12 @@ public class PushObject : MonoBehaviour, IInteractible
 
     [SerializeField] [Range(0, 1)] private float _velocityBuffer = 0.15f;
 
-    PushCollisionDetection _pushCollisionDetection;
+    [SerializeField] PushCollisionDetection _pushCollisionDetection;
 
 
     public float _audioDistance = 0.02f;
 
-    void Start()
+    void OnEnable()
     {
         _interactWithObject = GetComponent<InteractWithObject>();
         _inputSetUp = GetComponent<InputSetUp>();
