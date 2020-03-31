@@ -83,7 +83,7 @@ public class LightningStrike : MonoBehaviour
         yield return new WaitForSeconds(stunDuration);
         
         
-        player.GetComponent<PlayerMovement>().enabled = true;
+        player.GetComponent<PlayerMovement>().EnableThis();
 
         float remainingWaitTime = 2f - stunDuration;
         
