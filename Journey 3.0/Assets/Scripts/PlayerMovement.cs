@@ -65,6 +65,8 @@ public class PlayerMovement : MonoBehaviour
 
     public PushCollisionDetection _pushCollisionDetection;
 
+    public bool frozen;
+
     public Vector3 MovementDirection
     {
         get => _movementDirection;
@@ -141,8 +143,15 @@ public class PlayerMovement : MonoBehaviour
 
         if (!_remoteControl)
         {
-            _input = _inputSetUp.LeftStick;
-
+            if (frozen)
+            {
+                _input = Vector2.zero;
+            }
+            else
+            {
+                _input = _inputSetUp.LeftStick;
+            }
+            
             grounded = _controller.isGrounded;
             _timeDelta = Time.deltaTime;
 
@@ -381,6 +390,11 @@ public class PlayerMovement : MonoBehaviour
     {
         _walkSource.Stop();
         _anim.SetFloat("velocity", 0f);
-        this.enabled = false;
+        frozen = true;
+    }
+    
+    public void EnableThis()
+    {
+        frozen = false;
     }
 }
