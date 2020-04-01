@@ -9,9 +9,7 @@ public class ChangeElevatorEvent : MonoBehaviour
     [SerializeField] private UnityEvent[] seriesOfEvents;
 
     [SerializeField] private float[] seriesOfEverntsTimers;
-
-    [SerializeField] private ElevatorMovement _elevatorMovement;
-
+    
     private bool called = false;
 
     // Start is called before the first frame update
@@ -19,6 +17,7 @@ public class ChangeElevatorEvent : MonoBehaviour
     {
         if (other.CompareTag("Player") && !called)
         {
+            print("this getting called?");
             StartCoroutine(ExecuteEvents());
             called = true;
         }
@@ -28,13 +27,9 @@ public class ChangeElevatorEvent : MonoBehaviour
     {
         for (int i = 0; i < seriesOfEvents.Length; i++)
         {
-            seriesOfEvents[i].Invoke();
             yield return new WaitForSeconds(seriesOfEverntsTimers[i]);
+            seriesOfEvents[i].Invoke();
         }
     }
-
-    public void ChangeElevatorMovementSpeed(float newSpeed)
-    {
-        _elevatorMovement.ElevatorMovementSpeed = newSpeed;
-    }
+    
 }

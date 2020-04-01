@@ -201,7 +201,8 @@ public class SceneManagerScript : MonoBehaviour
 
         for (int i = 0; i < scenesToUnload.Length; i++)
         {
-            if (SceneManager.GetSceneByName(scenesToUnload[i]) != null)
+            Scene unloadableScene = SceneManager.GetSceneByName(scenesToUnload[i]);
+            if (unloadableScene.isLoaded)
             {
                 SceneManager.UnloadSceneAsync(scenesToUnload[i]);
             }
