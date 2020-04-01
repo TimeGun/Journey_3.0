@@ -418,7 +418,7 @@ public class InteractWithObject : MonoBehaviour
         }*/
 
         interactible.GetComponent<Rigidbody>().isKinematic = true;
-        interactible.GetComponent<Collider>().isTrigger = true;
+        //interactible.GetComponent<Collider>().isTrigger = true;
 
         _plankPlacementArea.GetPlank().transform.position = _plankPlacementArea.GetCenterObject().transform.position;
         _plankPlacementArea.GetPlank().transform.rotation = _plankPlacementArea.GetCenterObject().transform.rotation;

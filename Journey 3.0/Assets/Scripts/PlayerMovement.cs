@@ -284,12 +284,14 @@ public class PlayerMovement : MonoBehaviour
         
         if (!_pushing)
         {
+            gameObject.layer = 11;
             _movementDirection = movement;
             _movementDirection *= adjustedSpeed;
             pushingBoulder = false;
         }
         else
         {
+            gameObject.layer = 22;
             float localPushDirection;
             
             if (Vector3.Angle(transform.forward, movement) > 120f && _input.magnitude > 0.1f)
