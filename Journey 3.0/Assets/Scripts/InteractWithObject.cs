@@ -74,7 +74,7 @@ public class InteractWithObject : MonoBehaviour
     {
         _nearRune = CheckNearRune();
 
-        if (_inputSetUp.Controls.PlayerFreeMovement.Interact.triggered && !cooldown)
+        if (_inputSetUp.Controls.PlayerFreeMovement.Interact.triggered && !cooldown && _movement.grounded)
         {
             if (_nearRune && _objectDetection.Items.Count > 1 || _nearRune && _rune.getGameObject().GetComponent<GrowObject>())
             {
