@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 using System.Linq;
+using UnityEngine.Serialization;
 
 public class InteractWithObject : MonoBehaviour
 {
@@ -47,9 +48,9 @@ public class InteractWithObject : MonoBehaviour
         set => cooldown = value;
     }
 
-    public AudioSource _source;
+    [FormerlySerializedAs("_source")] public AudioSource _sourceGrabSound;
+     public AudioSource _sourcePlaceSound;
 
-    public AudioClip clip;
 
     [SerializeField] private IPlaceableArea _plankPlacementArea;
 
@@ -341,7 +342,7 @@ public class InteractWithObject : MonoBehaviour
 
         yield return new WaitForSeconds(animationTime);
 
-        _source.PlayOneShot(clip);
+        _sourceGrabSound.PlayOneShot(_sourceGrabSound.clip);
         _interactingObj.StartInteraction(handPosition);
 
         if (_interactingObj.getGameObject().GetComponent<SquishObject>())
@@ -386,9 +387,7 @@ public class InteractWithObject : MonoBehaviour
 
             yield return new WaitForEndOfFrame();
         }
-
-        _source.PlayOneShot(clip);
-
+        
         print(interactible);
 
         interactible.GetComponent<PickUpObject>().PlacedDown = true;
@@ -398,6 +397,9 @@ public class InteractWithObject : MonoBehaviour
         StopInteracting();
 
         _plankPlacementArea.SetPlankPlacedDown(true);
+        
+        _sourcePlaceSound.PlayOneShot(_sourcePlaceSound.clip);
+
 
         /*if (_plankPlacementArea.AdjustPositionBool())
         {
@@ -459,7 +461,7 @@ public class InteractWithObject : MonoBehaviour
         if (rune.GetComponent<HoldInteractipleOnRune>() != null)
         {
             HoldInteractipleOnRune holdInteractipleOnRune = rune.GetComponent<HoldInteractipleOnRune>();
-
+            
             if (!holdInteractipleOnRune.ItemOnRuneBool)
             {
                 interactible.transform.rotation = Quaternion.Euler(0, interactible.transform.rotation.eulerAngles.y, 0);
@@ -482,6 +484,8 @@ public class InteractWithObject : MonoBehaviour
                 rune.GetComponent<OpenForPlayer>().ItemPresentHeightOffset = ySize;
 
                 interactible.GetComponent<Rigidbody>().isKinematic = true;
+                
+                _sourcePlaceSound.PlayOneShot(_sourcePlaceSound.clip);
 
                 holdInteractipleOnRune.ItemOnRune = interactible;
 
