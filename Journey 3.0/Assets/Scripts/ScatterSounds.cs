@@ -34,17 +34,17 @@ public class ScatterSounds : MonoBehaviour
         while (true)
         {
             yield return new WaitForSeconds(secondsBetweenSounds + Random.Range(-secondRandomizer, secondRandomizer));
-
-            int ran = Random.Range(0, scatterSounds.Length);
-
-            source.clip = scatterSounds[ran];
-
-            source.pitch = startPitch + Random.Range(-randomPitch, randomPitch);
-            source.volume = startVolume + Random.Range(-randomVolume, randomVolume);
-
-
-            source.Play();
             
+            if (source.volume > 0)
+            {
+                int ran = Random.Range(0, scatterSounds.Length);
+
+                source.pitch = startPitch + Random.Range(-randomPitch, randomPitch);
+                source.volume = startVolume + Random.Range(-randomVolume, randomVolume);
+
+                source.PlayOneShot(scatterSounds[ran]);
+            }
+
             yield return new WaitWhile(StillPlaying);
         }
     }
