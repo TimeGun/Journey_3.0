@@ -17,6 +17,7 @@ public class PlayTimeline : MonoBehaviour
     private bool cinematicStarted;
     public float playerFreezeTime;
     public bool freezePlayerForEntireCinematic;
+    public bool blackBarsEnabled;
 
     public float timeBeforeFreeze;
     // Start is called before the first frame update
@@ -59,7 +60,7 @@ public class PlayTimeline : MonoBehaviour
         
         vcam.Priority = targetPriority;
         playableDirector.Play();
-        CinematicPlayerMoment.instance.FreezePlayer(timeBeforeFreeze, playerFreezeTime, true);
+        CinematicPlayerMoment.instance.FreezePlayer(timeBeforeFreeze, playerFreezeTime, blackBarsEnabled);
         yield return new WaitForSeconds((float)_timelineLength);
         vcam.Priority = _startPriority;
     }
