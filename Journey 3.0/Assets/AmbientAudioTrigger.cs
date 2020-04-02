@@ -12,7 +12,9 @@ public class AmbientAudioTrigger : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             _event.Invoke();
+            Destroy(gameObject);
         }
+        
     }
 
     public void SetOutSideAmbience(float newVolume)
