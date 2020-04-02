@@ -34,6 +34,12 @@ public class OpenForPlayer : MonoBehaviour
         set => _itemPresentHeightOffset = value;
     }
 
+    public bool open;
+
+    [SerializeField] private AudioClip[] twoSmashSounds;
+    [SerializeField] private AudioSource _slamSound;
+    [SerializeField] private AudioSource _chainCrash;
+
     [SerializeField] private HoldInteractipleOnRune _holdInteractipleOnRune;
 
     void Start()
@@ -56,6 +62,7 @@ public class OpenForPlayer : MonoBehaviour
 
         if (distanceToPlayer < _activationDistance)
         {
+            open = true;
             _playerActivated = true;
             
             if (_holdInteractipleOnRune.ItemOnRuneBool)
@@ -81,6 +88,7 @@ public class OpenForPlayer : MonoBehaviour
             {
                 StartCoroutine(SlamDown());
                 _playerActivated = false;
+                open = false;
             }
 
             _lerpSpeed = _lerpSpeedMax;
@@ -90,10 +98,14 @@ public class OpenForPlayer : MonoBehaviour
 
     IEnumerator SlamDown()
     {
+        _chainCrash.PlayOneShot(_chainCrash.clip);
+
         print("Slammed down");
 
         if (_holdInteractipleOnRune.ItemOnRuneBool)
         {
+            _slamSound.PlayOneShot(twoSmashSounds[1]);
+
             SquishObject item = _holdInteractipleOnRune.ItemOnRune.GetComponent<SquishObject>();
             
             if (item != null)
@@ -101,6 +113,12 @@ public class OpenForPlayer : MonoBehaviour
                 item.Squish();
             }
         }
+        else
+        {
+            _slamSound.PlayOneShot(twoSmashSounds[0]);
+        }
+
+
 
         //check where to move rune down to
         //call squishObject
