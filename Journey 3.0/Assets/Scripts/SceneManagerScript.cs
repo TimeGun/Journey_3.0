@@ -142,6 +142,18 @@ public class SceneManagerScript : MonoBehaviour
 
         API.GlobalReferences.PlayerRef.transform.rotation = playerSpawn[playerSpawn.Length-1].transform.rotation;
         
+        Invoke("EnablePlayerAndChangeSkybox", 2f);
+        
+        
+    }
+
+    void EnablePlayerAndChangeSkybox()
+    {
+        if (sectionToLoad >= 4)
+        {
+            GameObject.Find("Skybox Switch").GetComponent<UnityEventTrigger>()._unityEventToTrigger.Invoke();
+        }
+
         API.GlobalReferences.PlayerRef.GetComponent<PlayerMovement>().enabled = true;
     }
 
