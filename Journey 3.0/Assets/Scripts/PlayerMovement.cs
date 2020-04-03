@@ -153,46 +153,50 @@ public class PlayerMovement : MonoBehaviour
                 _input = _inputSetUp.LeftStick;
             }
             
+            
+            
             grounded = _controller.isGrounded;
             _timeDelta = Time.deltaTime;
 
-            CalculateDirection();
-
-            if (_controller.isGrounded)
+            if (!frozen)
             {
-                if (Mathf.Abs(_input.magnitude) > 0.05f && !_pushing)
+                CalculateDirection();
+
+                if (_controller.isGrounded)
                 {
-                    Rotate();
+                    if (Mathf.Abs(_input.magnitude) > 0.05f && !_pushing)
+                    {
+                        Rotate();
+                    }
+
+                    SetMove();
+
+                    if (_inputSetUp.Controls.PlayerFreeMovement.Jump.triggered && _jump && ! _pushing)
+                    {
+                        Jump();
+                    }
                 }
+                
+                ApplyGravity();
 
-                SetMove();
-
-                if (_inputSetUp.Controls.PlayerFreeMovement.Jump.triggered && _jump && ! _pushing)
+                _controller.Move(_movementDirection * _timeDelta);
+                if (_controller.velocity.magnitude >= 0.5f)
                 {
-                    Jump();
-                }
-            }
+                    float walkSoundPitch = Map(_controller.velocity.magnitude, 0f, _speed, 0.6f, 1.35f);
 
-
-            ApplyGravity();
-
-            _controller.Move(_movementDirection * _timeDelta);
-            if (_controller.velocity.magnitude >= 0.5f)
-            {
-                float walkSoundPitch = Map(_controller.velocity.magnitude, 0f, _speed, 0.6f, 1.35f);
-
-                _walkSource.pitch = walkSoundPitch;
+                    _walkSource.pitch = walkSoundPitch;
             
-                if (!_walkSource.isPlaying)
+                    if (!_walkSource.isPlaying)
+                    {
+                        _walkSource.Play();
+                    }
+                }else
                 {
-                    _walkSource.Play();
+                    _walkSource.Stop();
                 }
-            }else
-            {
-                _walkSource.Stop();
-            }
 
-            SetAnimation();
+                SetAnimation();
+            }
         }
         else
         {
