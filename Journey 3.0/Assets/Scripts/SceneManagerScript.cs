@@ -149,7 +149,7 @@ public class SceneManagerScript : MonoBehaviour
 
     void EnablePlayerAndChangeSkybox()
     {
-        if (sectionToLoad >= 4)
+        if (sectionToLoad >= 5)
         {
             GameObject.Find("Skybox Switch").GetComponent<UnityEventTrigger>()._unityEventToTrigger.Invoke();
         }
