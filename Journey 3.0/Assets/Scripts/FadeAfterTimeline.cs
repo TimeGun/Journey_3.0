@@ -35,7 +35,7 @@ public class FadeAfterTimeline : MonoBehaviour
 
     IEnumerator FadeToBlack()
     {
-        yield return new WaitForSeconds(((float)_timelineLength) - 1f);
+        yield return new WaitForSeconds(((float)_timelineLength) - 3f);
         Debug.Log("FADE OUT");
         global::FadeToBlack.instance.SetBlack(true);
         yield return new WaitForSeconds(6f);
