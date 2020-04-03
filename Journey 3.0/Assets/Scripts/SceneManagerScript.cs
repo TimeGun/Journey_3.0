@@ -208,4 +208,9 @@ public class SceneManagerScript : MonoBehaviour
             }
         }
     }
+
+    public void RestartSection()
+    {
+        
+    }
 }
