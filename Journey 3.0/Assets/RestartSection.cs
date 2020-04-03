@@ -57,7 +57,7 @@ public class RestartSection : MonoBehaviour
             SceneManagerScript.RestartSectionFunction(9);
         }
         
-        if (Input.GetKeyDown(KeyCode.KeypadEnter))
+        if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Minus))
         {
             SceneManagerScript.RestartSectionFunction(10);
         }
