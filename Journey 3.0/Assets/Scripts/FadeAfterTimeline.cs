@@ -38,7 +38,7 @@ public class FadeAfterTimeline : MonoBehaviour
         yield return new WaitForSeconds(((float)_timelineLength) - 1f);
         Debug.Log("FADE OUT");
         global::FadeToBlack.instance.SetBlack(true);
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(6f);
         SceneManager.LoadScene("Manager Scene");
     }
 }
