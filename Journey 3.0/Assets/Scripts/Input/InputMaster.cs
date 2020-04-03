@@ -57,6 +57,14 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Start Button"",
+                    ""type"": ""Button"",
+                    ""id"": ""5f35c8f4-a42b-4526-ac18-4bd4f6b43619"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -257,6 +265,28 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""action"": ""Aim"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e555f2f1-aa62-481f-acfb-4e6e6dc9436c"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Start Button"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5de18f03-8f07-47f3-a95e-a3b4ca343e71"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Start Button"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -293,6 +323,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_PlayerFreeMovement_Interact = m_PlayerFreeMovement.FindAction("Interact", throwIfNotFound: true);
         m_PlayerFreeMovement_InteractDown = m_PlayerFreeMovement.FindAction("InteractDown", throwIfNotFound: true);
         m_PlayerFreeMovement_Aim = m_PlayerFreeMovement.FindAction("Aim", throwIfNotFound: true);
+        m_PlayerFreeMovement_StartButton = m_PlayerFreeMovement.FindAction("Start Button", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -347,6 +378,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
     private readonly InputAction m_PlayerFreeMovement_Interact;
     private readonly InputAction m_PlayerFreeMovement_InteractDown;
     private readonly InputAction m_PlayerFreeMovement_Aim;
+    private readonly InputAction m_PlayerFreeMovement_StartButton;
     public struct PlayerFreeMovementActions
     {
         private @InputMaster m_Wrapper;
@@ -356,6 +388,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         public InputAction @Interact => m_Wrapper.m_PlayerFreeMovement_Interact;
         public InputAction @InteractDown => m_Wrapper.m_PlayerFreeMovement_InteractDown;
         public InputAction @Aim => m_Wrapper.m_PlayerFreeMovement_Aim;
+        public InputAction @StartButton => m_Wrapper.m_PlayerFreeMovement_StartButton;
         public InputActionMap Get() { return m_Wrapper.m_PlayerFreeMovement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -380,6 +413,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @Aim.started -= m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface.OnAim;
                 @Aim.performed -= m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface.OnAim;
                 @Aim.canceled -= m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface.OnAim;
+                @StartButton.started -= m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface.OnStartButton;
+                @StartButton.performed -= m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface.OnStartButton;
+                @StartButton.canceled -= m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface.OnStartButton;
             }
             m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface = instance;
             if (instance != null)
@@ -399,6 +435,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @Aim.started += instance.OnAim;
                 @Aim.performed += instance.OnAim;
                 @Aim.canceled += instance.OnAim;
+                @StartButton.started += instance.OnStartButton;
+                @StartButton.performed += instance.OnStartButton;
+                @StartButton.canceled += instance.OnStartButton;
             }
         }
     }
@@ -428,5 +467,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
         void OnInteract(InputAction.CallbackContext context);
         void OnInteractDown(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
+        void OnStartButton(InputAction.CallbackContext context);
     }
 }
