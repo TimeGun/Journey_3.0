@@ -35,10 +35,10 @@ public class FadeAfterTimeline : MonoBehaviour
 
     IEnumerator FadeToBlack()
     {
-        yield return new WaitForSeconds((float)_timelineLength);
+        yield return new WaitForSeconds(((float)_timelineLength) - 1f);
         Debug.Log("FADE OUT");
         global::FadeToBlack.instance.SetBlack(true);
-        yield return new WaitForSeconds(6f);
+        yield return new WaitForSeconds(3f);
         SceneManager.LoadScene("Manager Scene");
     }
 }
