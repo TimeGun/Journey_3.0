@@ -19,8 +19,9 @@ public class EnableObject : MonoBehaviour
         playerInZone = cameraTrigger.GetComponent<DetectPlayer>().PlayerInCollider;
         if (playerInZone && Target != null)
         {
-            Target.GetComponent<DetectPlayer>().enabled = false;
             Target.gameObject.SetActive(true);
+            Target.GetComponent<DetectPlayer>().enabled = false;
+            Debug.Log("player oi");
         }
         
        
