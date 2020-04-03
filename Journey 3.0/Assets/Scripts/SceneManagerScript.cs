@@ -39,6 +39,8 @@ public class SceneManagerScript : MonoBehaviour
 
         yield return new WaitUntil(() => baseSceneLoaded == true);
 
+        baseSceneLoaded = false;
+        
         if (LoadSpecificBundle)
         {
             StartCoroutine(LoadBundle(LoadSpecificBundle));
@@ -209,8 +211,29 @@ public class SceneManagerScript : MonoBehaviour
         }
     }
 
-    public void RestartSection()
+    public static void RestartSectionFunction(int value)
     {
+        instance.StartCoroutine(instance.RestartSection(value));
+    }
+
+    public IEnumerator RestartSection(int sectionToLoadInt)
+    {
+        for(int i = 0; i < SceneManager.sceneCount; i++)
+        {
+            if (SceneManager.GetSceneAt(i).name != "Manager Scene")
+            {
+                SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(i));
+            }
+        }
         
+        SceneManager.LoadSceneAsync("Base Scene", LoadSceneMode.Additive);
+        SceneManager.sceneLoaded += LoadedBaseScene;
+
+        yield return new WaitUntil(() => baseSceneLoaded == true);
+        bundleIndex = sectionToLoadInt;
+        sectionToLoad = sectionToLoadInt;
+        LoadSpecificBundle = true;
+        StartCoroutine(LoadBundle(LoadSpecificBundle));
+        yield return new WaitUntil(() => loading == false);
     }
 }

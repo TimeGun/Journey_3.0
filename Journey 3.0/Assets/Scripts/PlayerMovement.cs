@@ -123,6 +123,7 @@ public class PlayerMovement : MonoBehaviour
         _originalRange = _controller.radius;
 
         FadeToBlack.instance.SetBlack(false);
+        print("called");
     }
 
     private void Update()
