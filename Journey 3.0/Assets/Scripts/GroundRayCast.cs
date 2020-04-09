@@ -15,6 +15,13 @@ public class GroundRayCast : MonoBehaviour
     
     [SerializeField] private SeeSawAnimation _seeSawAnimation;
 
+    [SerializeField] private float _slopeAngle;
+
+    public float SlopeAngle
+    {
+        get => _slopeAngle;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -67,6 +74,9 @@ public class GroundRayCast : MonoBehaviour
                 {
                     ChangeHigh(true);
                 }
+                
+                
+                _slopeAngle = Mathf.Acos(Mathf.Clamp(hit.normal.y, -1f, 1f)) * Mathf.Rad2Deg; //angle of the slope you are standing on in degrees
             }
             else
             {
@@ -76,6 +86,8 @@ public class GroundRayCast : MonoBehaviour
                     _seeSawAnimation.SetAnimationBoolS("PlayerPresent", false);
                     _seeSawAnimation = null;
                 }
+
+                _slopeAngle = 0f;
             }
             
             if (_seeSawAnimation != null)

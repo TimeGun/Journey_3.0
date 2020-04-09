@@ -67,6 +67,8 @@ public class PlayerMovement : MonoBehaviour
 
     public bool frozen;
 
+    [SerializeField] private GroundRayCast _groundRayCast;
+
     public Vector3 MovementDirection
     {
         get => _movementDirection;
@@ -161,14 +163,14 @@ public class PlayerMovement : MonoBehaviour
             if (!frozen)
             {
                 CalculateDirection();
+                
+                if (Mathf.Abs(_input.magnitude) > 0.05f && !_pushing)
+                {
+                    Rotate();
+                }
 
                 if (_controller.isGrounded)
                 {
-                    if (Mathf.Abs(_input.magnitude) > 0.05f && !_pushing)
-                    {
-                        Rotate();
-                    }
-
                     SetMove();
 
                     if (_inputSetUp.Controls.PlayerFreeMovement.Jump.triggered && _jump && ! _pushing)
@@ -286,6 +288,12 @@ public class PlayerMovement : MonoBehaviour
         Vector3 forward = Vector3.Scale(cam.forward, new Vector3(1, 0, 1)).normalized;
 
         Vector3 movement = (right * _input.x) + (forward * _input.y);
+
+        movement = Quaternion.AngleAxis(_groundRayCast.SlopeAngle, transform.right) * movement;
+        
+
+        Debug.DrawRay(transform.position + transform.up, movement * 10f);
+        
         
         if (!_pushing)
         {
