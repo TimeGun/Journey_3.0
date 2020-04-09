@@ -318,14 +318,10 @@ public class InteractWithObject : MonoBehaviour
 
         _targetRotation.eulerAngles =
             new Vector3(transform.rotation.x, _targetRotation.eulerAngles.y, transform.rotation.z);
+        
 
-
-        while (Quaternion.Angle(transform.rotation, _targetRotation) > 10f)
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, _targetRotation, Time.deltaTime * _turnSpeed);
-
-            yield return new WaitForEndOfFrame();
-        }
+        StartCoroutine(ChangePlayerRotation(_targetRotation));
+        
 
         float angleFromForward = ReturnAngleToObj(interactible.transform.position);
 
@@ -338,9 +334,19 @@ public class InteractWithObject : MonoBehaviour
             gameObject.SendMessage("PickUpHigh");
         }
 
-        float animationTime = _movement.ReturnCurrentClipLength() / 2f;
+        float animationTime = _movement.ReturnCurrentClipLength() / 2.5f;
 
-        yield return new WaitForSeconds(animationTime);
+        Rigidbody rb = interactible.GetComponent<Rigidbody>();
+
+        while (animationTime > 0)
+        {
+            animationTime -= Time.deltaTime;
+            
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+            
+            yield return new WaitForEndOfFrame();
+        }
 
         _sourceGrabSound.PlayOneShot(_sourceGrabSound.clip);
         _interactingObj.StartInteraction(handPosition);
@@ -379,13 +385,7 @@ public class InteractWithObject : MonoBehaviour
         _targetRotation.eulerAngles =
             new Vector3(transform.rotation.x, _targetRotation.eulerAngles.y, transform.rotation.z);
 
-
-        while (Quaternion.Angle(transform.rotation, _targetRotation) > 10f)
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, _targetRotation, Time.deltaTime * _turnSpeed);
-
-            yield return new WaitForEndOfFrame();
-        }
+        StartCoroutine(ChangePlayerRotation(_targetRotation));
         
         print(interactible);
 
@@ -398,25 +398,6 @@ public class InteractWithObject : MonoBehaviour
         _plankPlacementArea.SetPlankPlacedDown(true);
         
         _sourcePlaceSound.PlayOneShot(_sourcePlaceSound.clip);
-
-
-        /*if (_plankPlacementArea.AdjustPositionBool())
-        {
-            PositionAdjustment positionAdjustment =
-                _plankPlacementArea.GetCenterObject().GetComponent<PositionAdjustment>();
-            PositionAdjustmentDouble positionAdjustmentDouble =
-                _plankPlacementArea.GetCenterObject().GetComponent<PositionAdjustmentDouble>();
-
-            if (positionAdjustment != null)
-            {
-                positionAdjustment.PlankPlacedDown = true;
-            }
-
-            if (positionAdjustmentDouble != null)
-            {
-                positionAdjustmentDouble.PlankPlacedDown = true;
-            }
-        }*/
 
         interactible.GetComponent<Rigidbody>().isKinematic = true;
         //interactible.GetComponent<Collider>().isTrigger = true;
@@ -562,5 +543,16 @@ public class InteractWithObject : MonoBehaviour
         
         //start the growth rune interaction with any this transform
         rune.GetComponent<GrowObject>().StartInteraction(transform);
+    }
+
+
+    IEnumerator ChangePlayerRotation(Quaternion targetRotation)
+    {
+        while (Quaternion.Angle(transform.rotation, targetRotation) > 10f)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * _turnSpeed);
+
+            yield return new WaitForEndOfFrame();
+        }
     }
 }
