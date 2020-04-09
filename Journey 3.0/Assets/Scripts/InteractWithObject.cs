@@ -80,11 +80,25 @@ public class InteractWithObject : MonoBehaviour
             {
                 if (_rune.getGameObject().GetComponent<GrowObject>() != null)
                 {
-                    cooldown = true;
-                    _movement.ControllerVeclocity = Vector3.zero;
-                    _movement.enabled = false;
+                    if (!_interacting && _objectDetection.Items.Count > 1)
+                    {
+                        cooldown = true;
+                        _interacting = true;
+                        _movement.ControllerVeclocity = Vector3.zero;
+                        _movement.enabled = false;
+                                
+                        GameObject obj = ReturnCloserObject();
+                        _interactingObj = obj.GetComponent<IInteractible>();
+                        _coroutine = StartCoroutine(TurnToGrab(obj));
+                    }
+                    else
+                    {
+                        cooldown = true;
+                        _movement.ControllerVeclocity = Vector3.zero;
+                        _movement.enabled = false;
                     
-                    StartCoroutine(UseGrowthRune(_rune.getGameObject()));
+                        StartCoroutine(UseGrowthRune(_rune.getGameObject()));
+                    }
                 }
                 else
                 {
@@ -99,30 +113,39 @@ public class InteractWithObject : MonoBehaviour
                             return;
                         }
 
-                        cooldown = true;
+                        /*cooldown = true;
                         _movement.ControllerVeclocity = Vector3.zero;
                         _movement.enabled = false;
 
                         interactible = _interactingObj.getGameObject();
 
                         GameObject[] temp = new GameObject[] {rune, interactible};
-                        _coroutine = StartCoroutine(UseRune(temp));
+                        _coroutine = StartCoroutine(UseRune(temp));*/
                     }
                     else
                     {
-                        if (rune.GetComponent<HoldInteractipleOnRune>() != null)
+                        HoldInteractipleOnRune holdInteractipleOnRune = rune.GetComponent<HoldInteractipleOnRune>();
+                        
+                        if (holdInteractipleOnRune != null)
                         {
-                            if (!rune.GetComponent<HoldInteractipleOnRune>().ItemOnRuneBool)
+                            if (!holdInteractipleOnRune.ItemOnRuneBool)
                             {
-                                return;
+                                cooldown = true;
+                                _interacting = true;
+                                _movement.ControllerVeclocity = Vector3.zero;
+                                _movement.enabled = false;
+                                
+                                GameObject obj = ReturnCloserObject();
+                                _interactingObj = obj.GetComponent<IInteractible>();
+                                _coroutine = StartCoroutine(TurnToGrab(obj));
                             }
 
                             cooldown = true;
                             _movement.ControllerVeclocity = Vector3.zero;
                             _movement.enabled = false;
 
-                            interactible = rune.GetComponent<HoldInteractipleOnRune>().ItemOnRune;
-                            _interactingObj = rune.GetComponent<HoldInteractipleOnRune>().ItemOnRune
+                            interactible = holdInteractipleOnRune.ItemOnRune;
+                            _interactingObj = holdInteractipleOnRune.ItemOnRune
                                 .GetComponent<IInteractible>();
                             GameObject[] temp = new GameObject[] {rune, interactible};
 
