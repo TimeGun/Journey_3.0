@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Cinemachine;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -212,13 +213,45 @@ public class SceneManagerScript : MonoBehaviour
     public static IEnumerator UnloadScenes(string[] scenesToUnload)
     {
         yield return new WaitUntil(() => !API.GlobalReferences.MainCamera.GetComponent<CinemachineBrain>().IsBlending);
-
+        
+        
         for (int i = 0; i < scenesToUnload.Length; i++)
         {
             Scene unloadableScene = SceneManager.GetSceneByName(scenesToUnload[i]);
             if (unloadableScene.isLoaded)
             {
+                instance.MovePersistantObjects(unloadableScene);
                 SceneManager.UnloadSceneAsync(scenesToUnload[i]);
+            }
+        }
+    }
+
+    void MovePersistantObjects(Scene sceneToCheck)
+    {
+        GameObject[] persistantGameObjects = sceneToCheck.GetRootGameObjects();
+        
+        List<PersistentObject> persistentObjects = new List<PersistentObject>();
+
+        for (int i = 0; i < persistantGameObjects.Length; i++)
+        {
+            PersistentObject[] tempArray  = persistantGameObjects[i].GetComponentsInChildren<PersistentObject>();
+
+            if (tempArray.Length != 0)
+            {
+                foreach (var obj in tempArray)
+                {
+                    persistentObjects.Add(obj);
+                }
+            }
+        }
+
+        Scene sceneToMoveTo = SceneManager.GetSceneByName("Base Scene");
+        
+        for (int i = 0; i < persistentObjects.Count; i++)
+        {
+            if (persistentObjects[i].gameObject.scene != sceneToMoveTo)
+            {
+                SceneManager.MoveGameObjectToScene(persistentObjects[i].gameObject, sceneToMoveTo);
             }
         }
     }
