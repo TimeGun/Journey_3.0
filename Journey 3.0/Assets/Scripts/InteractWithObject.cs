@@ -374,8 +374,7 @@ public class InteractWithObject : MonoBehaviour
         _movement.enabled = false;
 
 
-        Quaternion _targetRotation =
-            Quaternion.LookRotation(_plankPlacementArea.GetCenterObject().transform.right, Vector3.up);
+        Quaternion _targetRotation = Quaternion.LookRotation(_plankPlacementArea.GetCenterObject().transform.position - transform.position, Vector3.up);
 
         _targetRotation.eulerAngles =
             new Vector3(transform.rotation.x, _targetRotation.eulerAngles.y, transform.rotation.z);
