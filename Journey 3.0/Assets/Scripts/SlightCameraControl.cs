@@ -23,8 +23,7 @@ public class SlightCameraControl : MonoBehaviour
     {
         _inputSetUp = GetComponent<InputSetUp>();
         
-        
-        //_mainCamera = API.GlobalReferences.MainCamera;
+        _mainCamera = API.GlobalReferences.MainCamera;
 
         if (_mainCamera == null)
         {
@@ -40,17 +39,26 @@ public class SlightCameraControl : MonoBehaviour
     {
         _currentVirtualCamera =
             _cinemachineBrain.ActiveVirtualCamera.VirtualCameraGameObject;
-
-        _offsetOptions = _currentVirtualCamera.GetComponent<OffsetOptions>();
         
-        _cameraOffset = _currentVirtualCamera.GetComponent<CinemachineCameraOffset>();
+        OffsetOptions offsetOptions = _currentVirtualCamera.GetComponent<OffsetOptions>();
+
+        CinemachineCameraOffset cameraOffset = _currentVirtualCamera.GetComponent<CinemachineCameraOffset>();
+        
+        if (offsetOptions != null && cameraOffset != null)
+        {
+            _offsetOptions = offsetOptions;
+            _cameraOffset = cameraOffset;
+        }
+        else
+        {
+            _offsetOptions = null;
+            _cameraOffset = null;
+        }
     }
     
 
     IEnumerator UpdateCameraOffset()
     {
-        
-        
         while (true)
         {
             if(_cinemachineBrain.IsBlending || _currentVirtualCamera == null)
@@ -60,10 +68,11 @@ public class SlightCameraControl : MonoBehaviour
             }
 
             _input = _inputSetUp.RightStick;
-            
-        
-            _cameraOffset.m_Offset = Vector3.Lerp(_cameraOffset.m_Offset, new Vector3(_input.x, _input.y, 0f) * _offsetOptions.OffsetMultiplier, Time.deltaTime);
-            
+
+            if (_cameraOffset != null)
+            {
+                _cameraOffset.m_Offset = Vector3.Lerp(_cameraOffset.m_Offset, new Vector3(_input.x, _input.y, 0f) * _offsetOptions.OffsetMultiplier, Time.deltaTime);
+            }
             yield return new WaitForEndOfFrame();
         }
     }

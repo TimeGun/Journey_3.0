@@ -113,14 +113,14 @@ public class InteractWithObject : MonoBehaviour
                             return;
                         }
 
-                        /*cooldown = true;
+                        cooldown = true;
                         _movement.ControllerVeclocity = Vector3.zero;
                         _movement.enabled = false;
 
                         interactible = _interactingObj.getGameObject();
 
                         GameObject[] temp = new GameObject[] {rune, interactible};
-                        _coroutine = StartCoroutine(UseRune(temp));*/
+                        _coroutine = StartCoroutine(UseRune(temp));
                     }
                     else
                     {
