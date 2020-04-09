@@ -22,23 +22,16 @@ public class ChangeDOF : MonoBehaviour
     private float initialFarFocusStart;
     private float initialFarFocusEnd;
 
-    
+    private Volume volume;
     
     // Start is called before the first frame update
     void Start()
     {
-        Volume volume = GetComponent<Volume>();
-        DepthOfField tempDof;
+        volume = GetComponent<Volume>();
+        
 
-        if (volume.profile.TryGet<DepthOfField>(out tempDof))
-        {
-            DOF = tempDof;
-        }
-
-        initialNearBlurStart = DOF.nearFocusStart.value;
-        initialNearBlurEnd = DOF.nearFocusEnd.value;
-        initialFarFocusStart = DOF.farFocusStart.value;
-        initialFarFocusEnd = DOF.farFocusEnd.value;
+        
+        
 
 
     }
@@ -52,7 +45,7 @@ public class ChangeDOF : MonoBehaviour
             StartCoroutine(SwitchDepthOfField());
 
         }
-        
+        Debug.Log("DOF: " + DOF.active);
     }
 
     public void StartSwitchDepthOfField()
@@ -64,7 +57,30 @@ public class ChangeDOF : MonoBehaviour
     {
         StartCoroutine(RevertDepthOfField());
     }
-    
+
+    public void ActivateDepthOfField()
+    {
+        Debug.Log("Actiavted");
+        DepthOfField tempDof;
+
+        if (volume.profile.TryGet<DepthOfField>(out tempDof))
+        {
+            DOF = tempDof;
+            Debug.Log("TempDOF" + tempDof.active);
+            Debug.Log("DOF1: " + DOF.active);
+        }
+        DOF.active = true;
+        Debug.Log("DOF: " + DOF.active);
+        initialNearBlurStart = DOF.nearFocusStart.value;
+        initialNearBlurEnd = DOF.nearFocusEnd.value;
+        initialFarFocusStart = DOF.farFocusStart.value;
+        initialFarFocusEnd = DOF.farFocusEnd.value;
+    }
+
+    public void DisableDepthOfField()
+    {
+        DOF.active = false;
+    }
     IEnumerator SwitchDepthOfField()
     {
         while ( DOF.farFocusEnd.value < farFocusEnd - 0.05 || DOF.farFocusEnd.value > farFocusEnd + 0.05)
