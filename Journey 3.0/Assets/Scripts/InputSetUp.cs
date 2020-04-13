@@ -3,10 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Users;
 
 public class  InputSetUp : MonoBehaviour
 {
     private InputMaster _controls;
+
+    public string lastInput;
+
+    private InputUser _inputUser;
+    
 
     public InputMaster Controls
     {
@@ -49,18 +55,31 @@ public class  InputSetUp : MonoBehaviour
 
         _controls.PlayerFreeMovement.InteractDown.performed += ctx => _valueInteractDown = ctx.ReadValue<float>();
         _controls.PlayerFreeMovement.InteractDown.canceled += ctx => _valueInteractDown = 0;
+
+        PlayerInput input = GetComponent<PlayerInput>();
+
+        lastInput = input.currentControlScheme;
+
     }
-    
-    
+
+
+    void onInputDeviceChange(InputUser user, InputUserChange change, InputDevice device) {
+        if (change == InputUserChange.ControlSchemeChanged) {
+            lastInput = user.controlScheme.Value.name;
+        }
+    }
+
 
 
     void OnEnable()
     {
         _controls.Enable();
+        InputUser.onChange += onInputDeviceChange;
     }
 
     private void OnDisable()
     {
         _controls.Disable();
+        InputUser.onChange -= onInputDeviceChange;
     }
 }
