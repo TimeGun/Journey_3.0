@@ -84,9 +84,9 @@ public class MixingCamera : MonoBehaviour
                     case (AxisEnum.X):
                         
                         vcam.m_Weight1 = Mathf.Abs(followTarget.transform.position.x) - Mathf.Abs(playerStartPos.x);
-                        Debug.Log("Player start Pos x" + Mathf.Abs(playerStartPos.x));
-                        Debug.Log("Follow Target" + Mathf.Abs(followTarget.transform.position.x));
-                        Debug.Log("vcam weight" + (Mathf.Abs(followTarget.transform.position.x) - Mathf.Abs(playerStartPos.x)));
+//                        Debug.Log("Player start Pos x" + Mathf.Abs(playerStartPos.x));
+//                        Debug.Log("Follow Target" + Mathf.Abs(followTarget.transform.position.x));
+//                        Debug.Log("vcam weight" + (Mathf.Abs(followTarget.transform.position.x) - Mathf.Abs(playerStartPos.x)));
                         vcam.m_Weight1 = vcam.m_Weight1 * xPositionDirection * finalCamMultiplier;
                         break;
                     case (AxisEnum.Z):
