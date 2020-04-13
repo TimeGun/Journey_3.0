@@ -5,9 +5,8 @@ using UnityEngine.UI;
 
 public class TutorialPopup : MonoBehaviour
 {
-    [SerializeField] private GameObject[] _interactionObjectPress;
+    [SerializeField] private GameObject[] _interactionObject;
 
-    [SerializeField] private GameObject[] _interactionObjectHold;
 
     [SerializeField]private InputSetUp _inputSetUp;
 
@@ -40,34 +39,38 @@ public class TutorialPopup : MonoBehaviour
             
             if (objectToDisplayTutorialFor == null || objectToDisplayTutorialFor != tempObjectToDisplayTutorialFor)
             {
+                objectToDisplayTutorialFor = tempObjectToDisplayTutorialFor;
+                
                 if (objectToDisplayTutorialFor.GetComponent<PushObject>() != null)
                 {
                     if (_inputSetUp.lastInput == "Gamepad")
                     {
-                        _interactionObjectHold[0].GetComponent<Animator>().Play("HoldButton", 0, 0f);
+                        _interactionObject[0].GetComponent<Animator>().Play("HoldButton", 0, 0f);
                     }
                     else
                     {
-                        _interactionObjectHold[1].GetComponent<Animator>().Play("HoldButton", 0, 0f);
+                        _interactionObject[1].GetComponent<Animator>().Play("HoldButton", 0, 0f);
                     }
                 }
                 else
                 {
                     if (_inputSetUp.lastInput == "Gamepad")
                     {
-                        _interactionObjectPress[0].GetComponent<Animator>().Play("PressButton", 0, 0f);
+                        _interactionObject[0].GetComponent<Animator>().Play("PressButton", 0, 0f);
                     }
                     else
                     {
-                        _interactionObjectPress[1].GetComponent<Animator>().Play("PressButton", 0, 0f);
+                        _interactionObject[1].GetComponent<Animator>().Play("PressButton", 0, 0f);
                     }
                 }
-
-                objectToDisplayTutorialFor = tempObjectToDisplayTutorialFor;
             }
 
 
-            
+
+        }
+        else
+        {
+            objectToDisplayTutorialFor = null;
         }
     }
 
