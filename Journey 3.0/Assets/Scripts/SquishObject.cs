@@ -5,9 +5,7 @@ using UnityEngine;
 public class SquishObject : MonoBehaviour
 {
     [SerializeField] private MeshFilter _meshFilter;
-    [SerializeField] private MeshRenderer _meshRenderer;
     [SerializeField] private Mesh _newMesh;
-    [SerializeField] private Material _newMaterial;
 
     [SerializeField] private bool _squished;
 
@@ -37,6 +35,5 @@ public class SquishObject : MonoBehaviour
         }
 
         _meshFilter.mesh = _newMesh;
-        _meshRenderer.material = _newMaterial;
     }
 }
