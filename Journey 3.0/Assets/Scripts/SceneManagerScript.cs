@@ -24,16 +24,15 @@ public class SceneManagerScript : MonoBehaviour
 
     [HideInInspector] public int sectionToLoad;
 
-    private GameObject [] playerSpawn;
+    private GameObject playerSpawn;
 
 
-    void Start()
+    void Awake()
     {
         instance = this;
-        StartCoroutine(StartGameLoad());
     }
 
-    IEnumerator StartGameLoad()
+    public IEnumerator StartGameLoad(ProgressionData progressionData)
     {
         SceneManager.LoadSceneAsync("Base Scene", LoadSceneMode.Additive);
         SceneManager.sceneLoaded += LoadedBaseScene;
@@ -49,12 +48,8 @@ public class SceneManagerScript : MonoBehaviour
         }
         else
         {
-            StartCoroutine(LoadBundle(false));
+            instance.StartCoroutine(LoadSpecificSaveSection(progressionData));
             yield return new WaitUntil(() => loading == false);
-            StartCoroutine(LoadBundle(false));
-            yield return new WaitUntil(() => loading == false);
-
-            API.GlobalReferences.PlayerRef.GetComponent<PlayerMovement>().enabled = true;
         }
     }
 
@@ -63,9 +58,9 @@ public class SceneManagerScript : MonoBehaviour
         baseSceneLoaded = true;
     }
 
-    public static IEnumerator LoadBundle(bool loadCertainSection)
+    public static IEnumerator LoadBundle(bool debug)
     {
-        if (loadCertainSection)
+        if (debug)
         {
             if (instance.sectionToLoad != 0)
             {
@@ -119,40 +114,141 @@ public class SceneManagerScript : MonoBehaviour
         }
         else
         {
-            yield return new WaitUntil(() => loading == false);
-
             loading = true;
-
-            //Sets the current bundle to be the bundleIndex number
-            if (instance.gameScenes.Length > bundleIndex)
-                instance.currentBundle = instance.gameScenes[bundleIndex];
+            
+            instance.currentBundle = instance.gameScenes[bundleIndex];
 
             for (int i = 0; i < instance.currentBundle.scenes.Length; i++)
             {
                 SceneManager.LoadSceneAsync(instance.currentBundle.scenes[i], LoadSceneMode.Additive);
             }
 
+
             SceneManager.sceneLoaded += instance.MergeScenes;
         }
     }
 
+
+    IEnumerator LoadSpecificSaveSection(ProgressionData data)
+    {
+        AssignMenuCamera(data.saveSectionIndex);
+        MovePlayer(data.saveSectionIndex);
+        SetDayOrNight(data.saveSectionIndex);
+        
+        switch (data.saveSectionIndex) { 
+  
+            case 0: 
+                Debug.Log("Fist Section Load");
+                bundleIndex = 0;
+
+                StartCoroutine(LoadBundle(false));
+                yield return new WaitUntil(() => loading == false);
+                StartCoroutine(LoadBundle(false));
+                yield return new WaitUntil(() => loading == false);
+                break; 
+  
+            case 1: 
+                Debug.Log("Second Section Load");
+                bundleIndex = 2;
+                
+                StartCoroutine(LoadBundle(false));
+                yield return new WaitUntil(() => loading == false);
+                StartCoroutine(LoadBundle(false));
+                yield return new WaitUntil(() => loading == false);
+                
+                break; 
+  
+            case 2: 
+                Debug.Log("Third Section Load");
+                bundleIndex = 5;
+                
+                StartCoroutine(LoadBundle(false));
+                yield return new WaitUntil(() => loading == false);
+                StartCoroutine(LoadBundle(false));
+                yield return new WaitUntil(() => loading == false);
+                
+                break; 
+  
+            case 3:
+                Debug.Log("Fourth Section Load");
+                bundleIndex = 9;
+                
+                StartCoroutine(LoadBundle(false));
+                yield return new WaitUntil(() => loading == false);
+                StartCoroutine(LoadBundle(false));
+                yield return new WaitUntil(() => loading == false);
+                
+                break; 
+        }
+        
+        FadeToBlack.instance.SetBlack(false);
+        
+    }
+
+    private void SetDayOrNight(int data)
+    {
+        if (data == 2)
+        {
+            LerpDayToNight.SetToNight();
+        }else if (data == 3)
+        {
+            LerpDayToNight.SetToNight();
+        }
+    }
+
+    private void MovePlayer(int data)
+    {
+        playerSpawn = GameObject.FindGameObjectWithTag("PlayerSpawn");
+
+        if (data == 0)
+        {
+            API.GlobalReferences.PlayerRef.transform.position = playerSpawn.transform.GetChild(0).transform.position;
+
+            API.GlobalReferences.PlayerRef.transform.rotation = playerSpawn.transform.GetChild(0).transform.rotation;
+        }else if (data == 1)
+        {
+            API.GlobalReferences.PlayerRef.transform.position = playerSpawn.transform.GetChild(3).transform.position;
+
+            API.GlobalReferences.PlayerRef.transform.rotation = playerSpawn.transform.GetChild(3).transform.rotation;
+        }else if (data == 2)
+        {
+            API.GlobalReferences.PlayerRef.transform.position = playerSpawn.transform.GetChild(6).transform.position;
+
+            API.GlobalReferences.PlayerRef.transform.rotation = playerSpawn.transform.GetChild(6).transform.rotation;
+        }else if (data == 3)
+        {
+            API.GlobalReferences.PlayerRef.transform.position = playerSpawn.transform.GetChild(10).transform.position;
+
+            API.GlobalReferences.PlayerRef.transform.rotation = playerSpawn.transform.GetChild(10).transform.rotation;
+        }
+    }
+
+    private void AssignMenuCamera(int data)
+    {
+        GameObject cameraParent = GameObject.FindWithTag("MenuCameras");
+
+        GameObject cameraToUse = cameraParent.transform.GetChild(data).gameObject;
+        
+        cameraToUse.SetActive(true);
+        cameraToUse.GetComponent<CinemachineVirtualCamera>().Priority = 100;
+    }
+
+
     private void AssignPlayerTransform()
     {
-        playerSpawn = GameObject.FindGameObjectsWithTag("PlayerSpawn");
-        API.GlobalReferences.PlayerRef.transform.position = playerSpawn[playerSpawn.Length-1].transform.position;
+        playerSpawn = GameObject.FindGameObjectWithTag("PlayerSpawn");
+        API.GlobalReferences.PlayerRef.transform.position = playerSpawn.transform.GetChild(sectionToLoad).transform.position;
 
-        API.GlobalReferences.PlayerRef.transform.rotation = playerSpawn[playerSpawn.Length-1].transform.rotation;
-        
+        API.GlobalReferences.PlayerRef.transform.rotation = playerSpawn.transform.GetChild(sectionToLoad).transform.rotation;
+
         Invoke("EnablePlayerAndChangeSkybox", 2f);
-        
-        
     }
 
     void EnablePlayerAndChangeSkybox()
     {
         if (sectionToLoad >= 5)
         {
-            GameObject.Find("Skybox Switch").GetComponent<UnityEventTrigger>()._unityEventToTrigger.Invoke();
+            LerpDayToNight.SetToNight();
         }
 
         API.GlobalReferences.PlayerRef.GetComponent<PlayerMovement>().enabled = true;

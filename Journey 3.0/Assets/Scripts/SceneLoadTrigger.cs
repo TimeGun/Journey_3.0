@@ -10,6 +10,10 @@ public class SceneLoadTrigger : MonoBehaviour
     
     [SerializeField] private string[] scenesToUnload;
 
+    [SerializeField] private bool saveGame = false;
+    [Range(0, 3)][SerializeField] private int saveSection;
+    [SerializeField] private bool saveSectionNight;
+
     private void OnTriggerEnter(Collider other)
     {
         if(other.CompareTag("Player"))
@@ -22,6 +26,13 @@ public class SceneLoadTrigger : MonoBehaviour
             if (scenesToUnload.Length > 0)
             {
                 API.SceneManagerScript.StartCoroutine(SceneManagerScript.UnloadScenes(scenesToUnload));
+            }
+
+            if (saveGame)
+            {
+                ProgressionData _overwriteData = new ProgressionData(saveSection, saveSectionNight);
+                
+                SaveSystem.SaveProgress(_overwriteData);
             }
 
             Destroy(gameObject);

@@ -4,7 +4,9 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public static class SaveSystem
 {
-    private static string path = Application.persistentDataPath + "/player.progress";
+    public static string path = Application.persistentDataPath + "/PlayerProgression.saveFile";
+
+    public static bool firstTimePlaying = true;
     
     public static void SaveProgress(ProgressionData progressionData)
     {
@@ -49,7 +51,6 @@ public class ProgressionData
     public ProgressionData(int tempSaveSectionIndex, bool tempNightTime)
     {
         saveSectionIndex = tempSaveSectionIndex;
-
         nightTime = tempNightTime;
     }
 }

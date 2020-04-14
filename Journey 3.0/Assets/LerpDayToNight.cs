@@ -25,7 +25,9 @@ public class LerpDayToNight : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+#if UNITY_EDITOR
         EditorApplication.playmodeStateChanged += ModeChanged;
+#endif
         _dayTimeSkyboxProfile.TryGet(out _daySkybox);
         _nightTimeSkyboxProfile.TryGet(out _nightSkybox);
 
@@ -84,6 +86,8 @@ public class LerpDayToNight : MonoBehaviour
         }
     }
 
+#if UNITY_EDITOR
+    
 
     void ModeChanged()
     {
@@ -95,4 +99,5 @@ public class LerpDayToNight : MonoBehaviour
             _changingSkybox.top.value = _daySkybox.top.value;
         }
     }
+#endif
 }
