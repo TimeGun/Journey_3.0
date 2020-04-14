@@ -15,11 +15,12 @@ public class LerpDayToNight : MonoBehaviour
     [SerializeField] private GradientSky _daySkybox;
     [SerializeField] private GradientSky _nightSkybox;
     [SerializeField] private GradientSky _changingSkybox;
-
-    [SerializeField] private float lerpTimer;
-
+    
     public static LerpDayToNight instance;
 
+    [SerializeField] private float debugLerpTime;
+
+    public bool debug;
 
     // Start is called before the first frame update
     void Start()
@@ -37,6 +38,11 @@ public class LerpDayToNight : MonoBehaviour
         _changingSkybox.top.value = _daySkybox.top.value;
 
         instance = this;
+
+        if (debug)
+        {
+            StartCoroutine(ChangeDayToNight(debugLerpTime));
+        }
     }
 
     public static void LerpToNight(float secondsToLerpFor)
