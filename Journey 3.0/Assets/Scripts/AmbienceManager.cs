@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class AmbienceManager : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class AmbienceManager : MonoBehaviour
 
     [SerializeField] private float moveTowardsSpeed;
 
+    [SerializeField] private AudioMixer _masterMix;
+    
 
     void Start()
     {
@@ -71,10 +74,32 @@ public class AmbienceManager : MonoBehaviour
             }
         }
     }
-    
-    
+
+
     void MoveVolumeTo(AudioSource source, float targetVolume)
     {
         source.volume = Mathf.MoveTowards(source.volume, targetVolume, Time.deltaTime * moveTowardsSpeed);
+    }
+
+
+
+    public static void FadeInMasterSound()
+    {
+        instance.StartCoroutine(instance.FadeInMaster(0f));
+    }
+
+    IEnumerator FadeInMaster(float target)
+    {
+        float currentVolume;
+        _masterMix.GetFloat("MasterVolume", out currentVolume);
+        
+        while (currentVolume < target)
+        {
+            print(currentVolume);
+            currentVolume = Mathf.MoveTowards(currentVolume, target, Time.deltaTime * 50f);
+            _masterMix.SetFloat("MasterVolume", currentVolume);
+            _masterMix.GetFloat("MasterVolume", out currentVolume);
+            yield return new WaitForEndOfFrame();
+        }
     }
 }

@@ -182,7 +182,8 @@ public class SceneManagerScript : MonoBehaviour
         }
         
         FadeToBlack.instance.SetBlack(false);
-        
+        MenuController.FadeInMenu();
+        AmbienceManager.FadeInMasterSound();
     }
 
     private void SetDayOrNight(int data)
