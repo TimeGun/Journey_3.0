@@ -39,6 +39,10 @@ public class FadeAfterTimeline : MonoBehaviour
         Debug.Log("FADE OUT");
         global::FadeToBlack.instance.SetBlack(true);
         yield return new WaitForSeconds(6f);
+        
+        ProgressionData _resetData = new ProgressionData(0, false);
+        
+        SaveSystem.SaveProgress(_resetData);
         SceneManager.LoadScene("Manager Scene");
     }
 }
