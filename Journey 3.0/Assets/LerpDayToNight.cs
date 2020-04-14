@@ -18,6 +18,8 @@ public class LerpDayToNight : MonoBehaviour
 
     [SerializeField] private float lerpTimer;
 
+    public static LerpDayToNight instance;
+
 
     // Start is called before the first frame update
     void Start()
@@ -33,41 +35,54 @@ public class LerpDayToNight : MonoBehaviour
         _changingSkybox.bottom.value = _daySkybox.bottom.value;
         _changingSkybox.middle.value = _daySkybox.middle.value;
         _changingSkybox.top.value = _daySkybox.top.value;
-        
 
-        StartCoroutine(ChangeDayToNight(lerpTimer));
+        instance = this;
     }
 
+    public static void LerpToNight(float secondsToLerpFor)
+    {
+        instance.StartCoroutine(instance.ChangeDayToNight(secondsToLerpFor));
+    }
+
+    public static void SetToNight()
+    {
+        instance._changingSkybox.bottom.value = instance._nightSkybox.bottom.value;
+        instance._changingSkybox.middle.value = instance._nightSkybox.middle.value;
+        instance._changingSkybox.top.value = instance._nightSkybox.top.value;
+    }
 
 
     private IEnumerator ChangeDayToNight(float timeToLerpFor)
     {
         float timeLeft = timeToLerpFor;
-        
-        
+
+
         while (timeLeft > 0)
         {
-            
             print("gas");
-            _changingSkybox.gradientDiffusion.value = Mathf.Lerp(_changingSkybox.gradientDiffusion.value, _nightSkybox.gradientDiffusion.value, Time.deltaTime / timeLeft);
+            _changingSkybox.gradientDiffusion.value = Mathf.Lerp(_changingSkybox.gradientDiffusion.value,
+                _nightSkybox.gradientDiffusion.value, Time.deltaTime / timeLeft);
 
 
-            _changingSkybox.bottom.value = Color.Lerp(_changingSkybox.bottom.value, _nightSkybox.bottom.value, Time.deltaTime/timeLeft);
-            _changingSkybox.middle.value = Color.Lerp(_changingSkybox.middle.value, _nightSkybox.middle.value, Time.deltaTime/timeLeft);
-            _changingSkybox.top.value = Color.Lerp(_changingSkybox.top.value, _nightSkybox.top.value, Time.deltaTime/timeLeft);
+            _changingSkybox.bottom.value = Color.Lerp(_changingSkybox.bottom.value, _nightSkybox.bottom.value,
+                Time.deltaTime / timeLeft);
+            _changingSkybox.middle.value = Color.Lerp(_changingSkybox.middle.value, _nightSkybox.middle.value,
+                Time.deltaTime / timeLeft);
+            _changingSkybox.top.value =
+                Color.Lerp(_changingSkybox.top.value, _nightSkybox.top.value, Time.deltaTime / timeLeft);
 
 
             timeLeft -= Time.deltaTime;
-            
+
             yield return new WaitForEndOfFrame();
         }
     }
-    
- 
-    void ModeChanged ()
+
+
+    void ModeChanged()
     {
         if (!EditorApplication.isPlayingOrWillChangePlaymode &&
-            EditorApplication.isPlaying ) 
+            EditorApplication.isPlaying)
         {
             _changingSkybox.bottom.value = _daySkybox.bottom.value;
             _changingSkybox.middle.value = _daySkybox.middle.value;
