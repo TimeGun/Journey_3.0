@@ -58,6 +58,12 @@ public class LerpDayToNight : MonoBehaviour
         instance._changingSkybox.middle.value = instance._nightSkybox.middle.value;
         instance._changingSkybox.top.value = instance._nightSkybox.top.value;
     }
+    public static void SetToDay()
+    {
+        instance._changingSkybox.bottom.value = instance._daySkybox.bottom.value;
+        instance._changingSkybox.middle.value = instance._daySkybox.middle.value;
+        instance._changingSkybox.top.value = instance._daySkybox.top.value;
+    }
 
 
     private IEnumerator ChangeDayToNight(float timeToLerpFor)

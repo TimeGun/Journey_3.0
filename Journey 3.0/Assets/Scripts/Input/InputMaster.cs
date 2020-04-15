@@ -280,7 +280,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""5de18f03-8f07-47f3-a95e-a3b4ca343e71"",
-                    ""path"": ""<Keyboard>/space"",
+                    ""path"": ""<Keyboard>/escape"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",

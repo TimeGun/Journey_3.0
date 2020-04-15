@@ -27,6 +27,7 @@ public class SceneManagerScript : MonoBehaviour
     private GameObject playerSpawn;
 
 
+
     void Awake()
     {
         instance = this;
@@ -34,12 +35,35 @@ public class SceneManagerScript : MonoBehaviour
 
     public IEnumerator StartGameLoad(ProgressionData progressionData)
     {
-        SceneManager.LoadSceneAsync("Base Scene", LoadSceneMode.Additive);
-        SceneManager.sceneLoaded += LoadedBaseScene;
+        yield return new WaitUntil(() => loading == false);
 
-        yield return new WaitUntil(() => baseSceneLoaded == true);
+        GameObject torch = GameObject.Find("InteractibleTorch - Final");
 
-        baseSceneLoaded = false;
+        if (torch != null)
+        {
+            Destroy(torch);
+        }
+
+        for (int i = 1; i < SceneManager.sceneCount; i++)
+        {
+            Scene scene = SceneManager.GetSceneAt(i);
+            
+            if(scene.name != "Base Scene")
+            {
+                SceneManager.UnloadSceneAsync(scene);
+            }
+        }
+        
+        
+        if (!baseSceneLoaded)
+        {
+            SceneManager.LoadSceneAsync("Base Scene", LoadSceneMode.Additive);
+            SceneManager.sceneLoaded += LoadedBaseScene;
+
+            yield return new WaitUntil(() => baseSceneLoaded == true); 
+        }
+
+        yield return new WaitUntil(() => SceneManager.sceneCount == 2);
         
         if (LoadSpecificBundle)
         {
@@ -180,21 +204,25 @@ public class SceneManagerScript : MonoBehaviour
                 
                 break; 
         }
-        
+
+        CinemachineBrain _brain = API.GlobalReferences.MainCamera.GetComponent<CinemachineBrain>();
+        yield return new WaitUntil(()=>!_brain.IsBlending);
         FadeToBlack.instance.SetBlack(false);
-        MenuController.FadeInMenu();
+        MenuController.instance.OpenPauseMenu();
         AmbienceManager.FadeInMasterSound();
     }
 
     private void SetDayOrNight(int data)
     {
-        if (data == 2)
+        if(data == 0 || data == 1)
         {
-            LerpDayToNight.SetToNight();
-        }else if (data == 3)
+            LerpDayToNight.SetToDay();
+        }
+        else
         {
             LerpDayToNight.SetToNight();
         }
+        
     }
 
     private void MovePlayer(int data)
@@ -228,6 +256,11 @@ public class SceneManagerScript : MonoBehaviour
     {
         GameObject cameraParent = GameObject.FindWithTag("MenuCameras");
 
+        for (int i = 0; i < cameraParent.transform.childCount; i++)
+        {
+            cameraParent.transform.GetChild(i).GetComponent<CinemachineVirtualCamera>().Priority = 0;
+        }
+        
         GameObject cameraToUse = cameraParent.transform.GetChild(data).gameObject;
         
         cameraToUse.SetActive(true);
