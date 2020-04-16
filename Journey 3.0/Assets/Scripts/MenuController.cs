@@ -132,14 +132,17 @@ public class MenuController : MonoBehaviour
 
     IEnumerator ChangeZone(int zone, bool night)
     {
-        
+        API.InterestManagerScript.ResetList();
         FadeToBlack.instance.SetBlack(true);
         yield return new WaitForSeconds(1f);
+
+
         
         API.GlobalReferences.PlayerRef.GetComponent<InteractWithObject>().StopInteracting();
-        
-        
-        
+        API.GlobalReferences.PlayerRef.GetComponent<ObjectDetection>().Items = new List<GameObject>();
+        API.GlobalReferences.PlayerRef.GetComponent<ObjectDetection>().enabled = false;
+
+
         ProgressionData _newProgressionData = new ProgressionData(zone, night);
         SaveSystem.SaveProgress(_newProgressionData);
         SceneManagerScript.instance.StopAllCoroutines();

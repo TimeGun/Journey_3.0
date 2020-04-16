@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -21,6 +20,12 @@ public class InterestManagerScript : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void ResetList()
+    {
+        API.GlobalReferences.PlayerRef.GetComponent<InterestFinder>().TransformsOfInterst.Clear();
+        currentObjectsOfInterst.Clear();
     }
 
     public void LoadNewPointsOfInterest(Scene scene)
@@ -48,10 +53,7 @@ public class InterestManagerScript : MonoBehaviour
 
         API.GlobalReferences.PlayerRef.GetComponent<InterestFinder>().TransformsOfInterst.Clear();
 
-//        for (int i = 0; i < currentObjectsOfInterst.Count; i++)
-//        {
-//            API.GlobalReferences.PlayerRef.GetComponent<InterestFinder>().TransformsOfInterst.Add(currentObjectsOfInterst[i]);
-//        }
+
 
         API.GlobalReferences.PlayerRef.GetComponent<InterestFinder>().TransformsOfInterst =
             currentObjectsOfInterst.ToList();

@@ -250,6 +250,8 @@ public class SceneManagerScript : MonoBehaviour
 
             API.GlobalReferences.PlayerRef.transform.rotation = playerSpawn.transform.GetChild(10).transform.rotation;
         }
+        
+        API.GlobalReferences.PlayerRef.GetComponent<ObjectDetection>().enabled = true;
     }
 
     private void AssignMenuCamera(int data)

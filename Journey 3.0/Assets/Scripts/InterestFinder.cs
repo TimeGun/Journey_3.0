@@ -176,7 +176,8 @@ public class InterestFinder : MonoBehaviour
         Vector3 currentPosition = transform.position;
         for (int i = 0; i < interests.Length; i++)
         {
-            if (interests[i].gameObject.activeSelf)
+            
+            if (interests[i] != null && interests[i].gameObject.activeSelf)
             {
                 Vector3 directionToTarget = interests[i].position - currentPosition;
                 float dSqrToTarget = directionToTarget.sqrMagnitude;

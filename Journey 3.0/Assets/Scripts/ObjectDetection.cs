@@ -17,7 +17,7 @@ public class ObjectDetection : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-
+        
         IInteractible itemToPickUp = other.GetComponent<IInteractible>();
         if (itemToPickUp != null && !_items.Contains(other.gameObject))
         {
