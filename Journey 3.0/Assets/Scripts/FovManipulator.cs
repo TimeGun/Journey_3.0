@@ -91,7 +91,7 @@ public class FovManipulator : MonoBehaviour
             else if (playerInZone)
             {
                 _currentFov = Map(currentDist, _startDist, 0, _startFOV, targetFov);     //Map Function
-                Debug.Log(_startDist);
+                //Debug.Log(_startDist);
                 //Debug.Log(currentFov);
                 activeCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.FieldOfView = _currentFov;        //set active camera fov to currentfov value
             }

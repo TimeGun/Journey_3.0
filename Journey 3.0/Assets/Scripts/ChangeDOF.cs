@@ -45,7 +45,7 @@ public class ChangeDOF : MonoBehaviour
             StartCoroutine(SwitchDepthOfField());
 
         }
-        Debug.Log("DOF: " + DOF.active);
+        //Debug.Log("DOF: " + DOF.active);
     }
 
     public void StartSwitchDepthOfField()
