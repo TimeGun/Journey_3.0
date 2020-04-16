@@ -66,7 +66,6 @@ public class BluAIController : MonoBehaviour
         }
         else
         {
-            _animator.SetFloat("PlaybackSpeed", 1);
             _headAim.weight = Mathf.Lerp(_headAim.weight, 0f, Time.deltaTime * _lerpSpeed);
         }
     }
