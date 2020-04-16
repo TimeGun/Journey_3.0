@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class OpenForPlayer : MonoBehaviour
 {
@@ -41,6 +42,8 @@ public class OpenForPlayer : MonoBehaviour
     [SerializeField] private AudioSource _chainCrash;
 
     [SerializeField] private HoldInteractipleOnRune _holdInteractipleOnRune;
+
+    [SerializeField] private VisualEffect _sparks;
 
     void Start()
     {
@@ -98,6 +101,7 @@ public class OpenForPlayer : MonoBehaviour
 
     IEnumerator SlamDown()
     {
+        _sparks.SendEvent("Slam");
         _chainCrash.PlayOneShot(_chainCrash.clip);
 
         print("Slammed down");

@@ -2,10 +2,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class BrokenGrowthRune : MonoBehaviour
 {
     private GameObject player;
+
+    [SerializeField] private VisualEffect _slugs;
 
     void Start()
     {
@@ -19,6 +22,7 @@ public class BrokenGrowthRune : MonoBehaviour
 
         if (changeSize != null && changeSize.Small)
         {
+            _slugs.SetBool("BoulderInRange", true);
             if (player == null)
             {
                 player = GameObject.Find("Player");
@@ -43,12 +47,13 @@ public class BrokenGrowthRune : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        print("called");
         
         ChangeSize changeSize = other.GetComponent<ChangeSize>();
 
         if (changeSize != null)
         {
+            _slugs.SetBool("BoulderInRange", false);
+
             if (player == null)
             {
                 player = GameObject.Find("Player");
