@@ -42,6 +42,8 @@ public class InteractWithObject : MonoBehaviour
 
     [SerializeField] private bool cooldown;
 
+    [SerializeField] private float waitTime = 0.5f;
+
     public bool Cooldown
     {
         get => cooldown;
@@ -240,6 +242,8 @@ public class InteractWithObject : MonoBehaviour
             }
             else if (_interacting && !_nearRune && !_inPlacementArea) //Drop item you are currently holding
             {
+                cooldown = true;
+                Invoke("ResetCooldown", waitTime);
                 StopInteracting();
             }
             else if (_interacting && !_nearRune && _inPlacementArea) //Place plank
@@ -253,6 +257,11 @@ public class InteractWithObject : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void ResetCooldown()
+    {
+        cooldown = false;
     }
 
     private float ReturnAngleToObj(Vector3 objPosition)

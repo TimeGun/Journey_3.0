@@ -18,7 +18,7 @@ public class MenuController : MonoBehaviour
 
     [SerializeField] private InputSetUp _inputSetUp;
 
-    private bool inMenu;
+    private bool gameStarted, inMenu;
 
     // Start is called before the first frame update
     void Start()
@@ -26,6 +26,9 @@ public class MenuController : MonoBehaviour
         instance = this;
         
         _controls = _inputSetUp.Controls;
+
+        inMenu = true;
+        gameStarted = false;
     }
 
     // Update is called once per frame
@@ -35,7 +38,6 @@ public class MenuController : MonoBehaviour
         {
             if (inMenu)
             {
-                
                 LeaveMenu();
             }
             else
@@ -48,6 +50,11 @@ public class MenuController : MonoBehaviour
 
     public void OpenPauseMenu()
     {
+        if (gameStarted == true)
+        {
+            Time.timeScale = 0f;
+        }
+
         AudioListener.pause = true;
         inMenu = true;
         API.GlobalReferences.PlayerRef.GetComponent<PlayerMovement>().DisableThis();
@@ -57,12 +64,14 @@ public class MenuController : MonoBehaviour
 
     public void LeaveMenu()
     {
+        Time.timeScale = 1f;
         baseMenu.SetActive(false);
         settingsMenu.SetActive(false);
         controlsMenu.SetActive(false);
         API.GlobalReferences.PlayerRef.GetComponent<PlayerMovement>().EnableThis();
         AudioListener.pause = false;
         inMenu = false;
+        gameStarted = true;
     }
 
 
@@ -132,6 +141,8 @@ public class MenuController : MonoBehaviour
 
     IEnumerator ChangeZone(int zone, bool night)
     {
+        Time.timeScale = 1f;
+        gameStarted = false;
         API.InterestManagerScript.ResetList();
         API.GlobalReferences.PlayerRef.GetComponent<ObjectDetection>().ClearList();
         FadeToBlack.instance.SetBlack(true);
