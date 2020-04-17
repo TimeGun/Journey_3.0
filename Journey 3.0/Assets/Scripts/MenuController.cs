@@ -133,8 +133,7 @@ public class MenuController : MonoBehaviour
     IEnumerator ChangeZone(int zone, bool night)
     {
         API.InterestManagerScript.ResetList();
-        API.GlobalReferences.PlayerRef.GetComponent<ObjectDetection>().Items.Clear();
-        API.GlobalReferences.PlayerRef.GetComponent<ObjectDetection>().enabled = false;
+        API.GlobalReferences.PlayerRef.GetComponent<ObjectDetection>().ClearList();
         FadeToBlack.instance.SetBlack(true);
         yield return new WaitForSeconds(1f);
 
