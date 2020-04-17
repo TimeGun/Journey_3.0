@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Rendering.HighDefinition;
 
 public class ProceduralArmPlacement : MonoBehaviour
 {
@@ -29,6 +30,8 @@ public class ProceduralArmPlacement : MonoBehaviour
     
     private bool rightHandOn;
     private bool leftHandOn;
+
+    public bool pause = false;
     
     void Start()
     {
@@ -40,7 +43,9 @@ public class ProceduralArmPlacement : MonoBehaviour
     {
         while (true)
         {
-            //raycast right arm
+            if (!pause)
+            {
+                 //raycast right arm
             Ray rightArmRay = new Ray(_chestHeight.position + (transform.right * armSeperationFloat), _chestHeight.forward);
             RaycastHit rightRaycastHit;
             
@@ -109,6 +114,9 @@ public class ProceduralArmPlacement : MonoBehaviour
             }
             
             Debug.DrawRay(leftArmRay.origin, leftArmRay.direction * _wallDistanceCheck, leftRayCol, 0.1f);
+            }
+
+           
 
             
 

@@ -21,6 +21,23 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
     private float _multiplierPlate;
     private float _multiplierFrame;
 
+    private Transform _chestHeight;
+
+    [SerializeField] private float armSeperationFloat = 0.314f;
+
+    [SerializeField] private float _wallSeperationBuffer;
+    [SerializeField] private float _wallDistanceCheck = 1.5f;
+
+    [SerializeField] private LayerMask _wallMask;
+    
+    [SerializeField] private float angleAdjustment1 = 90f;
+    [SerializeField] private float angleAdjustment2 = -90f;
+
+    [SerializeField] private float distanceToPlate = 0.5f;
+
+    [SerializeField] private GameObject _palceToStand;
+    [SerializeField] private GameObject _objectToFollow;
+
 
     // Start is called before the first frame update
     void Start()
@@ -30,11 +47,73 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
 
         _plateMat.SetColor("_EmissiveColor", _emissionColour * _multiplierPlate);
         _frameMat.SetColor("_EmissiveColor", _emissionColour * _multiplierFrame);
-        StartCoroutine(PlayPainting());
+        //StartCoroutine(PlayPainting());
     }
 
-    IEnumerator PlayPainting()
+    IEnumerator PlayPainting(Transform player)
     {
+        PlayerMovement movement = player.GetComponent<PlayerMovement>();
+        InteractWithObject interactWithObject = player.GetComponent<InteractWithObject>();
+
+        ProceduralArmPlacement proceduralArmPlacement = player.GetComponent<ProceduralArmPlacement>();
+
+        _chestHeight = player.GetChild(player.childCount - 1);
+
+        proceduralArmPlacement.pause = true;
+
+        _objectToFollow.transform.position = player.transform.position;
+        _objectToFollow.transform.rotation = player.transform.rotation;
+        
+        movement.StartRemoteControlledMovement(_objectToFollow);
+
+
+        while (_objectToFollow.transform.position != _palceToStand.transform.position)
+        {
+            _objectToFollow.transform.position = Vector3.MoveTowards(_objectToFollow.transform.position, _palceToStand.transform.position, Time.deltaTime *2f);
+
+            if (Quaternion.Angle(_objectToFollow.transform.rotation,
+                    Quaternion.LookRotation(_palceToStand.transform.position - _objectToFollow.transform.position,
+                        Vector3.up)) > 5f)
+            {
+                _objectToFollow.transform.rotation = 
+                    Quaternion.Slerp(_objectToFollow.transform.rotation,
+                        Quaternion.LookRotation(_palceToStand.transform.position -_objectToFollow.transform.position, Vector3.up),
+                        Time.deltaTime * 10f);
+            }
+            yield return new WaitForEndOfFrame();
+        }
+        
+        Quaternion _targetRotation =
+            Quaternion.LookRotation(_palceToStand.transform.forward, Vector3.up);
+
+        _targetRotation.eulerAngles =
+            new Vector3(player.transform.rotation.x, _targetRotation.eulerAngles.y, player.transform.rotation.z);
+
+        while (Quaternion.Angle(player.transform.rotation, _targetRotation) > 10f)
+        {
+            player.transform.rotation = Quaternion.Slerp(player.transform.rotation, _targetRotation, Time.deltaTime * 10f);
+            yield return new WaitForEndOfFrame();
+        }
+
+        Ray leftArmRay = new Ray(_chestHeight.position - (transform.right * -armSeperationFloat), _chestHeight.forward);
+        RaycastHit leftRaycastHit;
+
+
+        if (Physics.Raycast(leftArmRay, out leftRaycastHit, _wallDistanceCheck, _wallMask))
+        {
+            if (!LeftArmIK.Instance.InUse)
+            {
+                print("set left arm");
+                LeftArmIK.Instance.TempUse = true;
+
+                Quaternion handRot = AdjustHandRotation(leftRaycastHit.normal);
+
+                LeftArmIK.Instance.SetProceduralTargetAndHint(
+                    leftRaycastHit.point + (leftRaycastHit.normal * _wallSeperationBuffer), handRot, 1f);
+            }
+        }
+
+
         while (_multiplierPlate != _minEmissionStrength)
         {
             print("Running");
@@ -42,7 +121,7 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
             _plateMat.SetColor("_EmissiveColor", _emissionColour * _multiplierPlate);
             yield return new WaitForEndOfFrame();
         }
-        
+
         while (_multiplierFrame != _maxEmissionStrength)
         {
             print("Running");
@@ -64,7 +143,7 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
             _frameMat.SetColor("_EmissiveColor", _emissionColour * _multiplierFrame);
             yield return new WaitForEndOfFrame();
         }
-        
+
         while (_multiplierPlate != _maxEmissionStrength)
         {
             print("Running");
@@ -72,21 +151,22 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
             _plateMat.SetColor("_EmissiveColor", _emissionColour * _multiplierPlate);
             yield return new WaitForEndOfFrame();
         }
+
+        proceduralArmPlacement.pause = false;
+
+        interactWithObject.Cooldown = false;
+        movement.enabled = true;
     }
 
-    GameObject IInteractible.getGameObject()
-    {
-        throw new System.NotImplementedException();
-    }
 
     public bool isActive()
     {
-        throw new System.NotImplementedException();
+        return true;
     }
 
     public void StartInteraction(Transform parent)
     {
-        StartCoroutine(PlayPainting());
+        StartCoroutine(PlayPainting(parent));
     }
 
     public void StopInteraction()
@@ -94,8 +174,19 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
         throw new System.NotImplementedException();
     }
 
-    GameObject IRune.getGameObject()
+    public GameObject getGameObject()
     {
-        throw new System.NotImplementedException();
+        return gameObject;
+    }
+    
+    
+    Quaternion AdjustHandRotation(Vector3 wallNormal)
+    {
+        Quaternion handRot = Quaternion.Inverse(Quaternion.LookRotation(wallNormal));
+        
+        handRot *= Quaternion.AngleAxis(angleAdjustment1, Vector3.right);
+        handRot *= Quaternion.AngleAxis(angleAdjustment2, Vector3.up);
+
+        return handRot;
     }
 }

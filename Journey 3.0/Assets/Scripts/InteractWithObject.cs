@@ -78,7 +78,7 @@ public class InteractWithObject : MonoBehaviour
 
         if (_inputSetUp.Controls.PlayerFreeMovement.Interact.triggered && !cooldown && _movement.grounded)
         {
-            if (_nearRune && _objectDetection.Items.Count > 1 || _nearRune && _rune.getGameObject().GetComponent<GrowObject>())
+            if (_nearRune && _objectDetection.Items.Count > 1 || _nearRune && _rune.getGameObject().GetComponent<GrowObject>() || _nearRune && _rune.getGameObject().GetComponent<InteractiblePainting>())
             {
                 if (_rune.getGameObject().GetComponent<GrowObject>() != null)
                 {
@@ -100,6 +100,27 @@ public class InteractWithObject : MonoBehaviour
                         _movement.enabled = false;
                     
                         StartCoroutine(UseGrowthRune(_rune.getGameObject()));
+                    }
+                }else if (_rune.getGameObject().GetComponent<InteractiblePainting>() != null)
+                {
+                    if (!_interacting && _objectDetection.Items.Count > 1)
+                    {
+                        cooldown = true;
+                        _interacting = true;
+                        _movement.ControllerVeclocity = Vector3.zero;
+                        _movement.enabled = false;
+
+                        GameObject obj = ReturnCloserObject();
+                        _interactingObj = obj.GetComponent<IInteractible>();
+                        _coroutine = StartCoroutine(TurnToGrab(obj));
+                    }
+                    else
+                    {
+                        cooldown = true;
+                        _movement.ControllerVeclocity = Vector3.zero;
+                        //_movement.enabled = false;
+                        print("Use Paintings");
+                        StartCoroutine(UseInteractiblePainting(_rune.getGameObject()));
                     }
                 }
                 else
@@ -575,6 +596,13 @@ public class InteractWithObject : MonoBehaviour
         
         //start the growth rune interaction with any this transform
         rune.GetComponent<GrowObject>().StartInteraction(transform);
+    }
+    
+    IEnumerator UseInteractiblePainting(GameObject rune)
+    {
+        //start the interactible painting interaction with any this transform
+        rune.GetComponent<InteractiblePainting>().StartInteraction(transform);
+        yield return new WaitForEndOfFrame();
     }
 
 
