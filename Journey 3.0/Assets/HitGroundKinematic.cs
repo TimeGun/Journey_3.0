@@ -1,23 +1,31 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class HitGroundKinematic : MonoBehaviour
 {
-    private Rigidbody _rb;
+    [SerializeField] private Rigidbody [] _rbs;
     // Start is called before the first frame update
     void Start()
     {
-        _rb = GetComponent<Rigidbody>();
+        _rbs = GetComponentsInChildren<Rigidbody>();
     }
 
     // Update is called once per frame
-
-
-    private void OnCollisionEnter(Collision other)
+    public void EnableRigidbodies()
     {
-        if (other.gameObject.layer == 8)
+        foreach (var rb in _rbs)
         {
-            _rb.isKinematic = true;
-            Destroy(this);
+            rb.isKinematic = false;
+        }
+
+        Invoke("DisableRigidbodies", 6f);
+    }
+
+    public void DisableRigidbodies()
+    {
+        foreach (var rb in _rbs)
+        {
+            rb.isKinematic = true;
         }
     }
 }
