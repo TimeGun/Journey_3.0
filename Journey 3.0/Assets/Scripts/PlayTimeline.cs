@@ -44,7 +44,7 @@ public class PlayTimeline : MonoBehaviour
         if (_playerEntered && cinematicStarted == false)
         {
             StartCoroutine(StartTimeline());
-            Debug.Log("Here");
+//            Debug.Log("Here");
             cinematicStarted = true;
 
 

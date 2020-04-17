@@ -60,17 +60,17 @@ public class ChangeDOF : MonoBehaviour
 
     public void ActivateDepthOfField()
     {
-        Debug.Log("Actiavted");
+//        Debug.Log("Actiavted");
         DepthOfField tempDof;
 
         if (volume.profile.TryGet<DepthOfField>(out tempDof))
         {
             DOF = tempDof;
-            Debug.Log("TempDOF" + tempDof.active);
-            Debug.Log("DOF1: " + DOF.active);
+//            Debug.Log("TempDOF" + tempDof.active);
+//            Debug.Log("DOF1: " + DOF.active);
         }
         DOF.active = true;
-        Debug.Log("DOF: " + DOF.active);
+//        Debug.Log("DOF: " + DOF.active);
         initialNearBlurStart = DOF.nearFocusStart.value;
         initialNearBlurEnd = DOF.nearFocusEnd.value;
         initialFarFocusStart = DOF.farFocusStart.value;
@@ -90,7 +90,7 @@ public class ChangeDOF : MonoBehaviour
             DOF.farFocusStart.value = Mathf.Lerp(DOF.farFocusStart.value, farFocusStart,  rateOfChange/100); 
             DOF.farFocusEnd.value = Mathf.Lerp(DOF.farFocusEnd.value, farFocusEnd,  rateOfChange/100);
             yield return new WaitForSeconds(Time.deltaTime);
-            Debug.Log("in depth of field"); 
+//            Debug.Log("in depth of field"); 
         }
         
     }
@@ -104,7 +104,7 @@ public class ChangeDOF : MonoBehaviour
             DOF.farFocusStart.value = Mathf.Lerp(DOF.farFocusStart.value, initialFarFocusStart,  rateOfChange/100); 
             DOF.farFocusEnd.value = Mathf.Lerp(DOF.farFocusEnd.value, initialFarFocusEnd,  rateOfChange/100);
             yield return new WaitForSeconds(Time.deltaTime);
-            Debug.Log("in revert depth of field"); 
+//            Debug.Log("in revert depth of field"); 
         }
     }
 }

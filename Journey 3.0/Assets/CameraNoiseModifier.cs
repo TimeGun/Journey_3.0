@@ -62,7 +62,7 @@ public class CameraNoiseModifier : MonoBehaviour
     public IEnumerator CameraShakeCoroutine(float ampChange, float freqChange, float strongShakeLength, float lightShakeLength)
     {
         coroutineStarted = true;
-        Debug.Log(ampChange);
+//        Debug.Log(ampChange);
         vcam = TargetCamera.GetComponent<CinemachineVirtualCamera>();
         vcam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = ampChange;
         vcam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = freqChange;
@@ -97,7 +97,7 @@ public class CameraNoiseModifier : MonoBehaviour
             
             for (var i = 0; i < strings.Length; i++)
             {
-                Debug.Log(i);
+//                Debug.Log(i);
                 float tempfloat = float.Parse(strings[i]);
                 floatArray.Add(tempfloat);
             }
