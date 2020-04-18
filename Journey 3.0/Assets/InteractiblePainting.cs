@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
@@ -64,34 +65,43 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
         _objectToFollow.transform.position = player.transform.position;
         _objectToFollow.transform.rotation = player.transform.rotation;
         
+        yield return new WaitForEndOfFrame();
         movement.StartRemoteControlledMovement(_objectToFollow);
 
-
+        
+        
+        
+        
+        //Walk to the place to stand
         while (_objectToFollow.transform.position != _palceToStand.transform.position)
         {
             _objectToFollow.transform.position = Vector3.MoveTowards(_objectToFollow.transform.position, _palceToStand.transform.position, Time.deltaTime *2f);
 
             if (Quaternion.Angle(_objectToFollow.transform.rotation,
-                    Quaternion.LookRotation(_palceToStand.transform.position - _objectToFollow.transform.position,
+                    Quaternion.LookRotation(new Vector3(_palceToStand.transform.position.x, _objectToFollow.transform.position.y, _palceToStand.transform.position.z) - _objectToFollow.transform.position,
                         Vector3.up)) > 5f)
             {
                 _objectToFollow.transform.rotation = 
                     Quaternion.Slerp(_objectToFollow.transform.rotation,
-                        Quaternion.LookRotation(_palceToStand.transform.position -_objectToFollow.transform.position, Vector3.up),
+                        Quaternion.LookRotation(new Vector3(_palceToStand.transform.position.x, _objectToFollow.transform.position.y, _palceToStand.transform.position.z) -_objectToFollow.transform.position, Vector3.up),
                         Time.deltaTime * 10f);
             }
             yield return new WaitForEndOfFrame();
         }
         
-        Quaternion _targetRotation =
-            Quaternion.LookRotation(_palceToStand.transform.forward, Vector3.up);
+        
+        Quaternion targetRotation =
+            Quaternion.LookRotation(transform.position - player.transform.position, Vector3.up);
 
-        _targetRotation.eulerAngles =
-            new Vector3(player.transform.rotation.x, _targetRotation.eulerAngles.y, player.transform.rotation.z);
+        targetRotation.eulerAngles =
+            new Vector3(player.transform.rotation.x, targetRotation.eulerAngles.y, player.transform.rotation.z);
 
-        while (Quaternion.Angle(player.transform.rotation, _targetRotation) > 10f)
+        
+
+        while (Quaternion.Angle(player.transform.rotation, targetRotation) > 10f)
         {
-            player.transform.rotation = Quaternion.Slerp(player.transform.rotation, _targetRotation, Time.deltaTime * 10f);
+            print(Quaternion.Angle(player.transform.rotation, targetRotation));
+            _objectToFollow.transform.rotation = Quaternion.Slerp(_objectToFollow.transform.rotation, targetRotation, Time.deltaTime * 10f);
             yield return new WaitForEndOfFrame();
         }
 
@@ -133,9 +143,8 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
 
         _paintingAnimator.Play(_paintingAnimationName);
         yield return new WaitForEndOfFrame();
-        print(_paintingAnimator.GetCurrentAnimatorStateInfo(0).length);
         yield return new WaitForSeconds(_paintingAnimator.GetCurrentAnimatorStateInfo(0).length);
-
+            
         while (_multiplierFrame != _minEmissionStrength)
         {
             print("Running");
@@ -155,7 +164,7 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
         proceduralArmPlacement.pause = false;
 
         interactWithObject.Cooldown = false;
-        movement.enabled = true;
+        movement.StopRemoteControlledMovement();
     }
 
 
