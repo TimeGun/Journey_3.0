@@ -24,6 +24,22 @@ public class EmotionController : MonoBehaviour
     {
         _colour = col;
     }
+    
+    public void SetTempColour(Color col, float tempDuration)
+    {
+        StartCoroutine(SetTempColourCoroutine(col, tempDuration));
+    }
+
+    IEnumerator SetTempColourCoroutine(Color col, float tempDuration)
+    {
+        Color pastColour = _colour;
+        
+        SetColour(col);
+        
+        yield return new WaitForSeconds(tempDuration);
+        
+        SetColour(pastColour);
+    }
 
     public void SetEmissionIntensity(float intensity)
     {
@@ -47,4 +63,7 @@ public class EmotionController : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
     }
+    
+    
+    
 }

@@ -39,6 +39,9 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
     [SerializeField] private GameObject _palceToStand;
     [SerializeField] private GameObject _objectToFollow;
 
+    [SerializeField] private string _gameObjectName;
+    [SerializeField] private string _methodName;
+
 
     // Start is called before the first frame update
     void Start()
@@ -123,6 +126,12 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
             }
         }
 
+        if (_gameObjectName != null)
+        {
+            GameObject.Find(_gameObjectName).SendMessage(_methodName);
+        }
+
+        
 
         while (_multiplierPlate != _minEmissionStrength)
         {
@@ -152,7 +161,7 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
             _frameMat.SetColor("_EmissiveColor", _emissionColour * _multiplierFrame);
             yield return new WaitForEndOfFrame();
         }
-
+        player.GetComponent<EmotionController>().SetTempColour(_emissionColour, 6f);
         while (_multiplierPlate != _maxEmissionStrength)
         {
             print("Running");
@@ -160,6 +169,8 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
             _plateMat.SetColor("_EmissiveColor", _emissionColour * _multiplierPlate);
             yield return new WaitForEndOfFrame();
         }
+        
+        
 
         proceduralArmPlacement.pause = false;
 
