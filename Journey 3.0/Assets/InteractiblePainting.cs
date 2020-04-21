@@ -39,8 +39,8 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
     [SerializeField] private GameObject _palceToStand;
     [SerializeField] private GameObject _objectToFollow;
 
-    [SerializeField] private string _gameObjectName;
-    [SerializeField] private string _methodName;
+    [SerializeField] private string _gameObjectName = "";
+    [SerializeField] private string _methodName = "";
 
 
     // Start is called before the first frame update
@@ -126,9 +126,9 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
             }
         }
 
-        if (_gameObjectName != null)
+        if (_gameObjectName != null || _gameObjectName != "")
         {
-            GameObject.Find(_gameObjectName).SendMessage(_methodName);
+            //GameObject.Find(_gameObjectName).SendMessage(_methodName);
         }
 
         

@@ -8,7 +8,7 @@ public class MenuController : MonoBehaviour
 {
     [SerializeField] private Animator _anim;
 
-    [SerializeField] private GameObject baseMenuFirstButton, baseMenuControlsButton, baseMenuSettingsButton, baseMenuLevelButton, levelMenuFirstButton, controlsMenuFirstButton, settingsFirstButton;
+    [SerializeField] private GameObject baseMenuFirstButton, baseMenuControlsButton, baseMenuGalleryButton, baseMenuSettingsButton, baseMenuLevelButton, levelMenuFirstButton, controlsMenuFirstButton, settingsFirstButton, galleryFirstButton;
 
     [SerializeField] private GameObject baseMenu, settingsMenu, controlsMenu;
 
@@ -120,6 +120,18 @@ public class MenuController : MonoBehaviour
     {
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(baseMenuLevelButton);
+    }
+    
+    public void SetGalleryBaseSelected()
+    {
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(baseMenuGalleryButton);
+    }
+    
+    public void SetDefaultGallerySelected()
+    {
+        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(galleryFirstButton);
     }
 
     public void LoadStartZone()
