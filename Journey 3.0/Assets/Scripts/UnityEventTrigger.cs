@@ -7,12 +7,19 @@ using UnityEngine.Events;
 public class UnityEventTrigger : MonoBehaviour
 {
     [SerializeField] public UnityEvent _unityEventToTrigger;
+
+    [SerializeField] private bool _destroySelf = false;
     
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
             _unityEventToTrigger.Invoke();
+
+            if (_destroySelf)
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }

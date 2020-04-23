@@ -1,18 +1,17 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Analytics;
 
 public class AnalyticsSendFrameRate : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
+    public void SendAvgFrameRate(){
+        //Send the event. Also get the result, so we can make sure it sent correctly
         
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        AnalyticsResult result = AnalyticsEvent.Custom("average_frameRate", new Dictionary<string, object>
+        {
+            { "fps_value", AverageFramesPerSecond.GetAverageFrameRate() }
+        });
+        Debug.Log(result);
     }
 }
