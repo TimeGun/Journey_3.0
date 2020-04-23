@@ -4,15 +4,10 @@ using UnityEngine;
 
 public class AverageFramesPerSecond : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public static float GetAverageFrameRate()
     {
-        
-    }
+        float avg = Time.frameCount / Time.time;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        return avg;
     }
 }
