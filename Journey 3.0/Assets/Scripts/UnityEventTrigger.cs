@@ -14,6 +14,7 @@ public class UnityEventTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            print("Event got triggered");
             _unityEventToTrigger.Invoke();
 
             if (_destroySelf)

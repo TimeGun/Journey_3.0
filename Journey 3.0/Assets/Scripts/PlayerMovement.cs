@@ -207,7 +207,7 @@ public class PlayerMovement : MonoBehaviour
             transform.position = _objectToFollow.transform.position;
             
             transform.rotation = _objectToFollow.transform.rotation;
-
+            
             SetRemoteAnimation();
         }
     }
@@ -222,6 +222,23 @@ public class PlayerMovement : MonoBehaviour
         float walkSpeed = Map(velocity, 0f, _speed, _minWalkSpeed, _maxWalkSpeed);
         
         _anim.SetFloat("walkSpeed", walkSpeed);
+
+        if (velocity > 0.1f)
+        {
+            float walkSoundPitch = Map(velocity, 0f, _speed, 0.6f, 1.35f);
+
+            _walkSource.pitch = walkSoundPitch;
+            
+            if (!_walkSource.isPlaying)
+            {
+                _walkSource.Play();
+            }
+        }else
+        {
+            _walkSource.Stop();
+        }
+
+        
     }
 
     public void StartRemoteControlledMovement(GameObject objToFollow)
@@ -403,7 +420,6 @@ public class PlayerMovement : MonoBehaviour
 
     public void DisableThis()
     {
-        _walkSource.Stop();
         _anim.SetFloat("velocity", 0f);
         frozen = true;
     }
