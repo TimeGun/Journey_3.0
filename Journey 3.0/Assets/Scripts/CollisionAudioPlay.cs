@@ -19,6 +19,7 @@ public class CollisionAudioPlay : MonoBehaviour
         if (other.gameObject.layer == 8)
         {
             _source.PlayOneShot(_clip);
+            GetComponent<Rigidbody>().isKinematic = true;
             Destroy(this);
         }
     }
