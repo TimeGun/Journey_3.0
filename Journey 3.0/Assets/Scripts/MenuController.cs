@@ -10,7 +10,7 @@ public class MenuController : MonoBehaviour
 
     [SerializeField] private GameObject baseMenuFirstButton, baseMenuControlsButton, baseMenuGalleryButton, baseMenuSettingsButton, baseMenuLevelButton, levelMenuFirstButton, controlsMenuFirstButton, settingsFirstButton, galleryFirstButton;
 
-    [SerializeField] private GameObject baseMenu, settingsMenu, controlsMenu;
+    [SerializeField] private GameObject baseMenu, settingsMenu, controlsMenu, galleryMenu, levelSelectMenu;
 
     public static MenuController instance;
     
@@ -68,6 +68,8 @@ public class MenuController : MonoBehaviour
         baseMenu.SetActive(false);
         settingsMenu.SetActive(false);
         controlsMenu.SetActive(false);
+        galleryMenu.SetActive(false);
+        levelSelectMenu.SetActive(false);
         API.GlobalReferences.PlayerRef.GetComponent<PlayerMovement>().EnableThis();
         AudioListener.pause = false;
         inMenu = false;

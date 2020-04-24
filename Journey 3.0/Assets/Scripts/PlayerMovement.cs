@@ -420,6 +420,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void DisableThis()
     {
+        _walkSource.Stop();
         _anim.SetFloat("velocity", 0f);
         frozen = true;
     }
