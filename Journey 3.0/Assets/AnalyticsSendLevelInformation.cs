@@ -5,22 +5,31 @@ using UnityEngine.Analytics;
 
 public class AnalyticsSendLevelInformation : MonoBehaviour
 {
-    [SerializeField] private string eventName;
+    [SerializeField] private bool _startLevel;
+    [SerializeField] private bool _endLevel;
 
-    [SerializeField] private string parameterName;
 
-    [SerializeField] private string levelFinishedValue;
-    [SerializeField] private string levelStartedValue;
+    [SerializeField] private string parameterName = "level_index";
+
+    [SerializeField] private int levelStartedValue;
+    [SerializeField] private int levelFinishedValue;
     
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+    public void SendLevelAnalytics(){
+        if (_startLevel)
+        {
+            AnalyticsResult levelStartResult = AnalyticsEvent.Custom("level_start", new Dictionary<string, object>()
+            {
+                {parameterName, levelStartedValue}
+            });
+            Debug.Log(levelStartResult);
+        }
+        if (_endLevel)
+        {
+            AnalyticsResult levelEndResult = AnalyticsEvent.Custom("level_complete", new Dictionary<string, object>()
+            {
+                {parameterName, levelFinishedValue}
+            });
+            Debug.Log(levelEndResult);
+        }
     }
 }
