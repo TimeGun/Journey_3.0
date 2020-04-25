@@ -42,20 +42,23 @@ public class ChangeDOF : MonoBehaviour
         if (switchDOF)
         {
 
-            StartCoroutine(SwitchDepthOfField());
+            //StartCoroutine(SwitchDepthOfField());
 
         }
         //Debug.Log("DOF: " + DOF.active);
     }
 
-    public void StartSwitchDepthOfField()
+    public void StartSwitchDepthOfField(string newFloatString)
     {
-        StartCoroutine(SwitchDepthOfField());
+        
+        ArrayList noiseArrayList = new ArrayList();
+        noiseArrayList = ParseSomething.ParseFloats(newFloatString);
+        StartCoroutine(SwitchDepthOfField((float)noiseArrayList[0] , (float)noiseArrayList[1], (float)noiseArrayList[2], (float)noiseArrayList[3]));
     }
     
-    public void StartRevertSwitchDepthOfField()
+    public void StartRevertSwitchDepthOfField(float farFocusEnd)
     {
-        StartCoroutine(RevertDepthOfField());
+        StartCoroutine(RevertDepthOfField(farFocusEnd));
     }
 
     public void ActivateDepthOfField()
@@ -81,7 +84,10 @@ public class ChangeDOF : MonoBehaviour
     {
         DOF.active = false;
     }
-    IEnumerator SwitchDepthOfField()
+    
+    
+    
+    IEnumerator SwitchDepthOfField(float nearBlurStart, float nearBlurEnd, float farFocusStart, float farFocusEnd)
     {
         while ( DOF.farFocusEnd.value < farFocusEnd - 0.05 || DOF.farFocusEnd.value > farFocusEnd + 0.05)
         {
@@ -95,7 +101,7 @@ public class ChangeDOF : MonoBehaviour
         
     }
 
-    IEnumerator RevertDepthOfField()
+    IEnumerator RevertDepthOfField(float farFocusEnd)
     {
         while (DOF.farFocusEnd.value < initialFarFocusEnd - 0.05 || DOF.farFocusEnd.value > farFocusEnd + 0.05 )
         {
