@@ -87,22 +87,24 @@ public class CameraNoiseModifier : MonoBehaviour
     }
     
     
-    public static class ParseSomething
-    {
-        
-        public static ArrayList ParseFloats(string floats)
-        {
-            var strings = floats.Split(',');
-            ArrayList floatArray = new ArrayList();
-            
-            for (var i = 0; i < strings.Length; i++)
-            {
-//                Debug.Log(i);
-                float tempfloat = float.Parse(strings[i]);
-                floatArray.Add(tempfloat);
-            }
-            return floatArray;
-        }
-    }
     
+    
+}
+
+public static class ParseSomething
+{
+        
+    public static ArrayList ParseFloats(string floats)
+    {
+        var strings = floats.Split(',');
+        ArrayList floatArray = new ArrayList();
+            
+        for (var i = 0; i < strings.Length; i++)
+        {
+//                Debug.Log(i);
+            float tempfloat = float.Parse(strings[i]);
+            floatArray.Add(tempfloat);
+        }
+        return floatArray;
+    }
 }
