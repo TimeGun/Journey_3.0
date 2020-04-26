@@ -61,7 +61,6 @@ public class PlayTimeline : MonoBehaviour
         vcam.Priority = targetPriority;
         playableDirector.Play();
         CinematicPlayerMoment.instance.FreezePlayer(timeBeforeFreeze, playerFreezeTime, blackBarsEnabled);
-        Debug.Log("PLayerfreezetime: " + playerFreezeTime);
         yield return new WaitForSeconds((float)_timelineLength);
         vcam.Priority = _startPriority;
     }
