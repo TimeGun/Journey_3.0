@@ -7,11 +7,14 @@ public class AnalyticsSendFrameRate : MonoBehaviour
 {
     public void SendAvgFrameRate(){
         //Send the event. Also get the result, so we can make sure it sent correctly
-        
-        AnalyticsResult result = AnalyticsEvent.Custom("average_frameRate", new Dictionary<string, object>
+
+        if (!Application.isEditor)
         {
-            { "fps_value", AverageFramesPerSecond.GetAverageFrameRate() }
-        });
-        Debug.Log(result);
+            AnalyticsResult result = AnalyticsEvent.Custom("average_frameRate", new Dictionary<string, object>
+            {
+                { "fps_value", AverageFramesPerSecond.GetAverageFrameRate() }
+            });
+            Debug.Log(result);
+        }
     }
 }

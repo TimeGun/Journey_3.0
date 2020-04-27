@@ -15,21 +15,24 @@ public class AnalyticsSendLevelInformation : MonoBehaviour
     [SerializeField] private int levelFinishedValue;
     
     public void SendLevelAnalytics(){
-        if (_startLevel)
+        if (!Application.isEditor)
         {
-            AnalyticsResult levelStartResult = AnalyticsEvent.Custom("level_start", new Dictionary<string, object>()
+            if (_startLevel)
             {
-                {parameterName, levelStartedValue}
-            });
-            Debug.Log(levelStartResult);
-        }
-        if (_endLevel)
-        {
-            AnalyticsResult levelEndResult = AnalyticsEvent.Custom("level_complete", new Dictionary<string, object>()
+                AnalyticsResult levelStartResult = AnalyticsEvent.Custom("level_start", new Dictionary<string, object>()
+                {
+                    {parameterName, levelStartedValue}
+                });
+                Debug.Log(levelStartResult);
+            }
+            if (_endLevel)
             {
-                {parameterName, levelFinishedValue}
-            });
-            Debug.Log(levelEndResult);
+                AnalyticsResult levelEndResult = AnalyticsEvent.Custom("level_complete", new Dictionary<string, object>()
+                {
+                    {parameterName, levelFinishedValue}
+                });
+                Debug.Log(levelEndResult);
+            }
         }
     }
 }
