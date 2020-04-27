@@ -209,7 +209,6 @@ public class SceneManagerScript : MonoBehaviour
         yield return new WaitUntil(()=>!_brain.IsBlending);
         FadeToBlack.instance.SetBlack(false);
         MenuController.instance.OpenPauseMenu();
-        AmbienceManager.FadeInMasterSound();
     }
 
     private void SetDayOrNight(int data)
@@ -252,6 +251,7 @@ public class SceneManagerScript : MonoBehaviour
         }
 
         API.GlobalReferences.PlayerRef.GetComponent<ObjectDetection>().checkForObjects = true;
+        AmbienceManager.FadeInMasterSound();
     }
 
     private void AssignMenuCamera(int data)
