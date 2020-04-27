@@ -15,7 +15,7 @@ public class PushObject : MonoBehaviour, IInteractible
 
     private float _distanceToPushingObject;
 
-    [SerializeField] private float _minDistance = 1.5f;
+    [SerializeField] private float _minDistance = 1.47f;
 
     private InteractWithObject _interactWithObject;
 
@@ -29,10 +29,8 @@ public class PushObject : MonoBehaviour, IInteractible
 
     private AudioSource _source;
 
-    [SerializeField] private float _positionLerpSpeed = 8f;
-
-    [SerializeField] [Range(0, 1)] private float _velocityBuffer = 0.15f;
-
+    [SerializeField] private float _positionLerpSpeed = 10f;
+    
     [SerializeField] PushCollisionDetection _pushCollisionDetection;
 
 
