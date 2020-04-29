@@ -12,6 +12,7 @@ public class EndBetaScript : MonoBehaviour
     public void EnableBateScreen()
     {
         _menuController.enabled = false;
+        GameObject.Find("Player").SetActive(false);
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(steam);
     }
