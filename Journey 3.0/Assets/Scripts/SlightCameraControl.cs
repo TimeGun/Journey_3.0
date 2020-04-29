@@ -59,6 +59,7 @@ public class SlightCameraControl : MonoBehaviour
 
     IEnumerator UpdateCameraOffset()
     {
+        yield return new WaitForSeconds(1f);
         while (true)
         {
             if(_cinemachineBrain.IsBlending || _currentVirtualCamera == null)
