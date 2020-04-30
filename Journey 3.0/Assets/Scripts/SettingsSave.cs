@@ -42,11 +42,6 @@ public class SettingsSave : MonoBehaviour
         LoadSettings();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-    }
-
     public void SetMasterVolume(float volume)
     {
         masterMix.SetFloat("MasterVolume", volume);
@@ -129,7 +124,9 @@ public class SettingsSave : MonoBehaviour
         {
             vsynToggle.isOn = true;
         }
-
+        
+        SetVSync(vsynToggle.isOn);
+        
         _liftGammaGain.gain.value = new Vector4(brightness, brightness,brightness, brightness);
 
         brightnessSlider.value = brightness;
