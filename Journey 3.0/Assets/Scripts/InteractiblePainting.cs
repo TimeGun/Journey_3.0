@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -41,6 +42,8 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
 
     [SerializeField] private string _gameObjectName = "";
     [SerializeField] private string _methodName = "";
+
+    [SerializeField] private CinemachineVirtualCamera _vPaintingCam;
 
 
     // Start is called before the first frame update
@@ -131,8 +134,8 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
             //GameObject.Find(_gameObjectName).SendMessage(_methodName);
         }
 
-        
 
+        _vPaintingCam.Priority = 100;
         while (_multiplierPlate != _minEmissionStrength)
         {
             print("Running");
@@ -149,7 +152,7 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
             yield return new WaitForEndOfFrame();
         }
 
-
+        
         _paintingAnimator.Play(_paintingAnimationName);
         yield return new WaitForEndOfFrame();
         yield return new WaitForSeconds(_paintingAnimator.GetCurrentAnimatorStateInfo(0).length);
@@ -169,7 +172,7 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
             _plateMat.SetColor("_EmissiveColor", _emissionColour * _multiplierPlate);
             yield return new WaitForEndOfFrame();
         }
-        
+        _vPaintingCam.Priority = 0;
         
 
         proceduralArmPlacement.pause = false;
