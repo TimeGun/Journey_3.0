@@ -150,6 +150,7 @@ public class PushObject : MonoBehaviour, IInteractible
     {
         _pushing = false;
         _movement.Pushing = false;
+        
 
         _movement._pushCollisionDetection = null;
 

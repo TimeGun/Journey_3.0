@@ -200,6 +200,7 @@ public class InteractWithObject : MonoBehaviour
                 {
                     cooldown = true;
                     _interacting = true;
+                    
                     _movement.ControllerVeclocity = Vector3.zero;
                     _movement.enabled = false;
 
@@ -307,7 +308,6 @@ public class InteractWithObject : MonoBehaviour
         {
             StopCoroutine(_coroutine);
         }
-
         _coroutine = null;
     }
 
@@ -553,12 +553,12 @@ public class InteractWithObject : MonoBehaviour
         _targetRotation.eulerAngles =
             new Vector3(transform.rotation.x, _targetRotation.eulerAngles.y, transform.rotation.z);
 
-        while (Quaternion.Angle(transform.rotation, _targetRotation) > 10f)
+        /*while (Quaternion.Angle(transform.rotation, _targetRotation) > 10f)
         {
             transform.rotation = Quaternion.Slerp(transform.rotation, _targetRotation, Time.deltaTime * _turnSpeed);
             yield return new WaitForEndOfFrame();
-        }
-
+        }*/
+        
         transform.rotation = _targetRotation;
 
         _interactingObj.StartInteraction(handPosition);
@@ -582,18 +582,6 @@ public class InteractWithObject : MonoBehaviour
 
     IEnumerator UseGrowthRune(GameObject rune)
     {
-        /*Quaternion _targetRotation =
-            Quaternion.LookRotation(rune.transform.position - transform.position, Vector3.up);
-
-        _targetRotation.eulerAngles =
-            new Vector3(transform.rotation.x, _targetRotation.eulerAngles.y, transform.rotation.z);
-
-        while (Quaternion.Angle(transform.rotation, _targetRotation) > 10f)
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, _targetRotation, Time.deltaTime * _turnSpeed);
-            yield return new WaitForEndOfFrame();
-        }*/
-        
         //start the growth rune interaction with any this transform
         print("Im Here atm");
         rune.GetComponent<GrowObject>().StartInteraction(transform);
