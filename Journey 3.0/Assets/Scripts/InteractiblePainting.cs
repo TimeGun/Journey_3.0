@@ -1,7 +1,5 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using Cinemachine;
-using Unity.Mathematics;
 using UnityEngine;
 
 public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
@@ -44,7 +42,6 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
     [SerializeField] private string _methodName = "";
 
     [SerializeField] private CinemachineVirtualCamera _vPaintingCam;
-
 
     // Start is called before the first frame update
     void Start()
