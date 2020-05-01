@@ -38,7 +38,10 @@ public class MenuController : MonoBehaviour
         {
             if (inMenu)
             {
-                LeaveMenu();
+                if (gameStarted)
+                {
+                    LeaveMenu();
+                }
             }
             else
             {
