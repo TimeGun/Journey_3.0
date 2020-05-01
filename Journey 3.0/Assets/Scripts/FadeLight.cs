@@ -2,12 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class FadeLight : MonoBehaviour
 {
     public InteractWithObject _interactWithObject;
     
-    public Material _material;
+    public Material _runeMaterial;
+    public Material _plateMaterial;
     public Light _light;
 
     private Color startColor;
@@ -19,9 +21,32 @@ public class FadeLight : MonoBehaviour
     
     private float intensityMultiplier = 1f;
 
+    [SerializeField] private float _maxEmissionStrength = 10f;
+    [SerializeField] private float _minEmissionStrength = 0f;
+    [SerializeField] private float _minRuneEmissionStrength = 0f;
+
+    [SerializeField] private ObjectsOnAltarPlate _objectsOnAltarPlate;
+
+    [SerializeField] private Color _emissionColour;
+
+    [SerializeField] private float _lerpSpeed = 5f;
+
+    private float _multiplierPlate;
+
+    [Range(0.1f, 10f)] [SerializeField] private float _pingPongSpeed = 1f;
+    [Range(0.1f, 10f)] [SerializeField] private float _maxPingPongValue = 1f;
+
+    [SerializeField] private Color redFire;
+    [SerializeField] private Color blueFire;
+
+    [SerializeField] private Light[] pitLights;
+    
+
+    [SerializeField] private VisualEffect[] pits;
+
     private void Start()
     {
-        startColor = new Color(0, 1f, 1f, 1f);
+        startColor = _emissionColour;
         startIntensity = _light.intensity;
         _interactWithObject = API.GlobalReferences.PlayerRef.GetComponent<InteractWithObject>();
     }
@@ -30,19 +55,54 @@ public class FadeLight : MonoBehaviour
     {
         brightColor = startColor * multiplier;
         
-        _material.SetColor("_EmissiveColor", brightColor);
+        _runeMaterial.SetColor("_EmissiveColor", brightColor);
         _light.intensity = startIntensity * intensityMultiplier;
         
         
         if (_interactWithObject.NearRune)
         {
-            multiplier = Mathf.Lerp(multiplier, 4f, Time.deltaTime * 2f);
-            intensityMultiplier = Mathf.Lerp(intensityMultiplier, 5f, Time.deltaTime * 2f);
+            multiplier = Mathf.Lerp(multiplier, _maxEmissionStrength, Time.deltaTime * _lerpSpeed);
+            intensityMultiplier = Mathf.Lerp(intensityMultiplier, 5f, Time.deltaTime * _lerpSpeed);
         }
         else
         {
-            multiplier = Mathf.Lerp(multiplier, 0.5f, Time.deltaTime * 2f);
-            intensityMultiplier = Mathf.Lerp(intensityMultiplier, 1f, Time.deltaTime * 2f);
+            multiplier = Mathf.Lerp(multiplier, _minRuneEmissionStrength, Time.deltaTime * _lerpSpeed);
+            intensityMultiplier = Mathf.Lerp(intensityMultiplier, 1f, Time.deltaTime * _lerpSpeed);
+        }
+
+
+        if (_objectsOnAltarPlate.ItemsOnAltar.Count > 0)
+        {
+            if (_multiplierPlate != _maxEmissionStrength)
+            {
+                print("Running");
+                _multiplierPlate = Mathf.MoveTowards(_multiplierPlate, _maxEmissionStrength, Time.deltaTime * _lerpSpeed);
+                _plateMaterial.SetColor("_EmissiveColor", _emissionColour * _multiplierPlate);
+            }
+            _minRuneEmissionStrength = Mathf.PingPong(Time.time * _pingPongSpeed, _maxPingPongValue);
+            pits[0].SetBool("ColourSwitch", true);
+            pits[1].SetBool("ColourSwitch", true);
+            pitLights[0].color = Color.Lerp(pitLights[0].color, blueFire, Time.deltaTime * _lerpSpeed);
+            pitLights[1].color = Color.Lerp(pitLights[1].color, blueFire, Time.deltaTime * _lerpSpeed);
+            
+            print(_minRuneEmissionStrength);
+        }
+        else
+        {
+            if (_multiplierPlate != _minEmissionStrength)
+            {
+                print("Running");
+                _multiplierPlate = Mathf.MoveTowards(_multiplierPlate, _minEmissionStrength, Time.deltaTime * _lerpSpeed * 3f);
+                _plateMaterial.SetColor("_EmissiveColor", _emissionColour * _multiplierPlate);
+                
+            }
+            pits[0].SetBool("ColourSwitch", false);
+            pits[1].SetBool("ColourSwitch", false);
+            pitLights[0].color = Color.Lerp(pitLights[0].color, redFire, Time.deltaTime * _lerpSpeed);
+            pitLights[1].color = Color.Lerp(pitLights[1].color, redFire, Time.deltaTime * _lerpSpeed);
+            
+            
+            _minRuneEmissionStrength = Mathf.Lerp(_minRuneEmissionStrength, 0, Time.deltaTime * _lerpSpeed);
         }
     }
 }

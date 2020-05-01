@@ -39,7 +39,10 @@ public class GrowObject : MonoBehaviour, IInteractible, IRune
     
     [SerializeField] private float angleAdjustment1 = 90f;
     [SerializeField] private float angleAdjustment2 = -90f;
-    
+
+    [SerializeField] private Light plateLight;
+    [SerializeField] private float lightIntensity;
+
     void Start()
     {
         _multiplierRune = _maxEmissionStrength;
@@ -167,14 +170,12 @@ public class GrowObject : MonoBehaviour, IInteractible, IRune
             yield return new WaitForEndOfFrame();
         }
 
-        while (_multiplierPlate != _maxEmissionStrength)
+
+        while (plateLight.intensity < lightIntensity)
         {
-            print("Running");
-            _multiplierPlate = Mathf.MoveTowards(_multiplierPlate, _maxEmissionStrength, Time.deltaTime * _lerpSpeed);
-            _plateMat.SetColor("_EmissiveColor", _emissionColour * _multiplierPlate);
+            plateLight.intensity = Mathf.Lerp(plateLight.intensity, lightIntensity, _lerpSpeed * Time.deltaTime * 100f);
             yield return new WaitForEndOfFrame();
         }
-        
         
 
         for (int i = 0; i < _objectsOnAltarPlate.ItemsOnAltar.Count; i++)
@@ -189,13 +190,7 @@ public class GrowObject : MonoBehaviour, IInteractible, IRune
         
         player.GetComponent<EmotionController>().SetTempColour(_emissionColour, 6f);
 
-        while (_multiplierPlate != _minEmissionStrength)
-        {
-            print("Running");
-            _multiplierPlate = Mathf.MoveTowards(_multiplierPlate, _minEmissionStrength, Time.deltaTime * _lerpSpeed);
-            _plateMat.SetColor("_EmissiveColor", _emissionColour * _multiplierPlate);
-            yield return new WaitForEndOfFrame();
-        }
+        
         
         while (_multiplierRune != _maxEmissionStrength)
         {
@@ -205,7 +200,12 @@ public class GrowObject : MonoBehaviour, IInteractible, IRune
             yield return new WaitForEndOfFrame();
         }
         
-
+        while (plateLight.intensity > 0)
+        {
+            plateLight.intensity = Mathf.Lerp(plateLight.intensity, 0, _lerpSpeed * Time.deltaTime * 100f);
+            yield return new WaitForEndOfFrame();
+        }
+        
         firePits[0].SetBool("RuneUsed", false);
         firePits[1].SetBool("RuneUsed", false);
         
