@@ -13,8 +13,10 @@ public class EmotionController : MonoBehaviour
     [SerializeField] private float _emissionIntensityLerpSpeed;
     [SerializeField] private float _colourLerpSpeed;
 
+    private Color _oldColour;
 
-    // Start is called before the first frame update
+    private Coroutine _coroutine = null;
+
     void Start()
     {
         StartCoroutine(AdjustEmotionSettings());
@@ -22,23 +24,34 @@ public class EmotionController : MonoBehaviour
 
     public void SetColour(Color col)
     {
+        print("New Colour set to: " + col);
         _colour = col;
     }
     
     public void SetTempColour(Color col, float tempDuration)
     {
-        StartCoroutine(SetTempColourCoroutine(col, tempDuration));
+        if (_coroutine == null)
+        {
+            _oldColour = _colour;
+            print("Colour Set to: " + col);
+            _coroutine = StartCoroutine(SetTempColourCoroutine(col, tempDuration));
+        }
+        else
+        {
+            StopCoroutine(_coroutine);
+            print("Colour Set to: " + col);
+            _coroutine = StartCoroutine(SetTempColourCoroutine(col, tempDuration));
+        }
     }
 
     IEnumerator SetTempColourCoroutine(Color col, float tempDuration)
     {
-        Color pastColour = _colour;
-        
         SetColour(col);
         
         yield return new WaitForSeconds(tempDuration);
         
-        SetColour(pastColour);
+        SetColour(_oldColour);
+        _coroutine = null;
     }
 
     public void SetEmissionIntensity(float intensity)

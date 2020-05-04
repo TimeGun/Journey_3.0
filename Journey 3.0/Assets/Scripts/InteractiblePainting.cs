@@ -162,6 +162,7 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
             yield return new WaitForEndOfFrame();
         }
         player.GetComponent<EmotionController>().SetTempColour(_emissionColour, 6f);
+        
         while (_multiplierPlate != _maxEmissionStrength)
         {
             print("Running");
