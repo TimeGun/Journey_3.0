@@ -66,11 +66,15 @@ public class LeftArmIK : MonoBehaviour
         _inUse = true;
     }
 
-    public void SetProceduralTargetAndHint(Vector3 position, Quaternion handRotation, float lerpPercentage)
+    public void SetProceduralTargetAndHint(Vector3 position, Vector3 normal, float lerpPercentage)
     {
         inUseLerpPercentage = lerpPercentage;
         target.position = position;
-        target.localRotation = handRotation;
+        target.rotation =
+            Quaternion.FromToRotation(Vector3.up,
+                normal) * Quaternion.LookRotation(normal, Vector3.up)
+            * Quaternion.AngleAxis(-90f, Vector3.up);
+        // * Quaternion.AngleAxis(90, _ikConstraint.data.tip.up);
     }
 
     public void StopIK()

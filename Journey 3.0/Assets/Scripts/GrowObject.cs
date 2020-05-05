@@ -143,7 +143,7 @@ public class GrowObject : MonoBehaviour, IInteractible, IRune
                 Quaternion handRot = AdjustHandRotation(leftRaycastHit.normal);
 
                 LeftArmIK.Instance.SetProceduralTargetAndHint(
-                    leftRaycastHit.point + (leftRaycastHit.normal * _wallSeperationBuffer), handRot, 1f);
+                    leftRaycastHit.point + (leftRaycastHit.normal * _wallSeperationBuffer), leftRaycastHit.normal, 1f);
             }
         }
         
