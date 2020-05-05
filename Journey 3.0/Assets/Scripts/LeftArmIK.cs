@@ -74,7 +74,6 @@ public class LeftArmIK : MonoBehaviour
             Quaternion.FromToRotation(Vector3.up,
                 normal) * Quaternion.LookRotation(normal, Vector3.up)
             * Quaternion.AngleAxis(-90f, Vector3.up);
-        // * Quaternion.AngleAxis(90, _ikConstraint.data.tip.up);
     }
 
     public void StopIK()
