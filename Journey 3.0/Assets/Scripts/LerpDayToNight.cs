@@ -20,6 +20,13 @@ public class LerpDayToNight : MonoBehaviour
 
     [SerializeField] private float debugLerpTime;
 
+    [SerializeField] private GameObject _directionalLight;
+
+    [SerializeField] private Quaternion _lightRotation;
+    [SerializeField] private Color _lightColor;
+
+    private Light _dirLight;
+
     public bool debug;
 
     // Start is called before the first frame update
@@ -40,6 +47,8 @@ public class LerpDayToNight : MonoBehaviour
         _changingSkybox.top.value = _daySkybox.top.value;
 
         instance = this;
+
+        _dirLight = _directionalLight.GetComponent<Light>();
 
         if (debug)
         {
@@ -84,8 +93,10 @@ public class LerpDayToNight : MonoBehaviour
                 Time.deltaTime / timeLeft);
             _changingSkybox.top.value =
                 Color.Lerp(_changingSkybox.top.value, _nightSkybox.top.value, Time.deltaTime / timeLeft);
-
-
+            
+            _directionalLight.transform.rotation = Quaternion.Slerp(_directionalLight.transform.rotation, _lightRotation, Time.deltaTime / timeLeft);
+            _dirLight.color = Color.Lerp(_dirLight.color, _lightColor, Time.deltaTime / timeLeft);
+            
             timeLeft -= Time.deltaTime;
 
             yield return new WaitForEndOfFrame();
