@@ -12,9 +12,9 @@ public class LerpDayToNight : MonoBehaviour
     [SerializeField] private VolumeProfile _nightTimeSkyboxProfile;
     [SerializeField] private VolumeProfile _changingSkyboxProfile;
 
-    [SerializeField] private GradientSky _daySkybox;
-    [SerializeField] private GradientSky _nightSkybox;
-    [SerializeField] private GradientSky _changingSkybox;
+    private GradientSky _daySkybox;
+    private GradientSky _nightSkybox;
+    private GradientSky _changingSkybox;
     
     public static LerpDayToNight instance;
 
