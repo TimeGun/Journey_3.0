@@ -9,7 +9,8 @@ using UnityEngine.Rendering.UI;
 
 public class CameraNoiseModifier : MonoBehaviour
 {
-    public GameObject TargetCamera;
+    
+    [Tooltip("Amplitude, Frequency, strongShakeLength, lightShakeLength")]public GameObject TargetCamera;
     private CinemachineVirtualCamera vcam;
     private float noiseAmp;
     private float noiseFreq;
@@ -21,7 +22,7 @@ public class CameraNoiseModifier : MonoBehaviour
     //public float testAmp;
     //public float testFreq;
 
-    public bool testBool;
+    private bool testBool;
 
     private bool coroutineStarted;
     
