@@ -119,7 +119,7 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
                 print("set left arm");
                 LeftArmIK.Instance.TempUse = true;
 
-                Quaternion handRot = AdjustHandRotation(leftRaycastHit.normal);
+                Quaternion handRot = AdjustHandRotation(leftRaycastHit.normal, player);
 
                 LeftArmIK.Instance.SetProceduralTargetAndHint(
                     leftRaycastHit.point + (leftRaycastHit.normal * _wallSeperationBuffer), handRot, 1f);
@@ -199,14 +199,14 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
     {
         return gameObject;
     }
-    
-    
-    Quaternion AdjustHandRotation(Vector3 wallNormal)
+
+
+    Quaternion AdjustHandRotation(Vector3 wallNormal, Transform player)
     {
         Quaternion handRot = Quaternion.Inverse(Quaternion.LookRotation(wallNormal));
         
-        handRot *= Quaternion.AngleAxis(angleAdjustment1, Vector3.right);
-        handRot *= Quaternion.AngleAxis(angleAdjustment2, Vector3.up);
+        handRot *= Quaternion.AngleAxis(angleAdjustment1, player.right);
+        handRot *= Quaternion.AngleAxis(angleAdjustment2, player.up);
 
         return handRot;
     }
