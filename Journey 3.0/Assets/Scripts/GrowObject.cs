@@ -153,8 +153,6 @@ public class GrowObject : MonoBehaviour, IInteractible, IRune
         
         
         
-        
-        
         _fadeLight.enabled = false;
 
 

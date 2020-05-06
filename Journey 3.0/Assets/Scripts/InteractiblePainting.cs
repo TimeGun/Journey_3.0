@@ -43,6 +43,8 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
 
     [SerializeField] private CinemachineVirtualCamera _vPaintingCam;
 
+    [SerializeField] private int paintingIndex;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -56,6 +58,9 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
 
     IEnumerator PlayPainting(Transform player)
     {
+        
+        GallerySaveSystem.FoundPainting(paintingIndex);
+        
         PlayerMovement movement = player.GetComponent<PlayerMovement>();
         InteractWithObject interactWithObject = player.GetComponent<InteractWithObject>();
 

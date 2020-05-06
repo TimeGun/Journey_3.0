@@ -85,7 +85,7 @@ public class FadeLight : MonoBehaviour
             pitLights[0].color = Color.Lerp(pitLights[0].color, blueFire, Time.deltaTime * _lerpSpeed);
             pitLights[1].color = Color.Lerp(pitLights[1].color, blueFire, Time.deltaTime * _lerpSpeed);
             
-            print(_minRuneEmissionStrength);
+            //print(_minRuneEmissionStrength);
         }
         else
         {
