@@ -107,7 +107,9 @@ public class PlayerMovement : MonoBehaviour
 
     private bool _remoteControl;
     private GameObject _objectToFollow;
-
+    
+    
+    bool ccSwitch;
 
     private Vector3 lastPos;
 
@@ -137,11 +139,21 @@ public class PlayerMovement : MonoBehaviour
 
         if (carryingObject)
         {
-            _controller.radius = _originalRange * 1.15f;
+            if (ccSwitch == true)
+            {
+                _controller.radius = _originalRange * 1.15f;
+                ccSwitch = false;
+            }
+
         }
         else
         {
-            _controller.radius = _originalRange;
+            if (ccSwitch == false)
+            {
+                print("Switched back");
+                _controller.radius = _originalRange;
+                ccSwitch = true;
+            }
         }
 
         if (!_remoteControl)

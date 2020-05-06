@@ -33,6 +33,8 @@ public class PushObject : MonoBehaviour, IInteractible
     
     [SerializeField] PushCollisionDetection _pushCollisionDetection;
 
+    private float oldRadius;
+
 
     public float _audioDistance = 0.02f;
 
@@ -113,8 +115,13 @@ public class PushObject : MonoBehaviour, IInteractible
         gameObject.layer = 18;
         _pushing = true;
         _player = parent.root.gameObject;
+        CharacterController cc =_player.GetComponent<CharacterController>();
 
+        oldRadius = cc.radius;
 
+        cc.radius = oldRadius * 0.35f;
+        
+        
         SetUpPushing();
     }
 
@@ -150,7 +157,9 @@ public class PushObject : MonoBehaviour, IInteractible
     {
         _pushing = false;
         _movement.Pushing = false;
-        
+        print("Push Finished");
+        CharacterController cc =_player.GetComponent<CharacterController>();
+        cc.radius = oldRadius;
 
         _movement._pushCollisionDetection = null;
 
