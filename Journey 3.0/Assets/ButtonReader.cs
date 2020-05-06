@@ -25,13 +25,13 @@ public class ButtonReader : MonoBehaviour, ISelectHandler, IPointerEnterHandler,
     // When selected.
     public void OnSelect(BaseEventData eventData)
     {
-        print("Play Animation on Select");
+        
     }
 
     //When un-selected
     public void OnDeselect(BaseEventData eventData)
     {
-        //To do: turn off highlighted buttons
+        //turn off highlighted buttons
         GetComponent<Selectable>().OnPointerExit(null);
     }
 }
