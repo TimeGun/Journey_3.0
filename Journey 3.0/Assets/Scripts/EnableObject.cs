@@ -21,7 +21,7 @@ public class EnableObject : MonoBehaviour
         {
             Target.gameObject.SetActive(true);
             Target.GetComponent<DetectPlayer>().enabled = false;
-            Debug.Log("player oi");
+            //Debug.Log("player oi");
         }
         
        

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class GalleryScroller : MonoBehaviour
 {
@@ -10,24 +11,32 @@ public class GalleryScroller : MonoBehaviour
     
     [SerializeField] private UIPage[] _pages;
 
+    [SerializeField] private Button _upButton;
+    [SerializeField] private Button _downButton;
+
     public void ScrollUp()
     {
         if (pageNumber == 1)
         {
+            //Set Page 0 as active
             _pages[0].gameObject.SetActive(true);
             _pages[1].gameObject.SetActive(false);
             _pages[2].gameObject.SetActive(false);
             
-            //SetDefaultEventSystem(_pages[0].defaultSelect);
             pageNumber = 0;
+            _upButton.interactable = false;
+            EventSystem.current.SetSelectedGameObject(_downButton.gameObject);
         }else if (pageNumber == 2)
         {
+            //Set Page 1 as active
             _pages[0].gameObject.SetActive(false);
             _pages[1].gameObject.SetActive(true);
             _pages[2].gameObject.SetActive(false);
             
-            //SetDefaultEventSystem(_pages[1].defaultSelect);
             pageNumber = 1;
+            
+            //Enable Down button
+            _downButton.interactable = true;
         }
     }
     
@@ -35,26 +44,48 @@ public class GalleryScroller : MonoBehaviour
     {
         if (pageNumber == 0)
         {
+            //Set Page 1 as active
             _pages[0].gameObject.SetActive(false);
             _pages[1].gameObject.SetActive(true);
             _pages[2].gameObject.SetActive(false);
             
-            //SetDefaultEventSystem(_pages[1].defaultSelect);
             pageNumber = 1;
+            
+            //Enable Up button
+            _upButton.interactable = true;
         }else if(pageNumber == 1)
         {
+            //Set Page 2 as active
             _pages[0].gameObject.SetActive(false);
             _pages[1].gameObject.SetActive(false);
             _pages[2].gameObject.SetActive(true);
             
-            //SetDefaultEventSystem(_pages[2].defaultSelect);
             pageNumber = 2;
+            
+            //Disable down button since you are at the bottom of the gallery
+            _downButton.interactable = false;
+            EventSystem.current.SetSelectedGameObject(_upButton.gameObject);
         }
     }
 
     void SetDefaultEventSystem(GameObject obj)
     {
+        //Sets the default ui element as selected on the page
+        //not needed at the moment but might be useful later
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(obj);
+    }
+
+    private void OnDisable()
+    {
+        //Set Page one as active
+        _pages[0].gameObject.SetActive(true);
+        _pages[1].gameObject.SetActive(false);
+        _pages[2].gameObject.SetActive(false);
+        
+        
+        //Re-enable the down button for next gallery opening
+        _downButton.interactable = true;
+        _upButton.interactable = false;
     }
 }
