@@ -44,8 +44,10 @@ public static class SaveSystem
 [System.Serializable]
 public class ProgressionData
 {
+    //which section of the game is the player on
     public int saveSectionIndex;
 
+    //is it night time in the current section
     public bool nightTime;
 
     public ProgressionData(int tempSaveSectionIndex, bool tempNightTime)
