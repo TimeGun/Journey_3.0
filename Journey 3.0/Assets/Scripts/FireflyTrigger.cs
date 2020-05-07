@@ -27,6 +27,8 @@ public class FireflyTrigger : MonoBehaviour
     
     private float _timeSinceFlee;
 
+    [SerializeField] public int twinkleAmmountToAdd = 10;
+
     private void Start()
     {
         //_system.Stop();        //Gary Added
@@ -41,6 +43,7 @@ public class FireflyTrigger : MonoBehaviour
 
     IEnumerator Flee()
     {
+        FlyTwinkleController.instance.AddTwinkleAmount(twinkleAmmountToAdd);
         _flee = true;
         while (_flee)
         {
@@ -65,8 +68,9 @@ public class FireflyTrigger : MonoBehaviour
         _vol.z = new ParticleSystem.MinMaxCurve(-5,5);*/
 
         yield return new WaitForSeconds(_mm.startLifetime.Evaluate(1));
-        //Destroy(gameObject);
-        InterestFinder.instance.RemoveObject(_flies.transform);
         _system.Stop();
+        
+        
+        Destroy(gameObject);
     }
 }
