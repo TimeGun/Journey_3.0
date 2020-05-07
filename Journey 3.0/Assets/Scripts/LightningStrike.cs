@@ -57,11 +57,10 @@ public class LightningStrike : MonoBehaviour
     }
     IEnumerator StrikeCoroutine()
     {
-        preStrikeVFX.enabled = true;
+        preStrikeVFX.SetBool("Spawn", true);
         yield return new WaitForSeconds(timeBeforeStrike);
-        preStrikeVFX.Stop();
-        strikeVFX.enabled = true;
-        strikeVFX.Play();
+        preStrikeVFX.SetBool("Spawn", false);
+        strikeVFX.SendEvent("Strike");
 
         if (playerInHitbox)
         {
