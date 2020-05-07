@@ -153,10 +153,11 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
         }
 
         
-        _paintingAnimator.Play(_paintingAnimationName);
-        yield return new WaitForEndOfFrame();
-        yield return new WaitForSeconds(_paintingAnimator.GetCurrentAnimatorStateInfo(0).length);
-            
+        _paintingAnimator.SetBool("Hover", true);
+        yield return new WaitUntil(() => !_paintingAnimator.GetCurrentAnimatorStateInfo(0).IsName("New State"));
+        yield return new WaitUntil(() => _paintingAnimator.GetCurrentAnimatorStateInfo(0).IsName("New State"));
+        
+        _paintingAnimator.SetBool("Hover", false);    
         while (_multiplierFrame != _minEmissionStrength)
         {
             print("Running");

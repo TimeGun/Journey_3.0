@@ -32,14 +32,17 @@ public class SeeSawAnimation : MonoBehaviour
 
     public void LaunchRock()
     {
-        _seeSawPlacement.GetPlank().GetComponent<Rigidbody>().isKinematic = false;
-        _seeSawPlacement.GetPlank().GetComponent<PickUpObject>().PlacedDown = false;
-        _seeSawPlacement.GetPlank().GetComponent<Collider>().isTrigger = false;
+        if (_seeSawPlacement.GetPlank() != null)
+        {
+            _seeSawPlacement.GetPlank().GetComponent<Rigidbody>().isKinematic = false;
+            _seeSawPlacement.GetPlank().GetComponent<PickUpObject>().PlacedDown = false;
+            _seeSawPlacement.GetPlank().GetComponent<Collider>().isTrigger = false;
         
-        _seeSawPlacement.GetPlank().GetComponent<Rigidbody>().AddForce(launchDirection.transform.forward * launchForce, ForceMode.Impulse);
+            _seeSawPlacement.GetPlank().GetComponent<Rigidbody>().AddForce(launchDirection.transform.forward * launchForce, ForceMode.Impulse);
         
-        _seeSawPlacement.SetPlank(null);
-        _seeSawPlacement.SetPlankPlacedDown(false);
+            _seeSawPlacement.SetPlank(null);
+            _seeSawPlacement.SetPlankPlacedDown(false);
+        }
     }
 
 
