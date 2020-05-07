@@ -75,6 +75,7 @@ public class LightningStrike : MonoBehaviour
 
             player.GetComponent<PlayerMovement>().DisableThis();
             player.GetComponent<ReceiveImpact>().AddImpact(pushDirection , forceToPushPlayer);
+            FlowerSmokeController.instance.StartSmoking(2f);
         }
 
         
