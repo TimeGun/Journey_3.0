@@ -78,6 +78,11 @@ public class GalleryScroller : MonoBehaviour
 
     private void OnDisable()
     {
+        ResetGalleryPage();
+    }
+
+    void ResetGalleryPage()
+    {
         //Set Page one as active
         _pages[0].gameObject.SetActive(true);
         _pages[1].gameObject.SetActive(false);
@@ -87,5 +92,8 @@ public class GalleryScroller : MonoBehaviour
         //Re-enable the down button for next gallery opening
         _downButton.interactable = true;
         _upButton.interactable = false;
+        
+        //Reset Page Number
+        pageNumber = 0;
     }
 }
