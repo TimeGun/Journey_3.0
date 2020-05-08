@@ -8,9 +8,7 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
     [SerializeField] private Animator _paintingAnimator;
 
     private bool paintingIsPlaying;
-
-    [SerializeField] private string _paintingAnimationName;
-
+    
     [SerializeField] private Color _emissionColour;
 
     [SerializeField] private float _minEmissionStrength;
@@ -30,9 +28,6 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
 
     [SerializeField] private LayerMask _wallMask;
     
-    [SerializeField] private float angleAdjustment1 = 90f;
-    [SerializeField] private float angleAdjustment2 = -90f;
-
     [SerializeField] private float distanceToPlate = 0.5f;
 
     [SerializeField] private GameObject _palceToStand;
@@ -45,7 +40,6 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
 
     [SerializeField] private int paintingIndex;
 
-    // Start is called before the first frame update
     void Start()
     {
         _multiplierPlate = _maxEmissionStrength;
@@ -53,13 +47,15 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
 
         _plateMat.SetColor("_EmissiveColor", _emissionColour * _multiplierPlate);
         _frameMat.SetColor("_EmissiveColor", _emissionColour * _multiplierFrame);
-        //StartCoroutine(PlayPainting());
     }
 
     IEnumerator PlayPainting(Transform player)
     {
-        
-        GallerySaveSystem.FoundPainting(paintingIndex);
+        if (GallerySaveSystem.instance != null)
+        {
+            GallerySaveSystem.FoundPainting(paintingIndex);
+        }
+
         
         PlayerMovement movement = player.GetComponent<PlayerMovement>();
         InteractWithObject interactWithObject = player.GetComponent<InteractWithObject>();
