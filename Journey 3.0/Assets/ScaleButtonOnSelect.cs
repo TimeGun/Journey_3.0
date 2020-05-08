@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 
 public class ScaleButtonOnSelect : MonoBehaviour, ISelectHandler, IPointerEnterHandler, IPointerExitHandler, IDeselectHandler
 {
-    private float _timeToScaleFor = 0.25f;
+    [SerializeField] private float _timeToScaleFor = 0.25f;
 
     [SerializeField] private float _scaleMultiplier = 1.25f;
     
@@ -25,6 +25,7 @@ public class ScaleButtonOnSelect : MonoBehaviour, ISelectHandler, IPointerEnterH
         if (_downScaler != null)
         {
             StopCoroutine(_downScaler);
+            _downScaler = null;
         }
         
         if (_upScaler == null)
@@ -38,6 +39,7 @@ public class ScaleButtonOnSelect : MonoBehaviour, ISelectHandler, IPointerEnterH
         if (_downScaler != null)
         {
             StopCoroutine(_downScaler);
+            _downScaler = null;
         }
         
         if (_upScaler == null)
@@ -51,6 +53,7 @@ public class ScaleButtonOnSelect : MonoBehaviour, ISelectHandler, IPointerEnterH
         if (_upScaler != null)
         {
             StopCoroutine(_upScaler);
+            _upScaler = null;
         }
 
         if (_downScaler == null)
@@ -64,6 +67,7 @@ public class ScaleButtonOnSelect : MonoBehaviour, ISelectHandler, IPointerEnterH
         if (_upScaler != null)
         {
             StopCoroutine(_upScaler);
+            _upScaler = null;
         }
         
         if (_downScaler == null)
@@ -84,13 +88,15 @@ public class ScaleButtonOnSelect : MonoBehaviour, ISelectHandler, IPointerEnterH
             timeLeft -= Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
+
+        print("Finished Up Scale");
     }
     
     private IEnumerator ScaleDown()
     {
         float timeLeft = _timeToScaleFor;
         
-        while (transform.localScale != _startScale * _scaleMultiplier)
+        while (transform.localScale != _startScale)
         {
             transform.localScale = Vector3.Lerp(transform.localScale, _startScale,
                 Time.deltaTime / timeLeft);
@@ -98,5 +104,7 @@ public class ScaleButtonOnSelect : MonoBehaviour, ISelectHandler, IPointerEnterH
             timeLeft -= Time.deltaTime;
             yield return new WaitForEndOfFrame();
         }
+        
+        print("Finished Down Scale");
     }
 }
