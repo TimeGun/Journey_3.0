@@ -51,7 +51,7 @@ public class InteractWithObject : MonoBehaviour
     }
 
     [FormerlySerializedAs("_source")] public AudioSource _sourceGrabSound;
-     public AudioSource _sourcePlaceSound;
+    public AudioSource _sourcePlaceSound;
 
 
     [SerializeField] private IPlaceableArea _plankPlacementArea;
@@ -78,7 +78,9 @@ public class InteractWithObject : MonoBehaviour
 
         if (_inputSetUp.Controls.PlayerFreeMovement.Interact.triggered && !cooldown && _movement.grounded)
         {
-            if (_nearRune && _objectDetection.Items.Count > 1 || _nearRune && _rune.getGameObject().GetComponent<GrowObject>() || _nearRune && _rune.getGameObject().GetComponent<InteractiblePainting>())
+            if (_nearRune && _rune.getGameObject().GetComponent<HoldInteractipleOnRune>() ||
+                _nearRune && _rune.getGameObject().GetComponent<GrowObject>() ||
+                _nearRune && _rune.getGameObject().GetComponent<InteractiblePainting>())
             {
                 if (_rune.getGameObject().GetComponent<GrowObject>() != null)
                 {
@@ -88,7 +90,7 @@ public class InteractWithObject : MonoBehaviour
                         _interacting = true;
                         _movement.ControllerVeclocity = Vector3.zero;
                         _movement.enabled = false;
-                                
+
                         GameObject obj = ReturnCloserObject();
                         _interactingObj = obj.GetComponent<IInteractible>();
                         _coroutine = StartCoroutine(TurnToGrab(obj));
@@ -98,10 +100,11 @@ public class InteractWithObject : MonoBehaviour
                         cooldown = true;
                         _movement.ControllerVeclocity = Vector3.zero;
                         //_movement.enabled = false;
-                    
+
                         StartCoroutine(UseGrowthRune(_rune.getGameObject()));
                     }
-                }else if (_rune.getGameObject().GetComponent<InteractiblePainting>() != null)
+                }
+                else if (_rune.getGameObject().GetComponent<InteractiblePainting>() != null)
                 {
                     if (!_interacting && _objectDetection.Items.Count > 1)
                     {
@@ -123,7 +126,7 @@ public class InteractWithObject : MonoBehaviour
                         StartCoroutine(UseInteractiblePainting(_rune.getGameObject()));
                     }
                 }
-                else
+                else if (_rune.getGameObject().GetComponent<HoldInteractipleOnRune>() != null)
                 {
                     GameObject rune = _rune.getGameObject();
                     GameObject interactible;
@@ -148,31 +151,38 @@ public class InteractWithObject : MonoBehaviour
                     else
                     {
                         HoldInteractipleOnRune holdInteractipleOnRune = rune.GetComponent<HoldInteractipleOnRune>();
-                        
+
                         if (holdInteractipleOnRune != null)
                         {
                             if (!holdInteractipleOnRune.ItemOnRuneBool)
                             {
+                                GameObject obj = ReturnCloserObject();
+
+                                if (obj != null)
+                                {
+                                    cooldown = true;
+                                    _interacting = true;
+                                    _movement.ControllerVeclocity = Vector3.zero;
+                                    _movement.enabled = false;
+                                    
+                                    _interactingObj = obj.GetComponent<IInteractible>();
+                                    _coroutine = StartCoroutine(TurnToGrab(obj));
+                                }
+                            }
+                            else
+                            {
+                                print("First Step");
                                 cooldown = true;
-                                _interacting = true;
                                 _movement.ControllerVeclocity = Vector3.zero;
                                 _movement.enabled = false;
-                                
-                                GameObject obj = ReturnCloserObject();
-                                _interactingObj = obj.GetComponent<IInteractible>();
-                                _coroutine = StartCoroutine(TurnToGrab(obj));
+
+                                interactible = holdInteractipleOnRune.ItemOnRune;
+                                _interactingObj = holdInteractipleOnRune.ItemOnRune
+                                    .GetComponent<IInteractible>();
+                                GameObject[] temp = new GameObject[] {rune, interactible};
+
+                                _coroutine = StartCoroutine(UseRune(temp));
                             }
-
-                            cooldown = true;
-                            _movement.ControllerVeclocity = Vector3.zero;
-                            _movement.enabled = false;
-
-                            interactible = holdInteractipleOnRune.ItemOnRune;
-                            _interactingObj = holdInteractipleOnRune.ItemOnRune
-                                .GetComponent<IInteractible>();
-                            GameObject[] temp = new GameObject[] {rune, interactible};
-
-                            _coroutine = StartCoroutine(UseRune(temp));
                         }
                         else
                         {
@@ -200,7 +210,7 @@ public class InteractWithObject : MonoBehaviour
                 {
                     cooldown = true;
                     _interacting = true;
-                    
+
                     _movement.ControllerVeclocity = Vector3.zero;
                     _movement.enabled = false;
 
@@ -308,6 +318,7 @@ public class InteractWithObject : MonoBehaviour
         {
             StopCoroutine(_coroutine);
         }
+
         _coroutine = null;
     }
 
@@ -334,7 +345,14 @@ public class InteractWithObject : MonoBehaviour
     {
         if (_objectDetection.Items.Count == 1)
         {
-            return _objectDetection.Items[0];
+            if (_objectDetection.Items[0].GetComponent<IRune>() != null)
+            {
+                return null;
+            }
+            else
+            {
+                return _objectDetection.Items[0];
+            }
         }
         else
         {
@@ -371,10 +389,10 @@ public class InteractWithObject : MonoBehaviour
 
         _targetRotation.eulerAngles =
             new Vector3(transform.rotation.x, _targetRotation.eulerAngles.y, transform.rotation.z);
-        
+
 
         StartCoroutine(ChangePlayerRotation(_targetRotation));
-        
+
 
         float angleFromForward = ReturnAngleToObj(interactible.transform.position);
 
@@ -394,10 +412,10 @@ public class InteractWithObject : MonoBehaviour
         while (animationTime > 0)
         {
             animationTime -= Time.deltaTime;
-            
+
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
-            
+
             yield return new WaitForEndOfFrame();
         }
 
@@ -433,13 +451,15 @@ public class InteractWithObject : MonoBehaviour
         _movement.enabled = false;
 
 
-        Quaternion _targetRotation = Quaternion.LookRotation(_plankPlacementArea.GetCenterObject().transform.position - transform.position, Vector3.up);
+        Quaternion _targetRotation =
+            Quaternion.LookRotation(_plankPlacementArea.GetCenterObject().transform.position - transform.position,
+                Vector3.up);
 
         _targetRotation.eulerAngles =
             new Vector3(transform.rotation.x, _targetRotation.eulerAngles.y, transform.rotation.z);
 
         StartCoroutine(ChangePlayerRotation(_targetRotation));
-        
+
         print(interactible);
 
         interactible.GetComponent<PickUpObject>().PlacedDown = true;
@@ -449,7 +469,7 @@ public class InteractWithObject : MonoBehaviour
         StopInteracting();
 
         _plankPlacementArea.SetPlankPlacedDown(true);
-        
+
         _sourcePlaceSound.PlayOneShot(_sourcePlaceSound.clip);
 
         interactible.GetComponent<Rigidbody>().isKinematic = true;
@@ -494,7 +514,7 @@ public class InteractWithObject : MonoBehaviour
         if (rune.GetComponent<HoldInteractipleOnRune>() != null)
         {
             HoldInteractipleOnRune holdInteractipleOnRune = rune.GetComponent<HoldInteractipleOnRune>();
-            
+
             if (!holdInteractipleOnRune.ItemOnRuneBool)
             {
                 interactible.transform.rotation = Quaternion.Euler(0, interactible.transform.rotation.eulerAngles.y, 0);
@@ -517,7 +537,7 @@ public class InteractWithObject : MonoBehaviour
                 rune.GetComponent<OpenForPlayer>().ItemPresentHeightOffset = ySize;
 
                 interactible.GetComponent<Rigidbody>().isKinematic = true;
-                
+
                 _sourcePlaceSound.PlayOneShot(_sourcePlaceSound.clip);
 
                 holdInteractipleOnRune.ItemOnRune = interactible;
@@ -526,6 +546,7 @@ public class InteractWithObject : MonoBehaviour
             }
             else
             {
+                print("This is happening, but nothing is happening");
                 holdInteractipleOnRune.ItemOnRune = null;
                 holdInteractipleOnRune.ItemOnRuneBool = false;
                 rune.GetComponent<OpenForPlayer>().ItemPresentHeightOffset = 0f;
@@ -558,7 +579,7 @@ public class InteractWithObject : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, _targetRotation, Time.deltaTime * _turnSpeed);
             yield return new WaitForEndOfFrame();
         }*/
-        
+
         transform.rotation = _targetRotation;
 
         _interactingObj.StartInteraction(handPosition);
@@ -587,7 +608,7 @@ public class InteractWithObject : MonoBehaviour
         rune.GetComponent<GrowObject>().StartInteraction(transform);
         yield return new WaitForEndOfFrame();
     }
-    
+
     IEnumerator UseInteractiblePainting(GameObject rune)
     {
         //start the interactible painting interaction with any this transform
