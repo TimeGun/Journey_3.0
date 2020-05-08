@@ -1,12 +1,14 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class ScaleButtonOnSelect : MonoBehaviour, ISelectHandler, IPointerEnterHandler, IPointerExitHandler, IDeselectHandler
 {
-    [SerializeField] private float _timeToScaleFor = 0.25f;
+    [SerializeField] private float _timeToScaleFor = 0.1f;
 
-    [SerializeField] private float _scaleMultiplier = 1.25f;
+    [SerializeField] private float _scaleMultiplier = 1.2f;
     
     private Vector3 _startScale;
     
@@ -36,6 +38,8 @@ public class ScaleButtonOnSelect : MonoBehaviour, ISelectHandler, IPointerEnterH
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        EventSystem.current.SetSelectedGameObject(gameObject);
+        
         if (_downScaler != null)
         {
             StopCoroutine(_downScaler);
@@ -64,6 +68,8 @@ public class ScaleButtonOnSelect : MonoBehaviour, ISelectHandler, IPointerEnterH
 
     public void OnDeselect(BaseEventData eventData)
     {
+        GetComponent<Selectable>().OnPointerExit(null);
+        
         if (_upScaler != null)
         {
             StopCoroutine(_upScaler);
@@ -78,14 +84,17 @@ public class ScaleButtonOnSelect : MonoBehaviour, ISelectHandler, IPointerEnterH
 
     private IEnumerator ScaleUp()
     {
+        yield return new WaitForEndOfFrame();
+        
+        
         float timeLeft = _timeToScaleFor;
         
         while (transform.localScale != _startScale * _scaleMultiplier)
         {
             transform.localScale = Vector3.Lerp(transform.localScale, _startScale * _scaleMultiplier,
-                Time.deltaTime / timeLeft);
+                Time.unscaledDeltaTime / timeLeft);
             
-            timeLeft -= Time.deltaTime;
+            timeLeft -= Time.unscaledDeltaTime;
             yield return new WaitForEndOfFrame();
         }
 
@@ -99,12 +108,24 @@ public class ScaleButtonOnSelect : MonoBehaviour, ISelectHandler, IPointerEnterH
         while (transform.localScale != _startScale)
         {
             transform.localScale = Vector3.Lerp(transform.localScale, _startScale,
-                Time.deltaTime / timeLeft);
+                Time.unscaledDeltaTime / timeLeft);
             
-            timeLeft -= Time.deltaTime;
+            timeLeft -= Time.unscaledDeltaTime;
             yield return new WaitForEndOfFrame();
         }
         
         print("Finished Down Scale");
+    }
+
+
+    private void OnDisable()
+    {
+        StopAllCoroutines();
+        transform.localScale = _startScale;
+    }
+
+    private void OnEnable()
+    {
+        _startScale = transform.localScale;
     }
 }
