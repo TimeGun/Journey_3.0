@@ -74,7 +74,7 @@ public class CameraZone : MonoBehaviour
         while (targetCamera1 == null) { 
             targetCamera1 = GameObject.Find(Cam1Name);
             yield return new WaitForEndOfFrame();
-            print("If this is printing every frame, thats fairly bad");
+            print("If this is printing every frame, thats fairly bad: " + gameObject.name);
         }
 
         if (targetCamera1 != null)
@@ -97,7 +97,7 @@ public class CameraZone : MonoBehaviour
         {
             targetCamera2 = GameObject.Find(Cam2Name);
             yield return new WaitForEndOfFrame();
-            print("If this is printing every frame, thats fairly bad");
+            print("If this is printing every frame, thats fairly bad: " + gameObject.name);
         }
         
 
