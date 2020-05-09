@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
 
-public class AssignVirtualCamera : MonoBehaviour
+public class AssignVirtualCamera : GradualLoader
 {
     [SerializeField] private CinemachineVirtualCamera _virtualCamera;
 
@@ -11,8 +11,29 @@ public class AssignVirtualCamera : MonoBehaviour
 
     [SerializeField] private bool assignFollow = true;
     [SerializeField] private bool assignLookAt = true;
-    void Start()
+    
+    
+    public override void EnqueThis()
     {
+        
+        base.EnqueThis();
+    }
+
+    public override void InitialiseThis()
+    {
+        base.InitialiseThis();
+    }
+
+    public override void Awake()
+    {
+        print("Called Awake");
+        base.Awake();
+    }
+    
+    IEnumerator Start()
+    {
+        yield return new WaitUntil(() => initialised);
+        
         if (assignFollow)
         {
             if (sphere)
@@ -30,10 +51,5 @@ public class AssignVirtualCamera : MonoBehaviour
             _virtualCamera.LookAt = API.GlobalReferences.PlayerRef.transform;
         }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 }

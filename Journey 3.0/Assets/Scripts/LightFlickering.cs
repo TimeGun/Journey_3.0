@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using System.Collections.Generic;
 
 // Written by Steve Streeting 2017
@@ -11,7 +12,7 @@ using System.Collections.Generic;
 ///
 /// Just activate / deactivate this component as usual to pause / resume flicker
 /// </summary>
-public class LightFlickering: MonoBehaviour
+public class LightFlickering: GradualLoader
 {
     [Tooltip("External light to flicker; you can leave this null if you attach script to a light")]
     public new Light light;
@@ -39,9 +40,26 @@ public class LightFlickering: MonoBehaviour
         smoothQueue.Clear();
         lastSum = 0;
     }
-
-    void Start()
+    public override void EnqueThis()
     {
+        
+        base.EnqueThis();
+    }
+
+    public override void InitialiseThis()
+    {
+        base.InitialiseThis();
+    }
+
+    public override void Awake()
+    {
+        print("Called Awake");
+        base.Awake();
+    }
+    IEnumerator Start()
+    {
+        yield return new WaitUntil(() => initialised);
+        
         smoothQueue = new Queue<float>(smoothing);
         // External or internal light?
         if (light == null)
@@ -52,22 +70,25 @@ public class LightFlickering: MonoBehaviour
 
     void Update()
     {
-        if (light == null)
-            return;
-
-        // pop off an item if too big
-        while (smoothQueue.Count >= smoothing)
+        if (initialised)
         {
-            lastSum -= smoothQueue.Dequeue();
+            if (light == null)
+                return;
+
+            // pop off an item if too big
+            while (smoothQueue.Count >= smoothing)
+            {
+                lastSum -= smoothQueue.Dequeue();
+            }
+
+            // Generate random new item, calculate new average
+            float newVal = Random.Range(minIntensity, maxIntensity);
+            smoothQueue.Enqueue(newVal);
+            lastSum += newVal;
+
+            // Calculate new smoothed average
+            light.intensity = lastSum / (float)smoothQueue.Count;
         }
-
-        // Generate random new item, calculate new average
-        float newVal = Random.Range(minIntensity, maxIntensity);
-        smoothQueue.Enqueue(newVal);
-        lastSum += newVal;
-
-        // Calculate new smoothed average
-        light.intensity = lastSum / (float)smoothQueue.Count;
     }
 
 }

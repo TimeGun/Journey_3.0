@@ -4,7 +4,7 @@ using UnityEngine;
 using Cinemachine;
 using UnityEngine.Playables;
 
-public class PlayTimeline : MonoBehaviour
+public class PlayTimeline : GradualLoader
 {
     public GameObject cameraTrigger;
     private bool _playerEntered;
@@ -21,8 +21,30 @@ public class PlayTimeline : MonoBehaviour
 
     public float timeBeforeFreeze;
     // Start is called before the first frame update
-    void Start()
+    
+    public override void EnqueThis()
     {
+        
+        base.EnqueThis();
+    }
+
+    public override void InitialiseThis()
+    {
+        base.InitialiseThis();
+    }
+
+    public override void Awake()
+    {
+        print("Called Awake");
+        base.Awake();
+    }
+    
+    
+    
+    IEnumerator Start()
+    {
+        yield return new WaitUntil(() => initialised);
+        
         _timelineLength = playableDirector.duration;
         vcam = targetCamera.GetComponent<CinemachineVirtualCamera>();
         _startPriority = vcam.Priority;
@@ -35,19 +57,22 @@ public class PlayTimeline : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (cameraTrigger != null)
+        if (initialised)
         {
-            _playerEntered = cameraTrigger.GetComponent<DetectPlayer>().PlayerEntered;    //Use a coroutine to check if the player has entered every x amount of frames
+            if (cameraTrigger != null)
+            {
+                _playerEntered = cameraTrigger.GetComponent<DetectPlayer>().PlayerEntered;    //Use a coroutine to check if the player has entered every x amount of frames
 
-        }
+            }
 //        Debug.Log(_playerEntered);
-        if (_playerEntered && cinematicStarted == false)
-        {
-            StartCoroutine(StartTimeline());
+            if (_playerEntered && cinematicStarted == false)
+            {
+                StartCoroutine(StartTimeline());
 //            Debug.Log("Here");
-            cinematicStarted = true;
+                cinematicStarted = true;
 
 
+            }
         }
     }
 

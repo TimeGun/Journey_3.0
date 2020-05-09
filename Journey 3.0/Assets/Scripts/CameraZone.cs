@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 using UnityEngine.UIElements;
 
-public class CameraZone : MonoBehaviour
+public class CameraZone : GradualLoader
 {
     public GameObject cameraTrigger;
 
@@ -40,9 +40,10 @@ public class CameraZone : MonoBehaviour
 
     private Collider col;
 
-    void Start()
+    IEnumerator Start()
     {
-
+        yield return new WaitUntil(() => initialised);
+        
         if (FindCam1)
         {
             StartCoroutine(AssignCameraObject1(Cam1Name));
@@ -115,30 +116,50 @@ public class CameraZone : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        playerInZone = cameraTrigger.GetComponent<DetectPlayer>().PlayerInCollider;
-//       Debug.Log(playerInZone);
-        if (playerInZone)
+        if (initialised)
         {
-            if (CameraTime > 0 && specialEvent)
+            playerInZone = cameraTrigger.GetComponent<DetectPlayer>().PlayerInCollider;
+//       Debug.Log(playerInZone);
+            if (playerInZone)
             {
-                StartCoroutine(TimedPriorityChange());
-                //return;
-            }
-            else if (specialEvent == false)
-            {
-                if (targetCamera1 != null)
+                if (CameraTime > 0 && specialEvent)
                 {
-                    targetCamera1.GetComponent<CinemachineVirtualCameraBase>().Priority = targetPriority1;
+                    StartCoroutine(TimedPriorityChange());
+                    //return;
                 }
-
-                if (targetCamera2 != null)
+                else if (specialEvent == false)
                 {
-                    targetCamera2.GetComponent<CinemachineVirtualCameraBase>().Priority = targetPriority2;
-                }
+                    if (targetCamera1 != null)
+                    {
+                        targetCamera1.GetComponent<CinemachineVirtualCameraBase>().Priority = targetPriority1;
+                    }
 
-                //targetCamera3.GetComponent<CinemachineVirtualCameraBase>().Priority = targetPriority3;
+                    if (targetCamera2 != null)
+                    {
+                        targetCamera2.GetComponent<CinemachineVirtualCameraBase>().Priority = targetPriority2;
+                    }
+
+                    //targetCamera3.GetComponent<CinemachineVirtualCameraBase>().Priority = targetPriority3;
+                }
             }
         }
+    }
+    public override void EnqueThis()
+    {
+        print("Enqued This");
+        base.EnqueThis();
+    }
+
+    public override void InitialiseThis()
+    {
+        print("Initialised This");
+        base.InitialiseThis();
+    }
+    
+    public override void Awake()
+    {
+        print("Called Awake");
+        base.Awake();
     }
 
     IEnumerator TimedPriorityChange()

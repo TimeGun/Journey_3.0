@@ -22,7 +22,5 @@ public class DisableObject : MonoBehaviour
             Target.GetComponent<DetectPlayer>().enabled = false;
             Target.gameObject.SetActive(false);
         }
-        
-       
     }
 }

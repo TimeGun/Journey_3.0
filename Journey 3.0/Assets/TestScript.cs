@@ -1,15 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Cinemachine;
 
-public class CMTargetGroupAssigning : GradualLoader
+public class TestScript: GradualLoader
 {
-    public CinemachineTargetGroup _targetGroup;
-
-    public int targetIndex;
-    
-    
     public override void EnqueThis()
     {
         
@@ -26,11 +21,19 @@ public class CMTargetGroupAssigning : GradualLoader
         print("Called Awake");
         base.Awake();
     }
-    
+
+    private void Update()
+    {
+        if (initialised)
+        {
+            print("Update");
+        }
+    }
+
     IEnumerator Start()
     {
         yield return new WaitUntil(() => initialised);
-        
-        _targetGroup.m_Targets[targetIndex].target = API.GlobalReferences.PlayerRef.transform;
+        print("called start");
     }
+
 }

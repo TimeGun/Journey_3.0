@@ -4,7 +4,7 @@ using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 using Cinemachine;
 
-public class AimOffsetChange : MonoBehaviour
+public class AimOffsetChange : GradualLoader
 {
     public enum AxisEnum {x,y,z};
 
@@ -36,49 +36,58 @@ public class AimOffsetChange : MonoBehaviour
 
     private bool valueIncreasing;       
     // Start is called before the first frame update
-    void Start()
+    public override void Awake()
     {
+        print("Called Awake");
+        base.Awake();
+    }
+    
+    
+    IEnumerator Start()
+    {
+        yield return new WaitUntil(() => initialised);
+        
         vcam = targetCamera.GetComponent<CinemachineVirtualCamera>();                
         TD = vcam.GetCinemachineComponent<CinemachineTrackedDolly>();
         comp = vcam.GetCinemachineComponent<CinemachineComposer>();                //Need to use this to access the LookAt target
         CheckAxis();
         startOffset = firstOffset;
-        
-        
-        
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        CheckAxis();
-        firstTrigger = cameraTrigger1.GetComponent<DetectPlayer>().PlayerEntered;   //Use this to trigger when  offset decreases
-        secondTrigger = cameraTrigger2.GetComponent<DetectPlayer>().PlayerEntered;  //Use this to trigger when  offset increases
+        if (initialised)
+        {
+            CheckAxis();
+            firstTrigger = cameraTrigger1.GetComponent<DetectPlayer>().PlayerEntered;   //Use this to trigger when  offset decreases
+            secondTrigger = cameraTrigger2.GetComponent<DetectPlayer>().PlayerEntered;  //Use this to trigger when  offset increases
   
-        //Debug.Log("Start Offset: " + startOffset);
-        //Debug.Log("New Offset: " + newOffset);
-        //Debug.Log("Current Offset: " + currentOffset);
+            //Debug.Log("Start Offset: " + startOffset);
+            //Debug.Log("New Offset: " + newOffset);
+            //Debug.Log("Current Offset: " + currentOffset);
         
-        if (firstTrigger)
-        {
-            afterTrigger = false;        //this is used to begin decreasing the value of the offset
+            if (firstTrigger)
+            {
+                afterTrigger = false;        //this is used to begin decreasing the value of the offset
             
-        }
-        else if (secondTrigger)
-        {
-            afterTrigger = true;    //this is used to begin increasing the value of the offset
-        }
+            }
+            else if (secondTrigger)
+            {
+                afterTrigger = true;    //this is used to begin increasing the value of the offset
+            }
 
         
             if (afterTrigger == false && firstTrigger)
             {
-               StartCoroutine(DecreaseValue());
+                StartCoroutine(DecreaseValue());
             }
             else if (afterTrigger && secondTrigger)
             {
 
                 StartCoroutine(IncreaseValue());
             }
+        }
     }
     
     IEnumerator DecreaseValue()
@@ -208,5 +217,16 @@ public class AimOffsetChange : MonoBehaviour
                 break;
             }
         }
+    }
+    
+    public override void EnqueThis()
+    {
+        
+        base.EnqueThis();
+    }
+
+    public override void InitialiseThis()
+    {
+        base.InitialiseThis();
     }
 }
