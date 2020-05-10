@@ -158,14 +158,13 @@ public class SceneManagerScript : MonoBehaviour
                         // Else, it means that we load something else.
                         if (asyncOp.progress >= 0.9f && !asyncOp.allowSceneActivation)
                         {
-                            var allGameObjects = GameObject.FindObjectsOfType<GameObject>();
-
                             asyncOp.allowSceneActivation = true; //< Once everything is loaded, reactive this variable
                         }
                         else
                         {
-                            // we are loading the rest of the scene
+                            // Scene is activated
                             yield return null; //< We still wait until the scene load is finished
+                            //Then the cycle repeats for the remaining scenes in the bundle
                         }
                     }
                 }
