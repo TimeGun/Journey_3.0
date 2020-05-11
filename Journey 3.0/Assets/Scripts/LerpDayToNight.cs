@@ -66,6 +66,9 @@ public class LerpDayToNight : MonoBehaviour
         instance._changingSkybox.bottom.value = instance._nightSkybox.bottom.value;
         instance._changingSkybox.middle.value = instance._nightSkybox.middle.value;
         instance._changingSkybox.top.value = instance._nightSkybox.top.value;
+
+        instance._dirLight.color = instance._lightColor;
+        instance._dirLight.transform.rotation = instance._lightRotation;
     }
     public static void SetToDay()
     {
