@@ -18,10 +18,10 @@ MonoBehaviour:
   categories: []
   uiBounds:
     serializedVersion: 2
-    x: 844
+    x: 581
     y: -133
-    width: 1010
-    height: 1967
+    width: 1273
+    height: 2027
 --- !u!114 &114350483966674976
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -162,8 +162,8 @@ VisualEffectResource:
       uint index = deadListIn[deadIndex];\r\n#else\r\n            uint index = particleIndex;\r\n#endif\r\n           
       attributeBuffer.Store3((index * 0xC + 0x0) << 2,asuint(attributes.position));\n           
       attributeBuffer.Store3((index * 0xC + 0x4) << 2,asuint(attributes.velocity));\n           
-      attributeBuffer.Store((index * 0x1 + 0xC0) << 2,asuint(attributes.lifetime));\n           
-      attributeBuffer.Store3((index * 0x4 + 0xD0) << 2,asuint(attributes.color));\n           
+      attributeBuffer.Store((index * 0x1 + 0x300) << 2,asuint(attributes.lifetime));\n           
+      attributeBuffer.Store3((index * 0x4 + 0x340) << 2,asuint(attributes.color));\n           
       attributeBuffer.Store((index * 0xC + 0x3) << 2,asuint(attributes.age));\n           
       attributeBuffer.Store((index * 0xC + 0x7) << 2,asuint(attributes.rateCount_b));\n           
       attributeBuffer.Store((index * 0xC + 0x8) << 2,uint(attributes.alive));\n           
@@ -219,7 +219,7 @@ VisualEffectResource:
       = (attributeBuffer.Load((index * 0xC + 0x9) << 2));\n\t\t\n\r\n\t\tif (attributes.alive)\r\n\t\t{\r\n\t\t\tattributes.position
       = asfloat(attributeBuffer.Load3((index * 0xC + 0x0) << 2));\n\t\t\tattributes.velocity
       = asfloat(attributeBuffer.Load3((index * 0xC + 0x4) << 2));\n\t\t\tattributes.lifetime
-      = asfloat(attributeBuffer.Load((index * 0x1 + 0xC0) << 2));\n\t\t\tattributes.age
+      = asfloat(attributeBuffer.Load((index * 0x1 + 0x300) << 2));\n\t\t\tattributes.age
       = asfloat(attributeBuffer.Load((index * 0xC + 0x3) << 2));\n\t\t\tattributes.mass
       = (float)1;\n\t\t\tattributes.rateCount_b = asfloat(attributeBuffer.Load((index
       * 0xC + 0x7) << 2));\n\t\t\tattributes.eventCount = (uint)0;\n\t\t\tuint eventCount_a
@@ -258,7 +258,7 @@ VisualEffectResource:
       \n\r\n            }            \r\n        }\r\n#endif\r\n#else\r\n\t\tattributes.position
       = asfloat(attributeBuffer.Load3((index * 0xC + 0x0) << 2));\n\t\tattributes.velocity
       = asfloat(attributeBuffer.Load3((index * 0xC + 0x4) << 2));\n\t\tattributes.lifetime
-      = asfloat(attributeBuffer.Load((index * 0x1 + 0xC0) << 2));\n\t\tattributes.age
+      = asfloat(attributeBuffer.Load((index * 0x1 + 0x300) << 2));\n\t\tattributes.age
       = asfloat(attributeBuffer.Load((index * 0xC + 0x3) << 2));\n\t\tattributes.mass
       = (float)1;\n\t\tattributes.rateCount_b = asfloat(attributeBuffer.Load((index
       * 0xC + 0x7) << 2));\n\t\tattributes.eventCount = (uint)0;\n\t\tuint eventCount_a
@@ -339,7 +339,7 @@ VisualEffectResource:
       1, 1);\n        attributes.lifetime = (float)1;\n        attributes.age = (float)0;\n       
       attributes.alive = (bool)true;\n        sourceAttributes.position = asfloat(sourceAttributeBuffer.Load3((sourceIndex
       * 0xC + 0x0) << 2));\n        sourceAttributes.color = asfloat(sourceAttributeBuffer.Load3((sourceIndex
-      * 0x4 + 0xD0) << 2));\n        \n\r\n#if VFX_USE_PARTICLEID_CURRENT\r\n        
+      * 0x4 + 0x340) << 2));\n        \n\r\n#if VFX_USE_PARTICLEID_CURRENT\r\n        
       attributes.particleId = particleIndex;\r\n#endif\r\n#if VFX_USE_SEED_CURRENT\r\n       
       attributes.seed = WangHash(particleIndex ^ systemSeed);\r\n#endif\r\n#if VFX_USE_SPAWNINDEX_CURRENT\r\n       
       attributes.spawnIndex = id;\r\n#endif\r\n#if HAS_STRIPS\r\n#if !VFX_USE_SPAWNER_FROM_GPU\r\n\t\t\r\n#else\r\n       
@@ -1309,7 +1309,7 @@ VisualEffectResource:
         - m_ExpressionIndex: 37
           m_Value: 2
         - m_ExpressionIndex: 38
-          m_Value: 16
+          m_Value: 160
         - m_ExpressionIndex: 39
           m_Value: 0
         - m_ExpressionIndex: 40
@@ -1393,7 +1393,7 @@ VisualEffectResource:
     m_ExposedExpressions: []
     m_Buffers:
     - type: 1
-      size: 272
+      size: 1088
       layout:
       - name: position
         type: 3
@@ -1434,22 +1434,22 @@ VisualEffectResource:
       - name: lifetime
         type: 1
         offset:
-          bucket: 192
+          bucket: 768
           structure: 1
           element: 0
       - name: color
         type: 3
         offset:
-          bucket: 208
+          bucket: 832
           structure: 4
           element: 0
       - name: spawnCount
         type: 1
         offset:
-          bucket: 208
+          bucket: 832
           structure: 4
           element: 3
-      capacity: 16
+      capacity: 64
       stride: 4
     - type: 1
       size: 3168000
@@ -1508,7 +1508,7 @@ VisualEffectResource:
       capacity: 1
       stride: 4
     - type: 4
-      size: 16
+      size: 64
       layout: []
       capacity: 0
       stride: 4
@@ -1591,7 +1591,7 @@ VisualEffectResource:
       shaderSourceIndex: -1
   - type: 1
     flags: 1
-    capacity: 16
+    capacity: 64
     layer: 0
     buffers:
     - nameId: attributeBuffer
@@ -1840,7 +1840,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
           PublicKeyToken=b77a5c561934e089
-      m_SerializableObject: 16
+      m_SerializableObject: 160
     m_Space: 2147483647
   m_Property:
     name: Rate
@@ -2243,7 +2243,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614558}
   - {fileID: 8926484042661614583}
   dataType: 0
-  capacity: 16
+  capacity: 64
   stripCapacity: 16
   particlePerStripCount: 16
   m_Space: 0
