@@ -48,12 +48,16 @@ public class GallerySaveSystem : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        SaveGallery();
+    }
+
 
     public static void FoundPainting(int paintingIndex)
     {
         instance.paintings[paintingIndex]._found = true;
     }
-
 }
 
 [Serializable]
