@@ -18,7 +18,7 @@ public class ScatterSounds : MonoBehaviour
     [Range(0, .5f)] public float randomVolume;
 
     private float startPitch;
-    private float startVolume;
+    public float startVolume;
     
     // Start is called before the first frame update
     void Start()
@@ -43,6 +43,7 @@ public class ScatterSounds : MonoBehaviour
                 source.volume = startVolume + Random.Range(-randomVolume, randomVolume);
 
                 source.PlayOneShot(scatterSounds[ran]);
+                print("Playing: " + scatterSounds[ran]);
             }
 
             yield return new WaitWhile(StillPlaying);

@@ -36,6 +36,7 @@ public class SceneManagerScript : MonoBehaviour
     public IEnumerator StartGameLoad(ProgressionData progressionData)
     {
         yield return new WaitUntil(() => loading == false);
+        
 
         GameObject torch = GameObject.Find("InteractibleTorch - Final");
 
@@ -178,6 +179,8 @@ public class SceneManagerScript : MonoBehaviour
         AssignMenuCamera(data.saveSectionIndex);
         MovePlayer(data.saveSectionIndex);
         SetDayOrNight(data.saveSectionIndex);
+        AmbienceManager.instance.SetProfile(data.saveSectionIndex);
+
 
         switch (data.saveSectionIndex)
         {

@@ -7,6 +7,8 @@ public class AmbienceManager : MonoBehaviour
 {
     public static AmbienceManager instance;
 
+    [SerializeField] private AudioProfileScriptableObject[] _profiles;
+
 
     [SerializeField] private AudioSource[] _outsideSource;
 
@@ -19,6 +21,9 @@ public class AmbienceManager : MonoBehaviour
     [SerializeField] private AudioMixer _masterMix;
 
     [SerializeField] private float _quietModifier;
+
+
+    [SerializeField] public ScatterSounds[] _scatterIntruments;
     
 
     void Start()
@@ -26,27 +31,43 @@ public class AmbienceManager : MonoBehaviour
         instance = this;
     }
 
+    public void SetProfile(int profileIndex)
+    {
+        print(_profiles[profileIndex].outsideVol);
+        print(_profiles[profileIndex].insideVol);
+        print(_profiles[profileIndex].mountainVol);
+        
+        SetOutSideAmbience(_profiles[profileIndex].outsideVol);
+        SetInsideAmbience(_profiles[profileIndex].insideVol);
+        SetTopOfTheMountainAmbience(_profiles[profileIndex].mountainVol);
+    }
+
     public void SetOutSideAmbience(float newVolume)
     {
         StartCoroutine(SetNewVolumes(_outsideSource, newVolume));
+        _scatterIntruments[0].startVolume = newVolume;
     }
 
     public void SetInsideAmbience(float newVolume)
     {
         StartCoroutine(SetNewVolumes(_insideSource, newVolume));
-
+        _scatterIntruments[1].startVolume = newVolume;
     }
 
     public void SetTopOfTheMountainAmbience(float newVolume)
     {
         StartCoroutine(SetNewVolumes(_topOfTheMountainSources, newVolume));
+        _scatterIntruments[2].startVolume = newVolume;
+        _scatterIntruments[3].startVolume = newVolume;
     }
 
     IEnumerator SetNewVolumes(AudioSource[] sources, float newVolume)
     {
+        //check if audio sources exist
         if (sources == null)
             yield break;
         
+        //if the sources are off, turn them on
         if (!sources[0].isPlaying)
         {
             for (int i = 0; i < sources.Length; i++)
@@ -56,6 +77,7 @@ public class AmbienceManager : MonoBehaviour
         }
         
         
+        //move the volume to the desired value
         while (sources[0].volume != newVolume)
         {
             for (int i = 0; i < sources.Length; i++)
@@ -65,7 +87,8 @@ public class AmbienceManager : MonoBehaviour
             
             yield return new WaitForEndOfFrame();
         }
-
+        
+        //if the volume is zero, turn off the source
         if (newVolume == 0)
         {
             for (int i = 0; i < sources.Length; i++)
@@ -90,7 +113,7 @@ public class AmbienceManager : MonoBehaviour
     
     public static void FadeOutMasterSound()
     {
-        instance.StartCoroutine(instance.FadeInMaster(-80f));
+        instance.StartCoroutine(instance.FadeOutMaster(-80f));
     }
     
     public static void QuietAmbienceVolume(float quietLength)

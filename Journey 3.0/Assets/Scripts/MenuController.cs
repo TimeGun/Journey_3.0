@@ -163,6 +163,7 @@ public class MenuController : MonoBehaviour
         API.InterestManagerScript.ResetList();
         API.GlobalReferences.PlayerRef.GetComponent<ObjectDetection>().ClearList();
         FadeToBlack.instance.SetBlack(true);
+        AmbienceManager.FadeOutMasterSound();
         yield return new WaitForSeconds(1f);
 
 

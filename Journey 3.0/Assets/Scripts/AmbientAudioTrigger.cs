@@ -31,6 +31,5 @@ public class AmbientAudioTrigger : MonoBehaviour
     public void SetMountainTopAmbience(float newVolume)
     {
         AmbienceManager.instance.SetTopOfTheMountainAmbience(newVolume);
-
     }
 }
