@@ -20,6 +20,8 @@ public class MenuController : MonoBehaviour
 
     private bool gameStarted, inMenu;
 
+    [SerializeField] private AudioSource _click, _select;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -29,6 +31,9 @@ public class MenuController : MonoBehaviour
 
         inMenu = true;
         gameStarted = false;
+
+        _click.ignoreListenerPause = true;
+        _select.ignoreListenerPause = true;
     }
 
     // Update is called once per frame
@@ -78,6 +83,7 @@ public class MenuController : MonoBehaviour
         inMenu = false;
         gameStarted = true;
     }
+
 
 
     public static void FadeInMenu()
@@ -158,6 +164,7 @@ public class MenuController : MonoBehaviour
 
     IEnumerator ChangeZone(int zone, bool night)
     {
+        AudioListener.pause = false;
         Time.timeScale = 1f;
         gameStarted = false;
         API.InterestManagerScript.ResetList();
