@@ -58,7 +58,8 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
         if (GallerySaveSystem.instance != null)
         {
             GallerySaveSystem.FoundPainting(paintingIndex);
-            OnStart();
+            if(OnStart != null)
+                OnStart();
         }
 
         
