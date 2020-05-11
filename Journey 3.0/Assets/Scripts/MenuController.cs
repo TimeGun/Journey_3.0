@@ -14,7 +14,7 @@ public class MenuController : MonoBehaviour
 
     public static MenuController instance;
     
-    [SerializeField] private InputMaster _controls;
+    private InputMaster _controls;
 
     [SerializeField] private InputSetUp _inputSetUp;
 

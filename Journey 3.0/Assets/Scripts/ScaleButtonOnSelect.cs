@@ -17,6 +17,19 @@ public class ScaleButtonOnSelect : MonoBehaviour, ISelectHandler, IPointerEnterH
     
     private Coroutine _downScaler;
 
+
+    [SerializeField] private AudioSource _source;
+    [SerializeField] private AudioClip _clip;
+
+    void PlayAudioSource()
+    {
+        if (!_source.isPlaying)
+        {
+            _source.PlayOneShot(_clip);
+        }
+    }
+
+
     void Start()
     {
         _startScale = transform.localScale;
@@ -34,6 +47,8 @@ public class ScaleButtonOnSelect : MonoBehaviour, ISelectHandler, IPointerEnterH
         {
             _upScaler = StartCoroutine(ScaleUp());
         }
+
+        PlayAudioSource();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -50,6 +65,8 @@ public class ScaleButtonOnSelect : MonoBehaviour, ISelectHandler, IPointerEnterH
         {
             _upScaler = StartCoroutine(ScaleUp());
         }
+        
+        PlayAudioSource();
     }
 
     public void OnPointerExit(PointerEventData eventData)

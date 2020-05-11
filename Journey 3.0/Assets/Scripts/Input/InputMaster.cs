@@ -65,6 +65,14 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""MenuBack"",
+                    ""type"": ""Button"",
+                    ""id"": ""05d9f6e1-0681-441f-b870-5b7263ab28b7"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -287,6 +295,28 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""action"": ""Start Button"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3507e579-d712-450a-8c36-2f4203abdf9e"",
+                    ""path"": ""<Keyboard>/backspace"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""MenuBack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1be40e35-a773-4744-8985-583391458601"",
+                    ""path"": ""<Gamepad>/buttonEast"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""MenuBack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -324,6 +354,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_PlayerFreeMovement_InteractDown = m_PlayerFreeMovement.FindAction("InteractDown", throwIfNotFound: true);
         m_PlayerFreeMovement_Aim = m_PlayerFreeMovement.FindAction("Aim", throwIfNotFound: true);
         m_PlayerFreeMovement_StartButton = m_PlayerFreeMovement.FindAction("Start Button", throwIfNotFound: true);
+        m_PlayerFreeMovement_MenuBack = m_PlayerFreeMovement.FindAction("MenuBack", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -379,6 +410,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
     private readonly InputAction m_PlayerFreeMovement_InteractDown;
     private readonly InputAction m_PlayerFreeMovement_Aim;
     private readonly InputAction m_PlayerFreeMovement_StartButton;
+    private readonly InputAction m_PlayerFreeMovement_MenuBack;
     public struct PlayerFreeMovementActions
     {
         private @InputMaster m_Wrapper;
@@ -389,6 +421,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         public InputAction @InteractDown => m_Wrapper.m_PlayerFreeMovement_InteractDown;
         public InputAction @Aim => m_Wrapper.m_PlayerFreeMovement_Aim;
         public InputAction @StartButton => m_Wrapper.m_PlayerFreeMovement_StartButton;
+        public InputAction @MenuBack => m_Wrapper.m_PlayerFreeMovement_MenuBack;
         public InputActionMap Get() { return m_Wrapper.m_PlayerFreeMovement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -416,6 +449,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @StartButton.started -= m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface.OnStartButton;
                 @StartButton.performed -= m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface.OnStartButton;
                 @StartButton.canceled -= m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface.OnStartButton;
+                @MenuBack.started -= m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface.OnMenuBack;
+                @MenuBack.performed -= m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface.OnMenuBack;
+                @MenuBack.canceled -= m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface.OnMenuBack;
             }
             m_Wrapper.m_PlayerFreeMovementActionsCallbackInterface = instance;
             if (instance != null)
@@ -438,6 +474,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @StartButton.started += instance.OnStartButton;
                 @StartButton.performed += instance.OnStartButton;
                 @StartButton.canceled += instance.OnStartButton;
+                @MenuBack.started += instance.OnMenuBack;
+                @MenuBack.performed += instance.OnMenuBack;
+                @MenuBack.canceled += instance.OnMenuBack;
             }
         }
     }
@@ -468,5 +507,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
         void OnInteractDown(InputAction.CallbackContext context);
         void OnAim(InputAction.CallbackContext context);
         void OnStartButton(InputAction.CallbackContext context);
+        void OnMenuBack(InputAction.CallbackContext context);
     }
 }
