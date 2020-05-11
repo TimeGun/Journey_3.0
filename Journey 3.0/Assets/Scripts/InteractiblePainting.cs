@@ -39,6 +39,10 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
     [SerializeField] private CinemachineVirtualCamera _vPaintingCam;
 
     [SerializeField] private int paintingIndex;
+    
+    
+    public delegate void StartPaiting();
+    public event StartPaiting OnStart;
 
     void Start()
     {
