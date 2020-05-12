@@ -82,7 +82,8 @@ public class InteractWithObject : MonoBehaviour
         {
             if (_nearRune && _rune.getGameObject().GetComponent<HoldInteractipleOnRune>() ||
                 _nearRune && _rune.getGameObject().GetComponent<GrowObject>() ||
-                _nearRune && _rune.getGameObject().GetComponent<InteractiblePainting>())
+                _nearRune && _rune.getGameObject().GetComponent<InteractiblePainting>()||
+                _nearRune && _rune.getGameObject().GetComponent<ChoiceRune>())
             {
                 if (_rune.getGameObject().GetComponent<GrowObject>() != null)
                 {
@@ -126,6 +127,26 @@ public class InteractWithObject : MonoBehaviour
                         //_movement.enabled = false;
                         print("Use Paintings");
                         StartCoroutine(UseInteractiblePainting(_rune.getGameObject()));
+                    }
+                }else if (_rune.getGameObject().GetComponent<ChoiceRune>() != null)
+                {
+                    if (!_interacting && _objectDetection.Items.Count > 1)
+                    {
+                        cooldown = true;
+                        _interacting = true;
+                        _movement.ControllerVeclocity = Vector3.zero;
+                        _movement.enabled = false;
+
+                        GameObject obj = ReturnCloserObject();
+                        _interactingObj = obj.GetComponent<IInteractible>();
+                        _coroutine = StartCoroutine(TurnToGrab(obj));
+                    }
+                    else
+                    {
+                        cooldown = true;
+                        _movement.ControllerVeclocity = Vector3.zero;
+                        print("Use Choice Rune");
+                        StartCoroutine(UseChoiceRune(_rune.getGameObject()));
                     }
                 }
                 else if (_rune.getGameObject().GetComponent<HoldInteractipleOnRune>() != null)
@@ -640,6 +661,13 @@ public class InteractWithObject : MonoBehaviour
     {
         //start the interactible painting interaction with any this transform
         rune.GetComponent<InteractiblePainting>().StartInteraction(transform);
+        yield return new WaitForEndOfFrame();
+    }
+    
+    IEnumerator UseChoiceRune(GameObject rune)
+    {
+        //start the choice rune interaction with any this transform
+        rune.GetComponent<ChoiceRune>().StartInteraction(transform);
         yield return new WaitForEndOfFrame();
     }
 

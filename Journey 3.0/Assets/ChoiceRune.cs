@@ -1,24 +1,10 @@
 ﻿using System.Collections;
-using Cinemachine;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 
-public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
+public class ChoiceRune : MonoBehaviour, IInteractible, IRune
 {
-    [SerializeField] private Material _plateMat, _frameMat;
-    [SerializeField] private Animator _paintingAnimator;
-
-    private bool paintingIsPlaying;
-    
-    [SerializeField] private Color _emissionColour;
-
-    [SerializeField] private float _minEmissionStrength;
-    [SerializeField] private float _maxEmissionStrength;
-
-    [SerializeField] private float _lerpSpeed = 1f;
-
-    private float _multiplierPlate;
-    private float _multiplierFrame;
-
     private Transform _chestHeight;
 
     [SerializeField] private float armSeperationFloat = 0.314f;
@@ -31,36 +17,22 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
     [SerializeField] private GameObject _palceToStand;
     [SerializeField] private GameObject _objectToFollow;
 
-    [SerializeField] private string _gameObjectName = "";
-    [SerializeField] private string _methodName = "";
+    [SerializeField] private PlayableDirector _timelineToPlay;
 
-    [SerializeField] private CinemachineVirtualCamera _vPaintingCam;
-
-    [SerializeField] private int paintingIndex;
-    
-    
-    public delegate void StartPaiting();
-    public event StartPaiting OnStart;
-
+    // Start is called before the first frame update
     void Start()
     {
-        _multiplierPlate = _maxEmissionStrength;
-        _multiplierFrame = _minEmissionStrength;
-
-        _plateMat.SetColor("_EmissiveColor", _emissionColour * _multiplierPlate);
-        _frameMat.SetColor("_EmissiveColor", _emissionColour * _multiplierFrame);
+        
     }
 
-    IEnumerator PlayPainting(Transform player)
+    // Update is called once per frame
+    void Update()
     {
-        if (GallerySaveSystem.instance != null)
-        {
-            GallerySaveSystem.FoundPainting(paintingIndex);
-            if(OnStart != null)
-                OnStart();
-        }
-
         
+    }
+    
+    IEnumerator ChooseEnding(Transform player)
+    {
         PlayerMovement movement = player.GetComponent<PlayerMovement>();
         InteractWithObject interactWithObject = player.GetComponent<InteractWithObject>();
 
@@ -129,53 +101,12 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
             }
         }
 
-        if (_gameObjectName != null || _gameObjectName != "")
+        if (_timelineToPlay != null)
         {
-            //GameObject.Find(_gameObjectName).SendMessage(_methodName);
+            _timelineToPlay.Play();
         }
 
-
-        _vPaintingCam.Priority = 100;
-        while (_multiplierPlate != _minEmissionStrength)
-        {
-            print("Running");
-            _multiplierPlate = Mathf.MoveTowards(_multiplierPlate, _minEmissionStrength, Time.deltaTime * _lerpSpeed);
-            _plateMat.SetColor("_EmissiveColor", _emissionColour * _multiplierPlate);
-            yield return new WaitForEndOfFrame();
-        }
-
-        while (_multiplierFrame != _maxEmissionStrength)
-        {
-            print("Running");
-            _multiplierFrame = Mathf.MoveTowards(_multiplierFrame, _maxEmissionStrength, Time.deltaTime * _lerpSpeed);
-            _frameMat.SetColor("_EmissiveColor", _emissionColour * _multiplierFrame);
-            yield return new WaitForEndOfFrame();
-        }
-
-        
-        _paintingAnimator.SetBool("Hover", true);
-        yield return new WaitUntil(() => !_paintingAnimator.GetCurrentAnimatorStateInfo(0).IsName("New State"));
-        yield return new WaitUntil(() => _paintingAnimator.GetCurrentAnimatorStateInfo(0).IsName("New State"));
-        
-        _paintingAnimator.SetBool("Hover", false);    
-        while (_multiplierFrame != _minEmissionStrength)
-        {
-            print("Running");
-            _multiplierFrame = Mathf.MoveTowards(_multiplierFrame, _minEmissionStrength, Time.deltaTime * _lerpSpeed);
-            _frameMat.SetColor("_EmissiveColor", _emissionColour * _multiplierFrame);
-            yield return new WaitForEndOfFrame();
-        }
-        player.GetComponent<EmotionController>().SetTempColour(_emissionColour, 6f);
-        
-        while (_multiplierPlate != _maxEmissionStrength)
-        {
-            print("Running");
-            _multiplierPlate = Mathf.MoveTowards(_multiplierPlate, _maxEmissionStrength, Time.deltaTime * _lerpSpeed);
-            _plateMat.SetColor("_EmissiveColor", _emissionColour * _multiplierPlate);
-            yield return new WaitForEndOfFrame();
-        }
-        _vPaintingCam.Priority = 0;
-        
+        yield return new WaitForSeconds(3f);
 
         proceduralArmPlacement.pause = false;
 
@@ -183,6 +114,10 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
         movement.StopRemoteControlledMovement();
     }
 
+    public GameObject getGameObject()
+    {
+        return gameObject;
+    }
 
     public bool isActive()
     {
@@ -191,16 +126,12 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
 
     public void StartInteraction(Transform parent)
     {
-        StartCoroutine(PlayPainting(parent));
+        print("Lego");
+        StartCoroutine(ChooseEnding(parent));
     }
 
     public void StopInteraction()
     {
         throw new System.NotImplementedException();
-    }
-
-    public GameObject getGameObject()
-    {
-        return gameObject;
     }
 }

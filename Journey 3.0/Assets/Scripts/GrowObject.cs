@@ -32,13 +32,10 @@ public class GrowObject : MonoBehaviour, IInteractible, IRune
     
     [SerializeField] private float armSeperationFloat = 0.314f;
 
-    [SerializeField] private float _wallSeperationBuffer;
+    [SerializeField] private float _wallSeperationBuffer = 0.1f;
     [SerializeField] private float _wallDistanceCheck = 1.5f;
 
     [SerializeField] private LayerMask _wallMask;
-    
-    [SerializeField] private float angleAdjustment1 = 90f;
-    [SerializeField] private float angleAdjustment2 = -90f;
 
     [SerializeField] private Light plateLight;
     [SerializeField] private float lightIntensity;
@@ -139,9 +136,7 @@ public class GrowObject : MonoBehaviour, IInteractible, IRune
             {
                 print("set left arm");
                 LeftArmIK.Instance.TempUse = true;
-
-                Quaternion handRot = AdjustHandRotation(leftRaycastHit.normal);
-
+                
                 LeftArmIK.Instance.SetProceduralTargetAndHint(
                     leftRaycastHit.point + (leftRaycastHit.normal * _wallSeperationBuffer), leftRaycastHit.normal, 1f);
             }
@@ -215,16 +210,5 @@ public class GrowObject : MonoBehaviour, IInteractible, IRune
         movement.StopRemoteControlledMovement();
         
         yield return null;
-    }
-    
-    
-    Quaternion AdjustHandRotation(Vector3 wallNormal)
-    {
-        Quaternion handRot = Quaternion.Inverse(Quaternion.LookRotation(wallNormal));
-        
-        handRot *= Quaternion.AngleAxis(angleAdjustment1, Vector3.right);
-        handRot *= Quaternion.AngleAxis(angleAdjustment2, Vector3.up);
-
-        return handRot;
     }
 }
