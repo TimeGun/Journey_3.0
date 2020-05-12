@@ -59,7 +59,7 @@ public class FadeLight : MonoBehaviour
         _light.intensity = startIntensity * intensityMultiplier;
         
         
-        if (_interactWithObject.NearRune)
+        if (_interactWithObject.NearRune && _interactWithObject.closeRune == gameObject)
         {
             multiplier = Mathf.Lerp(multiplier, _maxEmissionStrength, Time.deltaTime * _lerpSpeed);
             intensityMultiplier = Mathf.Lerp(intensityMultiplier, 5f, Time.deltaTime * _lerpSpeed);

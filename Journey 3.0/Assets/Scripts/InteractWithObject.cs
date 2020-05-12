@@ -26,6 +26,8 @@ public class InteractWithObject : MonoBehaviour
         get => _nearRune;
     }
 
+    public GameObject closeRune;
+
     [SerializeField] private Transform handPosition;
 
     private PlayerMovement _movement;
@@ -63,7 +65,7 @@ public class InteractWithObject : MonoBehaviour
         get => _plankPlacementArea;
         set => _plankPlacementArea = value;
     }
-
+    
 
     void Start()
     {
@@ -373,7 +375,10 @@ public class InteractWithObject : MonoBehaviour
     private bool CheckNearRune()
     {
         if (_objectDetection.Items.Count == 0) return false;
-
+        
+        
+        closeRune = null;
+        
         bool checker = false;
         for (int i = 0; i < _objectDetection.Items.Count; i++)
         {
@@ -381,10 +386,11 @@ public class InteractWithObject : MonoBehaviour
             {
                 _rune = _objectDetection.Items[i].GetComponent<IRune>();
                 checker = true;
+                closeRune = _objectDetection.Items[i];
                 break;
             }
         }
-
+        
         return checker;
     }
 
