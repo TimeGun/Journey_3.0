@@ -266,6 +266,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void SetAnimation()
     {
+        _anim.SetBool("Grounded", _controller.isGrounded);
         _anim.SetFloat("velocity", _controller.velocity.magnitude);
 
         float walkSpeed = Map(_controller.velocity.magnitude, 0f, _speed, _minWalkSpeed, _maxWalkSpeed);
