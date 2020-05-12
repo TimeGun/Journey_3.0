@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -39,11 +40,11 @@ public class MenuController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (_controls.PlayerFreeMovement.StartButton.triggered)
+        if (_controls.PlayerFreeMovement.StartButton.triggered || _controls.PlayerFreeMovement.MenuBack.triggered)
         {
             if (inMenu)
             {
-                if (gameStarted)
+                if (gameStarted && baseMenu.activeSelf)
                 {
                     LeaveMenu();
                 }
@@ -81,6 +82,9 @@ public class MenuController : MonoBehaviour
         API.GlobalReferences.PlayerRef.GetComponent<PlayerMovement>().EnableThis();
         AudioListener.pause = false;
         inMenu = false;
+
+        baseMenuFirstButton.GetComponentInChildren<TextMeshProUGUI>().text = "Continue";
+        
         gameStarted = true;
     }
 

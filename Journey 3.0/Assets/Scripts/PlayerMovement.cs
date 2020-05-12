@@ -105,7 +105,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private AudioSource _walkSource;
 
 
-    private bool _remoteControl;
+    public bool _remoteControl;
     private GameObject _objectToFollow;
     
     
