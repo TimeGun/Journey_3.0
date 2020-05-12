@@ -56,26 +56,37 @@ public class CheckPlate : MonoBehaviour
                 _ReturnBoulderPresent.pushableObj.SetParent(boulderParent, true);
                 _ReturnBoulderPresent.pushableObj.GetComponent<Rigidbody>().velocity = Vector3.zero;
 
-                Material mat = _ReturnBoulderPresent.pushableObj.GetComponentInChildren<Renderer>().material;
+
+                
 
                 InteractibleGlow _glow = API.GlobalReferences.PlayerRef.GetComponent<InteractibleGlow>();
 
-                _glow.materials.Remove(mat);
+                Destroy(_glow);
                 
-                _glow.lerpObjects.Add(_ReturnBoulderPresent.pushableObj.gameObject);
-                    
-                
-                Destroy(_ReturnBoulderPresent.pushableObj.GetComponent<GravityCheck>());
-                Destroy(_ReturnBoulderPresent.pushableObj.GetComponent<Rigidbody>());
-                Destroy(_ReturnBoulderPresent.pushableObj.GetComponent<PushObject>());
                 
                 openDoor.Invoke();
                 API.GlobalReferences.PlayerRef.GetComponent<InteractWithObject>().StopInteracting();
+                
                 opened = true;
+                Invoke("DestroyBoulder", Time.deltaTime);
             } 
         }
     }
-    
+
+    void DestroyBoulder()
+    {
+        Destroy(_ReturnBoulderPresent.pushableObj.GetComponent<GravityCheck>());
+        Destroy(_ReturnBoulderPresent.pushableObj.GetComponent<Rigidbody>());
+        Destroy(_ReturnBoulderPresent.pushableObj.GetComponent<PushObject>());
+        Destroy(_ReturnBoulderPresent.pushableObj.GetComponent<SquishObject>());
+        API.GlobalReferences.PlayerRef.GetComponent<ObjectDetection>().Items.Remove(_ReturnBoulderPresent.pushableObj.gameObject);
+        Invoke("EnableGlow", 1f);
+    }
+
+    void EnableGlow()
+    {
+        API.GlobalReferences.PlayerRef.AddComponent<InteractibleGlow>();
+    }
 
     private void OnTriggerExit(Collider other)
     {

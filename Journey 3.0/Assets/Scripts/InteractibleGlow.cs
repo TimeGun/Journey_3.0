@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,20 +7,30 @@ public class InteractibleGlow : MonoBehaviour
 {
     private ObjectDetection _objectDetection;
 
-    [SerializeField] float outlineStrength;
+    [SerializeField] float outlineStrength = 0.65f;
 
-    [SerializeField] private float lerpSpeed;
+    [SerializeField] private float lerpSpeed = 10f;
     [SerializeField] private float updatesPerSecond = 10f;
     
-    List <Material> materials = new List<Material>();
+    public List <Material> materials = new List<Material>();
     
-    List<GameObject> lerpObjects = new List<GameObject>();
+    public List<GameObject> lerpObjects = new List<GameObject>();
     
-    // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         _objectDetection = GetComponent<ObjectDetection>();
         StartCoroutine(UpdateMaterialList());
+        
+        materials.Clear();
+        lerpObjects.Clear();
+    }
+
+    private void OnDisable()
+    {
+        StopAllCoroutines();
+        _objectDetection = null;
+        materials.Clear();
+        lerpObjects.Clear();
     }
 
     // Update is called once per frame
@@ -31,7 +42,6 @@ public class InteractibleGlow : MonoBehaviour
         }
         
         FadeOutMaterials();
-
     }
 
     void GlowOutlineGlow(Material[] outlineMaterials)
@@ -85,13 +95,16 @@ public class InteractibleGlow : MonoBehaviour
             
             for (int i = 0; i < _objectDetection.Items.Count; i++)
             {
-                if (_objectDetection.Items[i].GetComponent<IRune>() == null && !objectsToChangeMaterial.Contains(_objectDetection.Items[i]) && !_objectDetection.Items[i].GetComponent<IInteractible>().isActive())
+                if (_objectDetection.Items[i] != null)
                 {
-                    objectsToChangeMaterial.Add(_objectDetection.Items[i]);
-
-                    if (lerpObjects.Contains(_objectDetection.Items[i]))
+                    if (_objectDetection.Items[i].GetComponent<IRune>() == null && !objectsToChangeMaterial.Contains(_objectDetection.Items[i]) && !_objectDetection.Items[i].GetComponent<IInteractible>().isActive())
                     {
-                        lerpObjects.Remove(_objectDetection.Items[i]);
+                        objectsToChangeMaterial.Add(_objectDetection.Items[i]);
+
+                        if (lerpObjects.Contains(_objectDetection.Items[i]))
+                        {
+                            lerpObjects.Remove(_objectDetection.Items[i]);
+                        }
                     }
                 }
             }
