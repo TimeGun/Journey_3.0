@@ -17,7 +17,9 @@ public class ChoiceRune : MonoBehaviour, IInteractible, IRune
     [SerializeField] private GameObject _palceToStand;
     [SerializeField] private GameObject _objectToFollow;
 
-    [SerializeField] private PlayableDirector _timelineToPlay;
+    [SerializeField] private string _timelineObject = "";
+    
+    private PlayableDirector _timelineToPlay;
 
     // Start is called before the first frame update
     void Start()
@@ -100,6 +102,12 @@ public class ChoiceRune : MonoBehaviour, IInteractible, IRune
                     leftRaycastHit.point + (leftRaycastHit.normal * _wallSeperationBuffer), leftRaycastHit.normal, 1f);
             }
         }
+
+        if (_timelineObject != "")
+        {
+            _timelineToPlay = GameObject.Find(_timelineObject).GetComponent<PlayableDirector>();
+        }
+
 
         if (_timelineToPlay != null)
         {
