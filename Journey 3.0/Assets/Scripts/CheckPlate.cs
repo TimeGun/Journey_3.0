@@ -55,6 +55,16 @@ public class CheckPlate : MonoBehaviour
             {
                 _ReturnBoulderPresent.pushableObj.SetParent(boulderParent, true);
                 _ReturnBoulderPresent.pushableObj.GetComponent<Rigidbody>().velocity = Vector3.zero;
+
+                Material mat = _ReturnBoulderPresent.pushableObj.GetComponentInChildren<Renderer>().material;
+
+                InteractibleGlow _glow = API.GlobalReferences.PlayerRef.GetComponent<InteractibleGlow>();
+
+                _glow.materials.Remove(mat);
+                
+                _glow.lerpObjects.Add(_ReturnBoulderPresent.pushableObj.gameObject);
+                    
+                
                 Destroy(_ReturnBoulderPresent.pushableObj.GetComponent<GravityCheck>());
                 Destroy(_ReturnBoulderPresent.pushableObj.GetComponent<Rigidbody>());
                 Destroy(_ReturnBoulderPresent.pushableObj.GetComponent<PushObject>());
