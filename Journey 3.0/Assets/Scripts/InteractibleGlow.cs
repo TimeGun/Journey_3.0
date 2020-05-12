@@ -38,9 +38,12 @@ public class InteractibleGlow : MonoBehaviour
     {
         for (int i = 0; i < outlineMaterials.Length; i++)
         {
-            float strength = outlineMaterials[i].GetFloat("_outlineStrength");
+            if (outlineMaterials[i].GetFloat("_outlineStrength") != null)
+            {
+                float strength = outlineMaterials[i].GetFloat("_outlineStrength");
             
-            outlineMaterials[i].SetFloat("_outlineStrength", Mathf.Lerp(strength, outlineStrength, Time.deltaTime * lerpSpeed));
+                outlineMaterials[i].SetFloat("_outlineStrength", Mathf.Lerp(strength, outlineStrength, Time.deltaTime * lerpSpeed));
+            }
         }
         
     }
@@ -97,7 +100,10 @@ public class InteractibleGlow : MonoBehaviour
             
             for (int i = 0; i < objectsToChangeMaterial.Count; i++)
             {
-                materials.Add(objectsToChangeMaterial[i].GetComponentInChildren<Renderer>().material);
+                if (objectsToChangeMaterial[i].GetComponentInChildren<Renderer>() != null && objectsToChangeMaterial[i].GetComponentInChildren<Renderer>().material != null)
+                {
+                    materials.Add(objectsToChangeMaterial[i].GetComponentInChildren<Renderer>().material);
+                }
             }
             
             yield return new WaitForSeconds(1f/updatesPerSecond);
