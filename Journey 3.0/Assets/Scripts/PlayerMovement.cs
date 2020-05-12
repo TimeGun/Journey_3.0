@@ -31,7 +31,6 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private float _pushSpeed = 2f;
 
-    
 
     [SerializeField] private float _turnSpeed = 10f;
     [SerializeField] private float _gravity = 20f;
@@ -73,7 +72,7 @@ public class PlayerMovement : MonoBehaviour
     {
         get => _movementDirection;
     }
-    
+
     public Vector3 ControllerVeclocity
     {
         get => _controller.velocity;
@@ -100,15 +99,15 @@ public class PlayerMovement : MonoBehaviour
     public LayerMask mask;
 
     [SerializeField] private bool pushingBoulder;
-    
-    
+
+
     [SerializeField] private AudioSource _walkSource;
 
 
     public bool _remoteControl;
     private GameObject _objectToFollow;
-    
-    
+
+
     bool ccSwitch;
 
     private Vector3 lastPos;
@@ -132,107 +131,108 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-        if (_controller == null)
+        if (!_anim.GetCurrentAnimatorStateInfo(0).IsName("Glyf-Formation"))
         {
-            Start();
-        }
-
-        if (carryingObject)
-        {
-            if (ccSwitch == true)
+            if (_controller == null)
             {
-                _controller.radius = _originalRange * 1.15f;
-                ccSwitch = false;
+                Start();
             }
 
-        }
-        else
-        {
-            if (ccSwitch == false)
+            if (carryingObject)
             {
-                print("Switched back");
-                _controller.radius = _originalRange;
-                ccSwitch = true;
-            }
-        }
-
-        if (!_remoteControl)
-        {
-            if (frozen)
-            {
-                _input = Vector2.zero;
+                if (ccSwitch == true)
+                {
+                    _controller.radius = _originalRange * 1.25f;
+                    ccSwitch = false;
+                }
             }
             else
             {
-                _input = _inputSetUp.LeftStick;
+                if (ccSwitch == false)
+                {
+                    print("Switched back");
+                    _controller.radius = _originalRange;
+                    ccSwitch = true;
+                }
             }
-            
-            
-            
-            grounded = _controller.isGrounded;
-            _timeDelta = Time.deltaTime;
 
-            if (!frozen)
+            if (!_remoteControl)
             {
-                CalculateDirection();
-                
-                if (Mathf.Abs(_input.magnitude) > 0.05f && !_pushing)
+                if (frozen)
                 {
-                    Rotate();
+                    _input = Vector2.zero;
+                }
+                else
+                {
+                    _input = _inputSetUp.LeftStick;
                 }
 
-                if (_controller.isGrounded)
-                {
-                    SetMove();
 
-                    if (_inputSetUp.Controls.PlayerFreeMovement.Jump.triggered && _jump && ! _pushing)
+                grounded = _controller.isGrounded;
+                _timeDelta = Time.deltaTime;
+
+                if (!frozen)
+                {
+                    CalculateDirection();
+
+                    if (Mathf.Abs(_input.magnitude) > 0.05f && !_pushing)
                     {
-                        Jump();
+                        Rotate();
                     }
-                }
-                
-                ApplyGravity();
 
-                _controller.Move(_movementDirection * _timeDelta);
-                if (_controller.velocity.magnitude >= 0.5f)
-                {
-                    float walkSoundPitch = Map(_controller.velocity.magnitude, 0f, _speed, 0.6f, 1.35f);
-
-                    _walkSource.pitch = walkSoundPitch;
-            
-                    if (!_walkSource.isPlaying)
+                    if (_controller.isGrounded)
                     {
-                        _walkSource.Play();
-                    }
-                }else
-                {
-                    _walkSource.Stop();
-                }
+                        SetMove();
 
-                SetAnimation();
+                        if (_inputSetUp.Controls.PlayerFreeMovement.Jump.triggered && _jump && !_pushing)
+                        {
+                            Jump();
+                        }
+                    }
+
+                    ApplyGravity();
+
+                    _controller.Move(_movementDirection * _timeDelta);
+                    if (_controller.velocity.magnitude >= 0.5f)
+                    {
+                        float walkSoundPitch = Map(_controller.velocity.magnitude, 0f, _speed, 0.6f, 1.35f);
+
+                        _walkSource.pitch = walkSoundPitch;
+
+                        if (!_walkSource.isPlaying)
+                        {
+                            _walkSource.Play();
+                        }
+                    }
+                    else
+                    {
+                        _walkSource.Stop();
+                    }
+
+                    SetAnimation();
+                }
             }
-        }
-        else
-        {
-            lastPos = transform.position;
-            
-            transform.position = _objectToFollow.transform.position;
-            
-            transform.rotation = _objectToFollow.transform.rotation;
-            
-            SetRemoteAnimation();
+            else
+            {
+                lastPos = transform.position;
+
+                transform.position = _objectToFollow.transform.position;
+
+                transform.rotation = _objectToFollow.transform.rotation;
+
+                SetRemoteAnimation();
+            }
         }
     }
 
     private void SetRemoteAnimation()
     {
-
         float velocity = Vector3.Distance(lastPos, transform.position) * remoteAnimationVelocityMultiplier;
-        
+
         _anim.SetFloat("velocity", velocity);
 
         float walkSpeed = Map(velocity, 0f, _speed, _minWalkSpeed, _maxWalkSpeed);
-        
+
         _anim.SetFloat("walkSpeed", walkSpeed);
 
         if (velocity > 0.1f)
@@ -240,17 +240,16 @@ public class PlayerMovement : MonoBehaviour
             float walkSoundPitch = Map(velocity, 0f, _speed, 0.6f, 1.35f);
 
             _walkSource.pitch = walkSoundPitch;
-            
+
             if (!_walkSource.isPlaying)
             {
                 _walkSource.Play();
             }
-        }else
+        }
+        else
         {
             _walkSource.Stop();
         }
-
-        
     }
 
     public void StartRemoteControlledMovement(GameObject objToFollow)
@@ -270,9 +269,9 @@ public class PlayerMovement : MonoBehaviour
         _anim.SetFloat("velocity", _controller.velocity.magnitude);
 
         float walkSpeed = Map(_controller.velocity.magnitude, 0f, _speed, _minWalkSpeed, _maxWalkSpeed);
-        
+
         _anim.SetFloat("walkSpeed", walkSpeed);
-        
+
         _anim.SetBool("pushing", _pushing);
     }
 
@@ -313,18 +312,18 @@ public class PlayerMovement : MonoBehaviour
         float angleToStraight = Quaternion.Angle(_targetRotation, transform.rotation);
 
         float adjustedSpeed = Map(angleToStraight, 180, 0, 0f, _speed);
-        
+
         Vector3 right = cam.right;
         Vector3 forward = Vector3.Scale(cam.forward, new Vector3(1, 0, 1)).normalized;
 
         Vector3 movement = (right * _input.x) + (forward * _input.y);
 
         movement = Quaternion.AngleAxis(_groundRayCast.SlopeAngle, transform.right) * movement;
-        
+
 
         Debug.DrawRay(transform.position + transform.up, movement * 10f);
-        
-        
+
+
         if (!_pushing)
         {
             gameObject.layer = 11;
@@ -336,7 +335,7 @@ public class PlayerMovement : MonoBehaviour
         {
             gameObject.layer = 22;
             float localPushDirection;
-            
+
             if (Vector3.Angle(transform.forward, movement) > 120f && _input.magnitude > 0.1f)
             {
                 _movementDirection = -transform.forward;
@@ -348,13 +347,14 @@ public class PlayerMovement : MonoBehaviour
             else if (Vector3.Angle(transform.forward, movement) < 60f && _input.magnitude > 0.1f)
             {
                 Debug.DrawRay(info.position, transform.forward * info.distance);
-                
+
                 Ray ray = new Ray(info.position, transform.forward);
 
                 print(_pushCollisionDetection.IsCollidingWithWall());
 
 
-                if (!Physics.SphereCast(ray, 0.2f, out RaycastHit hit, info.distance, mask) && !_pushCollisionDetection.IsCollidingWithWall())
+                if (!Physics.SphereCast(ray, 0.2f, out RaycastHit hit, info.distance, mask) &&
+                    !_pushCollisionDetection.IsCollidingWithWall())
                 {
                     _movementDirection = transform.forward;
                     _movementDirection *= _pushSpeed * _input.magnitude;
@@ -385,6 +385,7 @@ public class PlayerMovement : MonoBehaviour
                 pushingBoulder = false;
                 localPushDirection = 0f;
             }
+
             _anim.SetFloat("pushDirection", localPushDirection);
         }
     }
@@ -412,15 +413,14 @@ public class PlayerMovement : MonoBehaviour
     {
         _movementDirection.y = _jumpSpeed;
     }
-    
+
     public float Map(float a, float b, float c, float d, float e)
     {
-        
         float cb = c - b;
         float de = e - d;
         float howFar = (a - b) / cb;
         return d + howFar * de;
-        
+
         //float a = value you want mapped t
     }
 
@@ -437,7 +437,7 @@ public class PlayerMovement : MonoBehaviour
         _anim.SetFloat("velocity", 0f);
         frozen = true;
     }
-    
+
     public void EnableThis()
     {
         frozen = false;

@@ -12,6 +12,8 @@ public class InteractWithObject : MonoBehaviour
 
     private InputSetUp _inputSetUp;
 
+    [SerializeField] private bool useDropAnim;
+
     [SerializeField] private bool _interacting;
 
     [SerializeField] private bool _nearRune;
@@ -275,8 +277,21 @@ public class InteractWithObject : MonoBehaviour
             else if (_interacting && !_nearRune && !_inPlacementArea) //Drop item you are currently holding
             {
                 cooldown = true;
+                _movement.enabled = false;
+                
                 Invoke("ResetCooldown", waitTime);
-                StopInteracting();
+
+
+                if (useDropAnim)
+                {
+                    StartCoroutine(DropItem());
+                }
+                else
+                {
+                    _movement.enabled = true;
+                    StopInteracting();
+                }
+
             }
             else if (_interacting && !_nearRune && _inPlacementArea) //Place plank
             {
@@ -289,6 +304,17 @@ public class InteractWithObject : MonoBehaviour
                 }
             }
         }
+    }
+
+    IEnumerator DropItem()
+    {
+        RightArmIK.Instance.StopIK();
+        _animator.SetTrigger("Drop");
+        yield return new WaitForSeconds(0.4f);
+        StopInteracting();
+        
+        yield return new WaitForSeconds(0.5f);
+        _movement.enabled = true;
     }
 
     private void ResetCooldown()
@@ -307,6 +333,7 @@ public class InteractWithObject : MonoBehaviour
 
     public void StopInteracting()
     {
+        
         if (_interactingObj != null)
         {
             _interactingObj.StopInteraction();
