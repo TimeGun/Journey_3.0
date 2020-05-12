@@ -64,7 +64,7 @@ public class MenuController : MonoBehaviour
             Time.timeScale = 0f;
             AudioListener.pause = true;
         }
-
+        
         inMenu = true;
         API.GlobalReferences.PlayerRef.GetComponent<PlayerMovement>().DisableThis();
         baseMenu.SetActive(true);
@@ -79,10 +79,11 @@ public class MenuController : MonoBehaviour
         controlsMenu.SetActive(false);
         galleryMenu.SetActive(false);
         levelSelectMenu.SetActive(false);
+        GlyfFormationSetter.CheckAnimation();
         API.GlobalReferences.PlayerRef.GetComponent<PlayerMovement>().EnableThis();
         AudioListener.pause = false;
         inMenu = false;
-
+        
         baseMenuFirstButton.GetComponentInChildren<TextMeshProUGUI>().text = "Continue";
         
         gameStarted = true;

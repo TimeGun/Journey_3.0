@@ -20,6 +20,7 @@ public class GlyfFormationSetter : MonoBehaviour
         if (instance.UseFormation)
         {
             instance.anim.Play("Glyf-Formation");
+            instance.UseFormation = false;
         }
     }
 }
