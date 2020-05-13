@@ -49,6 +49,12 @@ public class SeeSawPlacement : MonoBehaviour, IPlaceableArea
         return false;
     }
 
+    public Type GetType()
+    {
+        return typeof(SeeSawPlacement);
+    }
+    
+
     private void Update()
     {
         if (_boulderPlacedDown)
