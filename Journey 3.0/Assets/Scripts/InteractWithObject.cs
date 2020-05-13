@@ -326,9 +326,19 @@ public class InteractWithObject : MonoBehaviour
                 print("Plank placement while in zone");
                 SquishObject squishObject = _interactingObj.getGameObject().GetComponent<SquishObject>();
 
-                if (squishObject != null && squishObject.Squished && !_plankPlacementArea.GetPlankPlacedDown() && squishObject.gameObject.name != "Boulder")
+                if (squishObject != null && squishObject.Squished && !_plankPlacementArea.GetPlankPlacedDown())
                 {
-                    StartCoroutine(PlacePlank(_interactingObj.getGameObject()));
+                    if (squishObject.gameObject.name == "Boulder")
+                    {
+                        if (_plankPlacementArea.GetType() == typeof(SeeSawPlacement))
+                        {
+                            StartCoroutine(PlacePlank(_interactingObj.getGameObject()));
+                        }
+                    }
+                    else
+                    {
+                        StartCoroutine(PlacePlank(_interactingObj.getGameObject()));
+                    }
                 }
             }
         }

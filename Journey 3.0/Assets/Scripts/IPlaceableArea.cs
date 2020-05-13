@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,4 +18,5 @@ public interface IPlaceableArea
 
     bool AdjustPositionBool();
 
+    System.Type GetType();
 }
