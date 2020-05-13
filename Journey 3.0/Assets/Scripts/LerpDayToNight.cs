@@ -23,7 +23,9 @@ public class LerpDayToNight : MonoBehaviour
     [SerializeField] private GameObject _directionalLight;
 
     [SerializeField] private Quaternion _lightRotation;
+    [SerializeField] private Quaternion _lightStartRotation;
     [SerializeField] private Color _lightColor;
+    [SerializeField] private Color _lightStartColor;
 
     private Light _dirLight;
 
@@ -32,6 +34,8 @@ public class LerpDayToNight : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
+        
 #if UNITY_EDITOR
         EditorApplication.playmodeStateChanged += ModeChanged;
 #endif
@@ -49,7 +53,10 @@ public class LerpDayToNight : MonoBehaviour
         instance = this;
 
         _dirLight = _directionalLight.GetComponent<Light>();
-
+        
+        _lightStartRotation = _dirLight.transform.rotation;
+        _lightStartColor = _dirLight.color;
+        
         if (debug)
         {
             StartCoroutine(ChangeDayToNight(debugLerpTime));
@@ -75,6 +82,9 @@ public class LerpDayToNight : MonoBehaviour
         instance._changingSkybox.bottom.value = instance._daySkybox.bottom.value;
         instance._changingSkybox.middle.value = instance._daySkybox.middle.value;
         instance._changingSkybox.top.value = instance._daySkybox.top.value;
+        
+        instance._dirLight.color = instance._lightStartColor;
+        instance._dirLight.transform.rotation = instance._lightStartRotation;
     }
 
 
