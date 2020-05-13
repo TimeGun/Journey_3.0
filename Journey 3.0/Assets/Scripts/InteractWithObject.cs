@@ -241,7 +241,7 @@ public class InteractWithObject : MonoBehaviour
 
                     _coroutine = StartCoroutine(TurnToPush(obj));
                 }
-                else if (type == typeof(PickUpObject))
+                else if (type == typeof(PickUpObject) && obj.tag != "Locked")
                 {
                     if (_plankPlacementArea != null && _plankPlacementArea.GetPlank() != null &&
                         _plankPlacementArea.GetPlank() != obj)
@@ -272,30 +272,35 @@ public class InteractWithObject : MonoBehaviour
             else if (!_interacting && !_nearRune && _objectDetection.Items.Count > 0 && _inPlacementArea
             ) // pickup of item whilst in the placement zone (bridge)
             {
+                
                 GameObject obj = ReturnCloserObject();
-
-                if (_plankPlacementArea.GetPlank() == null && obj.GetComponent<PickUpObject>().PlacedDown)
+                if (obj.tag != "Locked")
                 {
-                    print("in placement zone but returned here because of plank being placed down");
-                    return;
+                    if (_plankPlacementArea.GetPlank() == null && obj.GetComponent<PickUpObject>().PlacedDown)
+                    {
+                        print("in placement zone but returned here because of plank being placed down");
+                        return;
+                    }
+
+                    print("plank specific pickup whilst in zone");
+                    cooldown = true;
+                    _interacting = true;
+                    _movement.ControllerVeclocity = Vector3.zero;
+                    _movement.enabled = false;
+
+
+                    _interactingObj = obj.GetComponent<IInteractible>();
+                    _coroutine = StartCoroutine(TurnToGrab(obj));
+
+                    if (obj == _plankPlacementArea.GetPlank())
+                    {
+                        _plankPlacementArea.GetPlank().GetComponent<PickUpObject>().PlacedDown = false;
+                        _plankPlacementArea.SetPlank(null);
+                        _plankPlacementArea.SetPlankPlacedDown(false);
+                    }
                 }
 
-                print("plank specific pickup whilst in zone");
-                cooldown = true;
-                _interacting = true;
-                _movement.ControllerVeclocity = Vector3.zero;
-                _movement.enabled = false;
-
-
-                _interactingObj = obj.GetComponent<IInteractible>();
-                _coroutine = StartCoroutine(TurnToGrab(obj));
-
-                if (obj == _plankPlacementArea.GetPlank())
-                {
-                    _plankPlacementArea.GetPlank().GetComponent<PickUpObject>().PlacedDown = false;
-                    _plankPlacementArea.SetPlank(null);
-                    _plankPlacementArea.SetPlankPlacedDown(false);
-                }
+                
             }
             else if (_interacting && !_nearRune && !_inPlacementArea) //Drop item you are currently holding
             {
@@ -321,7 +326,7 @@ public class InteractWithObject : MonoBehaviour
                 print("Plank placement while in zone");
                 SquishObject squishObject = _interactingObj.getGameObject().GetComponent<SquishObject>();
 
-                if (squishObject != null && squishObject.Squished && !_plankPlacementArea.GetPlankPlacedDown())
+                if (squishObject != null && squishObject.Squished && !_plankPlacementArea.GetPlankPlacedDown() && squishObject.gameObject.name != "Boulder")
                 {
                     StartCoroutine(PlacePlank(_interactingObj.getGameObject()));
                 }
