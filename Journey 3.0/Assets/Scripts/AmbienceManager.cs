@@ -10,9 +10,9 @@ public class AmbienceManager : MonoBehaviour
     [SerializeField] private AudioProfileScriptableObject[] _profiles;
 
 
-    [SerializeField] private AudioSource[] _outsideSource;
+    [SerializeField] private AudioSource[] _outsideSources;
 
-    [SerializeField] private AudioSource[] _insideSource;
+    [SerializeField] private AudioSource[] _insideSources;
 
     [SerializeField] private AudioSource[] _topOfTheMountainSources;
 
@@ -44,13 +44,13 @@ public class AmbienceManager : MonoBehaviour
 
     public void SetOutSideAmbience(float newVolume)
     {
-        StartCoroutine(SetNewVolumes(_outsideSource, newVolume));
+        StartCoroutine(SetNewVolumes(_outsideSources, newVolume));
         _scatterIntruments[0].startVolume = newVolume;
     }
 
     public void SetInsideAmbience(float newVolume)
     {
-        StartCoroutine(SetNewVolumes(_insideSource, newVolume));
+        StartCoroutine(SetNewVolumes(_insideSources, newVolume));
         _scatterIntruments[1].startVolume = newVolume;
     }
 
