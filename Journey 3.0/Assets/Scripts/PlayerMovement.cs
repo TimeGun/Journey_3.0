@@ -114,6 +114,10 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private float remoteAnimationVelocityMultiplier;
 
+    [SerializeField] [Range(0, 1)] private float secondsBeforeFalling = 0.2f;
+
+    private float fallTimer;
+
 
     void Start()
     {
@@ -133,6 +137,16 @@ public class PlayerMovement : MonoBehaviour
     {
         if (!_anim.GetCurrentAnimatorStateInfo(0).IsName("Glyf-Formation"))
         {
+            if (!_controller.isGrounded)
+            {
+                fallTimer += Time.deltaTime;
+            }
+            else
+            {
+                fallTimer = 0;
+            }
+
+
             if (_controller == null)
             {
                 Start();
@@ -227,6 +241,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void SetRemoteAnimation()
     {
+        _anim.SetBool("Grounded", true);
         float velocity = Vector3.Distance(lastPos, transform.position) * remoteAnimationVelocityMultiplier;
 
         _anim.SetFloat("velocity", velocity);
@@ -265,7 +280,15 @@ public class PlayerMovement : MonoBehaviour
 
     private void SetAnimation()
     {
-        _anim.SetBool("Grounded", _controller.isGrounded);
+        if (fallTimer > secondsBeforeFalling)
+        {
+            _anim.SetBool("Grounded", false);
+        }
+        else
+        {
+            _anim.SetBool("Grounded", true);
+        }
+
         _anim.SetFloat("velocity", _controller.velocity.magnitude);
 
         float walkSpeed = Map(_controller.velocity.magnitude, 0f, _speed, _minWalkSpeed, _maxWalkSpeed);
