@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
+using UnityEngine.SceneManagement;
 
 public class ChoiceRune : MonoBehaviour, IInteractible, IRune
 {
@@ -112,6 +113,7 @@ public class ChoiceRune : MonoBehaviour, IInteractible, IRune
         if (_timelineToPlay != null)
         {
             _timelineToPlay.Play();
+            StartCoroutine(FadeToBlack());
         }
 
         yield return new WaitForSeconds(3f);
@@ -141,5 +143,18 @@ public class ChoiceRune : MonoBehaviour, IInteractible, IRune
     public void StopInteraction()
     {
         throw new System.NotImplementedException();
+    }
+    
+    IEnumerator FadeToBlack()
+    {
+        yield return new WaitForSeconds(((float)_timelineToPlay.duration) - 3f);
+        Debug.Log("FADE OUT");
+        global::FadeToBlack.instance.SetBlack(true);
+        yield return new WaitForSeconds(6f);
+        
+        ProgressionData _resetData = new ProgressionData(0, false);
+        
+        SaveSystem.SaveProgress(_resetData);
+        SceneManager.LoadScene("Manager Scene");
     }
 }
