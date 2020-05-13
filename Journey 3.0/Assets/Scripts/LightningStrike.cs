@@ -32,7 +32,10 @@ public class LightningStrike : MonoBehaviour
 
 
     [SerializeField] private float stunDuration;
-    
+
+    [SerializeField] private AudioSource _charge;
+    [SerializeField] private AudioSource _strike;
+
     void Start()
     {
         player = GameObject.Find("Player");
@@ -59,6 +62,8 @@ public class LightningStrike : MonoBehaviour
     {
         preStrikeVFX.SetBool("Spawn", true);
         yield return new WaitForSeconds(timeBeforeStrike);
+        _charge.Stop();
+        _strike.Play();
         preStrikeVFX.SetBool("Spawn", false);
         strikeVFX.SendEvent("Strike");
 
@@ -85,7 +90,7 @@ public class LightningStrike : MonoBehaviour
         
         player.GetComponent<PlayerMovement>().EnableThis();
 
-        float remainingWaitTime = 2f - stunDuration;
+        float remainingWaitTime = 6f - stunDuration;
         
         if(remainingWaitTime > 0)
             yield return new WaitForSeconds(remainingWaitTime);
