@@ -49,10 +49,9 @@ public class SpawnLightning : MonoBehaviour
     {
         while(true)
         {
+            yield return new WaitForSeconds(_timeBetweenStrike);
             if (withinZone)
             {
-                yield return new WaitForSeconds(_timeBetweenStrike);
-
                 Vector3 spawnPos = _player.transform.position;
 
 
@@ -68,10 +67,11 @@ public class SpawnLightning : MonoBehaviour
                 
                 float velocityMultiplier = Map(angle, 180f, 0, 0, 1);
                 
-                spawnPos += playerVelocity * velocityMultiplier;
+                spawnPos += playerVelocity * velocityMultiplier ;
                 
                 
                 Instantiate(_lightningPrefab, spawnPos, transform.rotation);
+                yield return new WaitForSeconds(_timeBetweenStrike);
             }
             
             yield return new WaitForEndOfFrame();
