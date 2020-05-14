@@ -22,6 +22,10 @@ public class ChoiceRune : MonoBehaviour, IInteractible, IRune
     
     private PlayableDirector _timelineToPlay;
 
+    [SerializeField] private AudioSource _source;
+
+    [SerializeField] [Range(0, 2f)] private float delayTime = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -113,6 +117,7 @@ public class ChoiceRune : MonoBehaviour, IInteractible, IRune
         if (_timelineToPlay != null)
         {
             _timelineToPlay.Play();
+            _source.PlayDelayed(delayTime);
             StartCoroutine(FadeToBlack());
         }
 
