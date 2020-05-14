@@ -65,6 +65,7 @@ public class ChangeSize : MonoBehaviour
         changingSize = true;
         
         Vector3 targetScale;
+
         
 
         if (_small)
@@ -82,6 +83,13 @@ public class ChangeSize : MonoBehaviour
                     }
 
                     Destroy(pickUpObject);
+
+                    ObjectDetection _detection = API.GlobalReferences.PlayerRef.GetComponent<ObjectDetection>();
+
+                    if (_detection.Items.Contains(gameObject))
+                    {
+                        _detection.Items.Remove(gameObject);
+                    }
                 }
             }
 
@@ -105,6 +113,13 @@ public class ChangeSize : MonoBehaviour
 
 
                     Destroy(pushObject);
+                    
+                    ObjectDetection _detection = API.GlobalReferences.PlayerRef.GetComponent<ObjectDetection>();
+
+                    if (_detection.Items.Contains(gameObject))
+                    {
+                        _detection.Items.Remove(gameObject);
+                    }
                 }
                 GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
             }
