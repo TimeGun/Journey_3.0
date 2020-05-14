@@ -16,6 +16,11 @@ public class LightningStrike : MonoBehaviour
 
     [SerializeField] private float timeBeforeStrike;
 
+    public float TimeBeforeStrike
+    {
+        get => timeBeforeStrike;
+    }
+
     [SerializeField] private float forceToPushPlayer;
 
     private Vector3 pushDirection;

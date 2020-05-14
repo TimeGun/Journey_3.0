@@ -14,6 +14,7 @@ public class SpawnLightning : MonoBehaviour
     private Coroutine coroutine;
 
     [SerializeField] private bool withinZone;
+    
 
     private void Start()
     {
@@ -66,8 +67,9 @@ public class SpawnLightning : MonoBehaviour
                 
                 
                 float velocityMultiplier = Map(angle, 180f, 0, 0, 1);
-                
-                spawnPos += playerVelocity * velocityMultiplier ;
+
+                spawnPos += playerVelocity * velocityMultiplier *
+                            _lightningPrefab.GetComponent<LightningStrike>().TimeBeforeStrike;
                 
                 
                 Instantiate(_lightningPrefab, spawnPos, transform.rotation);
