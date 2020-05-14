@@ -10,7 +10,7 @@ public class PlayAudioOnTrigger : MonoBehaviour
     private bool played = false;
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && played == false)
+        if (other.CompareTag("Player") && other.isTrigger == false && played == false)
         {
             print("Playing Audio");
             _source.Play();

@@ -22,5 +22,9 @@ public class GlyfFormationSetter : MonoBehaviour
             instance.anim.Play("Glyf-Formation");
             instance.UseFormation = false;
         }
+        else
+        {
+            instance.anim.Play("Glyf-Idle");
+        }
     }
 }
