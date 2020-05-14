@@ -15,7 +15,7 @@ public class ChangeElevatorEvent : MonoBehaviour
     // Start is called before the first frame update
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player") && !called)
+        if (other.CompareTag("Player") && !called && !other.isTrigger)
         {
             print("this getting called?");
             StartCoroutine(ExecuteEvents());
