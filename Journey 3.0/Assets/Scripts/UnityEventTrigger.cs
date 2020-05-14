@@ -12,7 +12,7 @@ public class UnityEventTrigger : MonoBehaviour
     
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !other.isTrigger)
         {
             print("Event got triggered");
             _unityEventToTrigger.Invoke();
