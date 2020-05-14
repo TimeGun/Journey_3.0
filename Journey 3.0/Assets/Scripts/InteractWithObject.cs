@@ -98,7 +98,18 @@ public class InteractWithObject : MonoBehaviour
 
                         GameObject obj = ReturnCloserObject();
                         _interactingObj = obj.GetComponent<IInteractible>();
-                        _coroutine = StartCoroutine(TurnToGrab(obj));
+                        
+                        var type = _interactingObj.GetType();
+
+                        if (type == typeof(PushObject))
+                        {
+                            _coroutine = StartCoroutine(TurnToPush(obj));
+                        }
+                        else if (type == typeof(PickUpObject) && obj.tag != "Locked")
+                        {
+                        
+                            _coroutine = StartCoroutine(TurnToGrab(obj));
+                        }
                     }
                     else
                     {
@@ -120,7 +131,18 @@ public class InteractWithObject : MonoBehaviour
 
                         GameObject obj = ReturnCloserObject();
                         _interactingObj = obj.GetComponent<IInteractible>();
-                        _coroutine = StartCoroutine(TurnToGrab(obj));
+                        
+                        var type = _interactingObj.GetType();
+
+                        if (type == typeof(PushObject))
+                        {
+                            _coroutine = StartCoroutine(TurnToPush(obj));
+                        }
+                        else if (type == typeof(PickUpObject) && obj.tag != "Locked")
+                        {
+                        
+                            _coroutine = StartCoroutine(TurnToGrab(obj));
+                        }
                     }
                     else
                     {
@@ -141,7 +163,17 @@ public class InteractWithObject : MonoBehaviour
 
                         GameObject obj = ReturnCloserObject();
                         _interactingObj = obj.GetComponent<IInteractible>();
-                        _coroutine = StartCoroutine(TurnToGrab(obj));
+                        var type = _interactingObj.GetType();
+
+                        if (type == typeof(PushObject))
+                        {
+                            _coroutine = StartCoroutine(TurnToPush(obj));
+                        }
+                        else if (type == typeof(PickUpObject) && obj.tag != "Locked")
+                        {
+                        
+                            _coroutine = StartCoroutine(TurnToGrab(obj));
+                        }
                     }
                     else
                     {
