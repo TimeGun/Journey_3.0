@@ -72,6 +72,7 @@ public class GrowObject : MonoBehaviour, IInteractible, IRune
 
     IEnumerator GrowObjectCoroutine(Transform player)
     {
+        LevelSelectEnabler.DisableButton();
         PlayerMovement movement = player.GetComponent<PlayerMovement>();
         InteractWithObject interactWithObject = player.GetComponent<InteractWithObject>();
 
@@ -210,5 +211,6 @@ public class GrowObject : MonoBehaviour, IInteractible, IRune
         movement.StopRemoteControlledMovement();
         
         yield return null;
+        LevelSelectEnabler.EnableButton();
     }
 }

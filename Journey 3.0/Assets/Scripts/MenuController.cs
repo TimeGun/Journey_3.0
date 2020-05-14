@@ -174,6 +174,7 @@ public class MenuController : MonoBehaviour
         gameStarted = false;
         API.InterestManagerScript.ResetList();
         API.GlobalReferences.PlayerRef.GetComponent<ObjectDetection>().ClearList();
+        API.GlobalReferences.PlayerRef.GetComponent<InteractWithObject>().StopInteracting();
         FadeToBlack.instance.SetBlack(true);
         AmbienceManager.FadeOutMasterSound();
         yield return new WaitForSeconds(1f);
@@ -187,6 +188,8 @@ public class MenuController : MonoBehaviour
         ProgressionData _newProgressionData = new ProgressionData(zone, night);
         SaveSystem.SaveProgress(_newProgressionData);
         SceneManagerScript.instance.StopAllCoroutines();
+        API.GlobalReferences.PlayerRef.GetComponent<InteractWithObject>().StopInteracting();
+        yield return new WaitForEndOfFrame();
         SceneManagerScript.instance.StartCoroutine(SceneManagerScript.instance.StartGameLoad(_newProgressionData));
     }
 

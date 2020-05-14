@@ -53,6 +53,7 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
 
     IEnumerator PlayPainting(Transform player)
     {
+        LevelSelectEnabler.DisableButton();
         if (GallerySaveSystem.instance != null)
         {
             GallerySaveSystem.FoundPainting(paintingIndex);
@@ -181,6 +182,7 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
 
         interactWithObject.Cooldown = false;
         movement.StopRemoteControlledMovement();
+        LevelSelectEnabler.EnableButton();
     }
 
 

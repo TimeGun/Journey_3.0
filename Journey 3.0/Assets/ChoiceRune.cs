@@ -40,6 +40,7 @@ public class ChoiceRune : MonoBehaviour, IInteractible, IRune
     
     IEnumerator ChooseEnding(Transform player)
     {
+        LevelSelectEnabler.DisableButton();
         PlayerMovement movement = player.GetComponent<PlayerMovement>();
         InteractWithObject interactWithObject = player.GetComponent<InteractWithObject>();
 
@@ -127,6 +128,7 @@ public class ChoiceRune : MonoBehaviour, IInteractible, IRune
 
         interactWithObject.Cooldown = false;
         movement.StopRemoteControlledMovement();
+        LevelSelectEnabler.EnableButton();
     }
 
     public GameObject getGameObject()
