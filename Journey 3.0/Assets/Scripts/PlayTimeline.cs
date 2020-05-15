@@ -57,11 +57,12 @@ public class PlayTimeline : MonoBehaviour
         
         
        
-        
+        LevelSelectEnabler.DisableButton();
         vcam.Priority = targetPriority;
         playableDirector.Play();
         CinematicPlayerMoment.instance.FreezePlayer(timeBeforeFreeze, playerFreezeTime, blackBarsEnabled);
         yield return new WaitForSeconds((float)_timelineLength);
         vcam.Priority = _startPriority;
+        LevelSelectEnabler.EnableButton();
     }
 }
