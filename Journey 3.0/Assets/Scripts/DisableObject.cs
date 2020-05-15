@@ -19,7 +19,7 @@ public class DisableObject : MonoBehaviour
         playerInZone = cameraTrigger.GetComponent<DetectPlayer>().PlayerInCollider;
         if (playerInZone && Target != null)
         {
-            Target.GetComponent<DetectPlayer>().enabled = false;
+            cameraTrigger.GetComponent<DetectPlayer>().enabled = false;
             Target.gameObject.SetActive(false);
         }
         
