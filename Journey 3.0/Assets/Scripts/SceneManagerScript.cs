@@ -337,10 +337,7 @@ public class SceneManagerScript : MonoBehaviour
             {
                 SceneManager.MergeScenes(SceneManager.GetSceneByName(currentBundle.scenes[i]), section);
             }
-
-
-            API.InterestManagerScript.LoadNewPointsOfInterest(section);
-
+            
 
             loading = false;
             if (bundleIndex == sectionToLoad) AssignPlayerTransform();
@@ -361,10 +358,6 @@ public class SceneManagerScript : MonoBehaviour
             {
                 SceneManager.MergeScenes(SceneManager.GetSceneByName(currentBundle.scenes[i]), section);
             }
-
-
-            API.InterestManagerScript.LoadNewPointsOfInterest(section);
-
 
             loading = false;
             bundleIndex++;

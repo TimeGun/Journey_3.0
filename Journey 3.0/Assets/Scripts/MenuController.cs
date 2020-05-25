@@ -172,7 +172,6 @@ public class MenuController : MonoBehaviour
         AudioListener.pause = false;
         Time.timeScale = 1f;
         gameStarted = false;
-        API.InterestManagerScript.ResetList();
         API.GlobalReferences.PlayerRef.GetComponent<ObjectDetection>().ClearList();
         API.GlobalReferences.PlayerRef.GetComponent<InteractWithObject>().StopInteracting();
         FadeToBlack.instance.SetBlack(true);
