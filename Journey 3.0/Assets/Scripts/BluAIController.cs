@@ -50,9 +50,6 @@ public class BluAIController : MonoBehaviour
             flipBool = false;
             flipInt = flipInt * -1;
             _animator.SetInteger("Switch", flipInt);
-            
-
-            print("jump");
         }
         else if(!_animator.GetCurrentAnimatorStateInfo(0).IsName("Jump") && !flipBool)
         {
