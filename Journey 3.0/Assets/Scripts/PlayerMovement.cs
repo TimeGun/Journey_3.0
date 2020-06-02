@@ -68,6 +68,11 @@ public class PlayerMovement : MonoBehaviour
 
     [SerializeField] private GroundRayCast _groundRayCast;
 
+
+    private float accelerationModifier;
+    [SerializeField] [Range(0.1f, 5f)] private float accelerationTime;
+    [SerializeField] [Range(0.1f, 1f)] private float accelerationMinAmount;
+
     public Vector3 MovementDirection
     {
         get => _movementDirection;
@@ -179,6 +184,15 @@ public class PlayerMovement : MonoBehaviour
                 else
                 {
                     _input = _inputSetUp.LeftStick;
+
+                    if (_input.magnitude >= 0.05f && accelerationModifier <= accelerationTime)
+                    {
+                        accelerationModifier += Time.deltaTime;
+                    }
+                    else if(_input.magnitude <= 0.05f)
+                    {
+                        accelerationModifier = 0;
+                    }
                 }
 
 
@@ -351,7 +365,7 @@ public class PlayerMovement : MonoBehaviour
         {
             gameObject.layer = 11;
             _movementDirection = movement;
-            _movementDirection *= adjustedSpeed;
+            _movementDirection *= adjustedSpeed * Map(accelerationModifier, 0, accelerationTime, accelerationMinAmount, 1f);
             pushingBoulder = false;
         }
         else
@@ -362,7 +376,7 @@ public class PlayerMovement : MonoBehaviour
             if (Vector3.Angle(transform.forward, movement) > 120f && _input.magnitude > 0.1f)
             {
                 _movementDirection = -transform.forward;
-                _movementDirection *= _pushSpeed * _input.magnitude;
+                _movementDirection *= _pushSpeed * _input.magnitude * Map(accelerationModifier, 0, accelerationTime, accelerationMinAmount, 1f);
                 localPushDirection = -1f * _input.magnitude;
                 pushingBoulder = true;
                 pushingForward = false;
@@ -380,7 +394,7 @@ public class PlayerMovement : MonoBehaviour
                     !_pushCollisionDetection.IsCollidingWithWall())
                 {
                     _movementDirection = transform.forward;
-                    _movementDirection *= _pushSpeed * _input.magnitude;
+                    _movementDirection *= _pushSpeed * _input.magnitude * Map(accelerationModifier, 0, accelerationTime, accelerationMinAmount, 1f);
                     localPushDirection = 1f * _input.magnitude;
                     pushingBoulder = true;
                     pushingForward = true;
