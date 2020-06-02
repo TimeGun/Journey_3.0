@@ -27,6 +27,8 @@ public class SceneManagerScript : MonoBehaviour
 
     private GameObject playerSpawn;
 
+    public static event Action<bool> loadingUpdate;
+
 
     void Awake()
     {
@@ -95,6 +97,8 @@ public class SceneManagerScript : MonoBehaviour
                 yield return new WaitUntil(() => loading == false);
 
                 loading = true;
+                if(loadingUpdate != null)
+                    loadingUpdate(loading);
 
                 for (int i = 0; i < instance.currentBundle.scenes.Length; i++)
                 {
@@ -111,6 +115,8 @@ public class SceneManagerScript : MonoBehaviour
                 yield return new WaitUntil(() => loading == false);
 
                 loading = true;
+                if(loadingUpdate != null)
+                    loadingUpdate(loading);
 
                 for (int i = 0; i < instance.currentBundle.scenes.Length; i++)
                 {
@@ -127,6 +133,8 @@ public class SceneManagerScript : MonoBehaviour
                 yield return new WaitUntil(() => loading == false);
 
                 loading = true;
+                if(loadingUpdate != null)
+                    loadingUpdate(loading);
 
                 for (int i = 0; i < instance.currentBundle.scenes.Length; i++)
                 {
@@ -140,6 +148,8 @@ public class SceneManagerScript : MonoBehaviour
         else
         {
             loading = true;
+            if(loadingUpdate != null)
+                loadingUpdate(loading);
 
             instance.currentBundle = instance.gameScenes[bundleIndex];
 
@@ -340,6 +350,9 @@ public class SceneManagerScript : MonoBehaviour
             
 
             loading = false;
+            if(loadingUpdate != null)
+                loadingUpdate(loading);
+            
             if (bundleIndex == sectionToLoad) AssignPlayerTransform();
             bundleIndex++;
         }
@@ -360,6 +373,10 @@ public class SceneManagerScript : MonoBehaviour
             }
 
             loading = false;
+            
+            if(loadingUpdate != null)
+                loadingUpdate(loading);
+            
             bundleIndex++;
         }
     }
