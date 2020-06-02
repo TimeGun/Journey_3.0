@@ -71,7 +71,9 @@ public class PlayerMovement : MonoBehaviour
 
     private float accelerationModifier;
     [SerializeField] [Range(0.1f, 5f)] private float accelerationTime;
+    private float accelerationTimeVariable;
     [SerializeField] [Range(0.1f, 1f)] private float accelerationMinAmount;
+    [SerializeField] [Range(1f, 5f)] private float accelerationPushMultiplier;
 
     public Vector3 MovementDirection
     {
@@ -138,6 +140,8 @@ public class PlayerMovement : MonoBehaviour
         print("called");
     }
 
+    private bool pushSwitch = true;
+
     private void Update()
     {
         if (!_anim.GetCurrentAnimatorStateInfo(0).IsName("Glyf-Formation"))
@@ -184,14 +188,42 @@ public class PlayerMovement : MonoBehaviour
                 else
                 {
                     _input = _inputSetUp.LeftStick;
+                    if (!_pushing)
+                    {
+                        if (pushSwitch == false)
+                        {
+                            print("Switched true");
+                            accelerationModifier = 0;
+                            pushSwitch = true;
+                        }
 
-                    if (_input.magnitude >= 0.05f && accelerationModifier <= accelerationTime)
-                    {
-                        accelerationModifier += Time.deltaTime;
+                        if (_input.magnitude >= 0.05f && accelerationModifier <= accelerationTime)
+                        {
+                            accelerationModifier += Time.deltaTime;
+                        }
+                        else if (_input.magnitude <= 0.05f)
+                        {
+                            accelerationModifier = 0;
+                        }
                     }
-                    else if(_input.magnitude <= 0.05f)
+                    else
                     {
-                        accelerationModifier = 0;
+                        if (pushSwitch == true)
+                        {
+                            print("Switched false");
+                            accelerationModifier = 0;
+                            pushSwitch = false;
+                        }
+                        
+                        if (_input.magnitude >= 0.05f &&
+                            accelerationModifier <= accelerationTime * accelerationPushMultiplier)
+                        {
+                            accelerationModifier += Time.deltaTime;
+                        }
+                        else if (_input.magnitude <= 0.05f)
+                        {
+                            accelerationModifier = 0;
+                        }
                     }
                 }
 
@@ -350,6 +382,7 @@ public class PlayerMovement : MonoBehaviour
 
         float adjustedSpeed = Map(angleToStraight, 180, 0, 0f, _speed);
 
+
         Vector3 right = cam.right;
         Vector3 forward = Vector3.Scale(cam.forward, new Vector3(1, 0, 1)).normalized;
 
@@ -358,14 +391,12 @@ public class PlayerMovement : MonoBehaviour
         movement = Quaternion.AngleAxis(_groundRayCast.SlopeAngle, transform.right) * movement;
 
 
-        Debug.DrawRay(transform.position + transform.up, movement * 10f);
-
-
         if (!_pushing)
         {
             gameObject.layer = 11;
             _movementDirection = movement;
-            _movementDirection *= adjustedSpeed * Map(accelerationModifier, 0, accelerationTime, accelerationMinAmount, 1f);
+            _movementDirection *= adjustedSpeed * Map(accelerationModifier, 0, accelerationTime,
+                                      accelerationMinAmount, 1f);
             pushingBoulder = false;
         }
         else
@@ -373,28 +404,29 @@ public class PlayerMovement : MonoBehaviour
             gameObject.layer = 22;
             float localPushDirection;
 
-            if (Vector3.Angle(transform.forward, movement) > 120f && _input.magnitude > 0.1f)
+            if (Vector3.Angle(transform.forward, movement) > 120f && _input.magnitude > 0.1f &&
+                _anim.GetCurrentAnimatorStateInfo(0).IsName("Glyf-Pushing"))
             {
                 _movementDirection = -transform.forward;
-                _movementDirection *= _pushSpeed * _input.magnitude * Map(accelerationModifier, 0, accelerationTime, accelerationMinAmount, 1f);
+                _movementDirection *= _pushSpeed * _input.magnitude * Map(accelerationModifier, 0, accelerationTime * accelerationPushMultiplier,
+                                          accelerationMinAmount, 1f);;
                 localPushDirection = -1f * _input.magnitude;
                 pushingBoulder = true;
                 pushingForward = false;
             }
-            else if (Vector3.Angle(transform.forward, movement) < 60f && _input.magnitude > 0.1f)
+            else if (Vector3.Angle(transform.forward, movement) < 60f && _input.magnitude > 0.1f &&
+                     _anim.GetCurrentAnimatorStateInfo(0).IsName("Glyf-Pushing"))
             {
                 Debug.DrawRay(info.position, transform.forward * info.distance);
 
                 Ray ray = new Ray(info.position, transform.forward);
 
-                print(_pushCollisionDetection.IsCollidingWithWall());
-
-
                 if (!Physics.SphereCast(ray, 0.2f, out RaycastHit hit, info.distance, mask) &&
                     !_pushCollisionDetection.IsCollidingWithWall())
                 {
                     _movementDirection = transform.forward;
-                    _movementDirection *= _pushSpeed * _input.magnitude * Map(accelerationModifier, 0, accelerationTime, accelerationMinAmount, 1f);
+                    _movementDirection *= _pushSpeed * _input.magnitude * Map(accelerationModifier, 0, accelerationTime * accelerationPushMultiplier,
+                                              accelerationMinAmount, 1f);;
                     localPushDirection = 1f * _input.magnitude;
                     pushingBoulder = true;
                     pushingForward = true;

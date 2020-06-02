@@ -43,7 +43,6 @@ public class ScatterSounds : MonoBehaviour
                 source.volume = startVolume + Random.Range(-randomVolume, randomVolume);
 
                 source.PlayOneShot(scatterSounds[ran]);
-                print("Playing: " + scatterSounds[ran]);
             }
 
             yield return new WaitWhile(StillPlaying);
