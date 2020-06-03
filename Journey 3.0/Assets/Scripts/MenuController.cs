@@ -79,7 +79,11 @@ public class MenuController : MonoBehaviour
         controlsMenu.SetActive(false);
         galleryMenu.SetActive(false);
         levelSelectMenu.SetActive(false);
-        GlyfFormationSetter.CheckAnimation();
+        if (gameStarted == false /* && scene is section 0*/)
+        {
+            StartCoroutine(PlayOpeningCinematic.StartTimeline());
+        }
+        //GlyfFormationSetter.CheckAnimation();
         API.GlobalReferences.PlayerRef.GetComponent<PlayerMovement>().EnableThis();
         AudioListener.pause = false;
         inMenu = false;

@@ -23,4 +23,9 @@ public class RemoteAnimationController : MonoBehaviour
     {
         _playerMovement.PickUpHigh();
     }
+
+    public void StartFormation()
+    {
+        _playerMovement.Anim.Play("Glyf-Formation");
+    }
 }
