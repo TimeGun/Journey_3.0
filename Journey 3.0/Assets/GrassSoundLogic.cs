@@ -53,5 +53,12 @@ public class GrassSoundLogic : MonoBehaviour
                 }
             }
         }
+        else
+        {
+            if (audioSource.isPlaying)
+            {
+                audioSource.Pause();
+            }
+        }
     }
 }
