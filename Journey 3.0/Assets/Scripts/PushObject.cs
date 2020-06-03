@@ -37,6 +37,8 @@ public class PushObject : MonoBehaviour, IInteractible
 
     private CharacterController characterController;
 
+    public bool forwardCast;
+
 
     public float _audioDistance = 0.02f;
 
@@ -77,7 +79,10 @@ public class PushObject : MonoBehaviour, IInteractible
                 _movement.info.position = ray.origin;
 
 
-                if (!Physics.SphereCast(ray, 0.2f, out hit, _distanceToPushingObject + internalDistance, mask))
+                forwardCast =
+                    Physics.SphereCast(ray, 0.2f, out hit, _distanceToPushingObject + internalDistance, mask);
+
+                if (!forwardCast)
                 {
                     if (characterController.velocity.magnitude > 0.05f)
                     {
@@ -85,11 +90,9 @@ public class PushObject : MonoBehaviour, IInteractible
                     }
                     else
                     {
-                        _rb.MovePosition(Vector3.Lerp(transform.position, _position, _positionLerpSpeed));
+                        //_rb.MovePosition(Vector3.Lerp(transform.position, _position, _positionLerpSpeed));
                     }
-
-
-
+                    
                     if (_movement.PushingBoulder())
                     {
                         if (!_source.isPlaying)
@@ -168,7 +171,17 @@ public class PushObject : MonoBehaviour, IInteractible
         _pushing = false;
         _movement.Pushing = false;
 
+        _interactWithObject.Cooldown = true;
+        _interactWithObject.Invoke("ResetCooldown", 0.5f);
+
         print("Push Finished");
+
+        while (Vector3.Distance(transform.position, playerChest.position) < _minDistance)
+        {
+            Vector3 awayFromRock = playerChest.position - transform.position;
+            _player.transform.position += awayFromRock.normalized * 0.01f;
+        }
+
         CharacterController cc = _player.GetComponent<CharacterController>();
         cc.radius = oldRadius;
 
