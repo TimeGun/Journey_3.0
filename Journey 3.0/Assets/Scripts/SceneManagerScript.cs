@@ -27,6 +27,8 @@ public class SceneManagerScript : MonoBehaviour
 
     private GameObject playerSpawn;
 
+    public static event Action<bool> loadingUpdate;
+
 
     void Awake()
     {
@@ -95,6 +97,8 @@ public class SceneManagerScript : MonoBehaviour
                 yield return new WaitUntil(() => loading == false);
 
                 loading = true;
+                if(loadingUpdate != null)
+                    loadingUpdate(loading);
 
                 for (int i = 0; i < instance.currentBundle.scenes.Length; i++)
                 {
@@ -111,6 +115,8 @@ public class SceneManagerScript : MonoBehaviour
                 yield return new WaitUntil(() => loading == false);
 
                 loading = true;
+                if(loadingUpdate != null)
+                    loadingUpdate(loading);
 
                 for (int i = 0; i < instance.currentBundle.scenes.Length; i++)
                 {
@@ -127,6 +133,8 @@ public class SceneManagerScript : MonoBehaviour
                 yield return new WaitUntil(() => loading == false);
 
                 loading = true;
+                if(loadingUpdate != null)
+                    loadingUpdate(loading);
 
                 for (int i = 0; i < instance.currentBundle.scenes.Length; i++)
                 {
@@ -140,6 +148,8 @@ public class SceneManagerScript : MonoBehaviour
         else
         {
             loading = true;
+            if(loadingUpdate != null)
+                loadingUpdate(loading);
 
             instance.currentBundle = instance.gameScenes[bundleIndex];
 
@@ -187,7 +197,7 @@ public class SceneManagerScript : MonoBehaviour
             case 0:
                 Debug.Log("Fist Section Load");
                 bundleIndex = 0;
-                GameObject.Find("Player").GetComponent<GlyfFormationSetter>().UseFormation = true;
+                MenuController.formationUse = true;
                 StartCoroutine(LoadBundle(false));
                 yield return new WaitUntil(() => loading == false);
                 StartCoroutine(LoadBundle(false));
@@ -197,7 +207,7 @@ public class SceneManagerScript : MonoBehaviour
             case 1:
                 Debug.Log("Second Section Load");
                 bundleIndex = 2;
-                GameObject.Find("Player").GetComponent<GlyfFormationSetter>().UseFormation = false;
+                MenuController.formationUse = false;
                 StartCoroutine(LoadBundle(false));
                 yield return new WaitUntil(() => loading == false);
                 StartCoroutine(LoadBundle(false));
@@ -208,7 +218,7 @@ public class SceneManagerScript : MonoBehaviour
             case 2:
                 Debug.Log("Third Section Load");
                 bundleIndex = 5;
-                GameObject.Find("Player").GetComponent<GlyfFormationSetter>().UseFormation = false;
+                MenuController.formationUse = false;
                 StartCoroutine(LoadBundle(false));
                 yield return new WaitUntil(() => loading == false);
                 StartCoroutine(LoadBundle(false));
@@ -219,7 +229,7 @@ public class SceneManagerScript : MonoBehaviour
             case 3:
                 Debug.Log("Fourth Section Load");
                 bundleIndex = 9;
-                GameObject.Find("Player").GetComponent<GlyfFormationSetter>().UseFormation = false;            
+                MenuController.formationUse = false;    
                 StartCoroutine(LoadBundle(false));
                 yield return new WaitUntil(() => loading == false);
                 StartCoroutine(LoadBundle(false));
@@ -337,12 +347,12 @@ public class SceneManagerScript : MonoBehaviour
             {
                 SceneManager.MergeScenes(SceneManager.GetSceneByName(currentBundle.scenes[i]), section);
             }
-
-
-            API.InterestManagerScript.LoadNewPointsOfInterest(section);
-
+            
 
             loading = false;
+            if(loadingUpdate != null)
+                loadingUpdate(loading);
+            
             if (bundleIndex == sectionToLoad) AssignPlayerTransform();
             bundleIndex++;
         }
@@ -362,11 +372,11 @@ public class SceneManagerScript : MonoBehaviour
                 SceneManager.MergeScenes(SceneManager.GetSceneByName(currentBundle.scenes[i]), section);
             }
 
-
-            API.InterestManagerScript.LoadNewPointsOfInterest(section);
-
-
             loading = false;
+            
+            if(loadingUpdate != null)
+                loadingUpdate(loading);
+            
             bundleIndex++;
         }
     }

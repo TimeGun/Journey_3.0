@@ -29,11 +29,13 @@ public class PushObject : MonoBehaviour, IInteractible
 
     private AudioSource _source;
 
-    [SerializeField] private float _positionLerpSpeed = 10f;
-    
+    [SerializeField] private float _positionLerpSpeed = 1f;
+
     [SerializeField] PushCollisionDetection _pushCollisionDetection;
 
     private float oldRadius;
+
+    private CharacterController characterController;
 
 
     public float _audioDistance = 0.02f;
@@ -59,26 +61,34 @@ public class PushObject : MonoBehaviour, IInteractible
             if (_inputSetUp.ValueInteractDown >= 0.9f)
             {
                 _position = _player.transform.TransformPoint(Vector3.forward * (_distanceToPushingObject));
-                
+
 
                 _position.y = transform.position.y;
-            
+
 
                 float internalDistance = _col.bounds.extents.x;
 
-                Ray ray = new Ray(playerChest.position + (_player.transform.up/2f), _player.transform.forward);
+                Ray ray = new Ray(playerChest.position + (_player.transform.up / 2f), _player.transform.forward);
 
                 RaycastHit hit;
-                
+
 
                 _movement.info.distance = _distanceToPushingObject + internalDistance;
                 _movement.info.position = ray.origin;
-                
-                
-                
+
+
                 if (!Physics.SphereCast(ray, 0.2f, out hit, _distanceToPushingObject + internalDistance, mask))
                 {
-                    _rb.MovePosition(Vector3.Lerp(transform.position, _position, _positionLerpSpeed));
+                    if (characterController.velocity.magnitude > 0.05f)
+                    {
+                        _rb.MovePosition(_position);
+                    }
+                    else
+                    {
+                        _rb.MovePosition(Vector3.Lerp(transform.position, _position, _positionLerpSpeed));
+                    }
+
+
 
                     if (_movement.PushingBoulder())
                     {
@@ -115,13 +125,13 @@ public class PushObject : MonoBehaviour, IInteractible
         gameObject.layer = 18;
         _pushing = true;
         _player = parent.root.gameObject;
-        CharacterController cc =_player.GetComponent<CharacterController>();
+        CharacterController cc = _player.GetComponent<CharacterController>();
 
         oldRadius = cc.radius;
 
         cc.radius = oldRadius * 0.35f;
-        
-        
+        characterController = cc;
+
         SetUpPushing();
     }
 
@@ -157,8 +167,9 @@ public class PushObject : MonoBehaviour, IInteractible
     {
         _pushing = false;
         _movement.Pushing = false;
+
         print("Push Finished");
-        CharacterController cc =_player.GetComponent<CharacterController>();
+        CharacterController cc = _player.GetComponent<CharacterController>();
         cc.radius = oldRadius;
 
         _movement._pushCollisionDetection = null;

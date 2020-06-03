@@ -39,6 +39,7 @@ public class InterestFinder : MonoBehaviour
     public GameObject interactingObj;
 
     public static InterestFinder instance;
+    
     public bool _debug;
 
 
@@ -200,6 +201,15 @@ public class InterestFinder : MonoBehaviour
             lockedPosition = null;
         }
 
+    }
+    
+    public void AddObject(Transform toAdd)
+    {
+        if (!transformsOfInterst.Contains(toAdd))
+        {
+            transformsOfInterst.Add(toAdd);
+            lockedPosition = null;
+        }
     }
 
 
