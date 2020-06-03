@@ -23,6 +23,10 @@ public class MenuController : MonoBehaviour
 
     [SerializeField] private AudioSource _click, _select;
 
+    public static bool formationUse;
+    
+    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -79,11 +83,10 @@ public class MenuController : MonoBehaviour
         controlsMenu.SetActive(false);
         galleryMenu.SetActive(false);
         levelSelectMenu.SetActive(false);
-        if (gameStarted == false /* && scene is section 0*/)
+        if (gameStarted == false && formationUse)
         {
             StartCoroutine(PlayOpeningCinematic.StartTimeline());
         }
-        //GlyfFormationSetter.CheckAnimation();
         API.GlobalReferences.PlayerRef.GetComponent<PlayerMovement>().EnableThis();
         AudioListener.pause = false;
         inMenu = false;
@@ -193,6 +196,7 @@ public class MenuController : MonoBehaviour
         SceneManagerScript.instance.StopAllCoroutines();
         API.GlobalReferences.PlayerRef.GetComponent<InteractWithObject>().StopInteracting();
         yield return new WaitForEndOfFrame();
+        baseMenuFirstButton.GetComponentInChildren<TextMeshProUGUI>().text = "Start";
         SceneManagerScript.instance.StartCoroutine(SceneManagerScript.instance.StartGameLoad(_newProgressionData));
     }
 

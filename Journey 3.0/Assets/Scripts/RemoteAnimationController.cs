@@ -28,4 +28,16 @@ public class RemoteAnimationController : MonoBehaviour
     {
         _playerMovement.Anim.Play("Glyf-Formation");
     }
+
+    public void AnimationPause(bool pause)
+    {
+        if (pause)
+        {
+            _playerMovement.Anim.speed = 0;
+        }
+        else
+        {
+            _playerMovement.Anim.speed = 1;
+        }
+    }
 }
