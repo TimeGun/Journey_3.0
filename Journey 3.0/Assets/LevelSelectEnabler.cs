@@ -7,20 +7,29 @@ public class LevelSelectEnabler : MonoBehaviour
 {
     public static LevelSelectEnabler instance;
 
-    [SerializeField]private Button levelSelect;
+    private bool offAtStart;
+
+    [SerializeField] private Button levelSelect;
 
     void Start()
     {
         instance = this;
+        offAtStart = !levelSelect.interactable;
     }
 
     public static void EnableButton()
     {
-        instance.levelSelect.interactable = true;
+        if (!instance.offAtStart)
+        {
+            instance.levelSelect.interactable = true;
+        }
     }
     
     public static void DisableButton()
     {
-        instance.levelSelect.interactable = false;
+        if (!instance.offAtStart)
+        {
+            instance.levelSelect.interactable = false;
+        }
     }
 }
