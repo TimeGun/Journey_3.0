@@ -6,6 +6,13 @@ public class DropTorchS2 : MonoBehaviour
 {
     public void DropObject()
     {
-        API.GlobalReferences.PlayerRef.GetComponent<InteractWithObject>().StopInteracting();
+        Invoke("DropTorch", 1f);
+    }
+
+    void DropTorch()
+    {
+        InteractWithObject _interactWithObject = API.GlobalReferences.PlayerRef.GetComponent<InteractWithObject>();
+        GameObject.Find("InteractibleTorch - Final").GetComponent<ObjectToLookAt>().enabled = false;
+        _interactWithObject.StopInteracting();
     }
 }
