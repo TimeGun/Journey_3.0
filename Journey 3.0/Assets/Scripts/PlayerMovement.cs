@@ -422,7 +422,7 @@ public class PlayerMovement : MonoBehaviour
                 Ray ray = new Ray(info.position, transform.forward);
 
                 if (!Physics.SphereCast(ray, 0.2f, out RaycastHit hit, info.distance, mask) &&
-                    !_pushCollisionDetection.IsCollidingWithWall())
+                    !_pushCollisionDetection.IsCollidingWithWall() && !_pushCollisionDetection.transform.parent.GetComponent<PushObject>().forwardCast)
                 {
                     _movementDirection = transform.forward;
                     _movementDirection *= _pushSpeed * _input.magnitude * Map(accelerationModifier, 0, accelerationTime * accelerationPushMultiplier,
