@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,7 +24,15 @@ public class CinematicObjectToLookAt : MonoBehaviour
     {
         InterestFinder.instance.RemoveObject(lookAtObject, true);
     }
-    
+
+    private void Update()
+    {
+        if (lookAtObject._range != range)
+        {
+            lookAtObject._range = range;
+        }
+    }
+
     private void OnDrawGizmos()
     {
         if (debug)

@@ -13,7 +13,7 @@ public class InterestManagerScript : MonoBehaviour
 
     public void ResetList()
     {
-        API.GlobalReferences.PlayerRef.GetComponent<InterestFinder>().TransformsOfInterst.Clear();
+        API.GlobalReferences.PlayerRef.GetComponent<InterestFinder>().ObjectsOfInterst.Clear();
         currentObjectsOfInterst.Clear();
     }
 
@@ -40,11 +40,11 @@ public class InterestManagerScript : MonoBehaviour
             currentObjectsOfInterst.Dequeue();
         }
 
-        API.GlobalReferences.PlayerRef.GetComponent<InterestFinder>().TransformsOfInterst.Clear();
+        API.GlobalReferences.PlayerRef.GetComponent<InterestFinder>().ObjectsOfInterst.Clear();
 
 
 
-        API.GlobalReferences.PlayerRef.GetComponent<InterestFinder>().TransformsOfInterst =
+        API.GlobalReferences.PlayerRef.GetComponent<InterestFinder>().ObjectsOfInterst =
             currentObjectsOfInterst.ToList();
     }
 }

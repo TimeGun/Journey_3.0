@@ -16,6 +16,14 @@ public class ObjectToLookAt : MonoBehaviour
         InterestFinder.instance.AddObject(lookAtObject, false);
     }
 
+    private void Update()
+    {
+        if (lookAtObject._range != range)
+        {
+            lookAtObject._range = range;
+        }
+    }
+
     private void OnDestroy()
     {
         InterestFinder.instance.RemoveObject(lookAtObject, false);

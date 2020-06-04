@@ -15,19 +15,19 @@ public class InterestFinder : MonoBehaviour
 
     private bool newTargetFound;
 
-    [SerializeField] private List<LookAtObject> transformsOfInterst = new List<LookAtObject>();
-    [SerializeField] private List<LookAtObject> transformsOfInterstCinematic = new List<LookAtObject>();
+    [SerializeField] private List<LookAtObject> objectsOfInterst = new List<LookAtObject>();
+    [SerializeField] private List<LookAtObject> objectsOfInterstCinematic = new List<LookAtObject>();
 
-    public List<LookAtObject> TransformsOfInterstCinematic
+    public List<LookAtObject> ObjectsOfInterstCinematic
     {
-        get => transformsOfInterstCinematic;
-        set => transformsOfInterstCinematic = value;
+        get => objectsOfInterstCinematic;
+        set => objectsOfInterstCinematic = value;
     }
 
-    public List<LookAtObject> TransformsOfInterst
+    public List<LookAtObject> ObjectsOfInterst
     {
-        get => transformsOfInterst;
-        set => transformsOfInterst = value;
+        get => objectsOfInterst;
+        set => objectsOfInterst = value;
     }
 
     [SerializeField] private Transform lookTarget;
@@ -48,7 +48,7 @@ public class InterestFinder : MonoBehaviour
     public static InterestFinder instance;
 
     [SerializeField] private PlayerMovement _playerMovement;
-    
+
     public bool _debug;
 
 
@@ -76,21 +76,20 @@ public class InterestFinder : MonoBehaviour
             Transform[] closeTransformsInFront;
             if (_playerMovement.cinematicMoment)
             {
-                closeTransformsInFront = ReturnCloseInterestsInFront(transformsOfInterstCinematic.ToArray());
+                closeTransformsInFront = ReturnCloseInterestsInFront(objectsOfInterstCinematic.ToArray());
             }
             else
             {
-                closeTransformsInFront = ReturnCloseInterestsInFront(transformsOfInterst.ToArray());
+                closeTransformsInFront = ReturnCloseInterestsInFront(objectsOfInterst.ToArray());
             }
-            
-            
+
+
             Transform potentialInterest = ClosestItem(closeTransformsInFront);
 
             if (potentialInterest != null)
             {
                 if (lockedPosition != potentialInterest)
                 {
-                    
                     newTargetFound = true;
 
                     if (resetCoroutine != null)
@@ -180,7 +179,6 @@ public class InterestFinder : MonoBehaviour
                         infrontItems.Add(interests[i]);
                     }
                 }
-
             }
         }
 
@@ -194,7 +192,6 @@ public class InterestFinder : MonoBehaviour
         Vector3 currentPosition = transform.position;
         for (int i = 0; i < interests.Length; i++)
         {
-            
             if (interests[i] != null && interests[i].gameObject.activeSelf)
             {
                 Vector3 directionToTarget = interests[i].position - currentPosition;
@@ -214,46 +211,42 @@ public class InterestFinder : MonoBehaviour
     {
         if (cinematic)
         {
-            if (!transformsOfInterstCinematic.Contains(toRemove))
+            if (objectsOfInterstCinematic.Contains(toRemove))
             {
-                transformsOfInterstCinematic.Remove(toRemove);
+                objectsOfInterstCinematic.Remove(toRemove);
                 lockedPosition = null;
             }
         }
         else
         {
-            if (!transformsOfInterst.Contains(toRemove))
+            if (objectsOfInterst.Contains(toRemove))
             {
-                transformsOfInterst.Remove(toRemove);
+                objectsOfInterst.Remove(toRemove);
                 lockedPosition = null;
             }
         }
-
     }
-    
+
     public void AddObject(LookAtObject toAdd, bool cinematic)
     {
         if (cinematic)
         {
-            if (!transformsOfInterstCinematic.Contains(toAdd))
+            if (!objectsOfInterstCinematic.Contains(toAdd))
             {
-                transformsOfInterstCinematic.Add(toAdd);
+                objectsOfInterstCinematic.Add(toAdd);
                 lockedPosition = null;
             }
         }
         else
         {
-            if (!transformsOfInterst.Contains(toAdd))
+            if (!objectsOfInterst.Contains(toAdd))
             {
-                transformsOfInterst.Add(toAdd);
+                print("Added LookAt: " + gameObject.name);
+                objectsOfInterst.Add(toAdd);
                 lockedPosition = null;
             }
         }
-
-        
     }
-
-
 
 
     private void OnDrawGizmos()
@@ -268,7 +261,8 @@ public class InterestFinder : MonoBehaviour
     }
 }
 
-public struct LookAtObject
+[Serializable]
+public class LookAtObject
 {
     public Transform _transform;
     public float _range;
