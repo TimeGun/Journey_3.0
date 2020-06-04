@@ -15,16 +15,16 @@ public class InterestFinder : MonoBehaviour
 
     private bool newTargetFound;
 
-    [SerializeField] private List<Transform> transformsOfInterst = new List<Transform>();
-    [SerializeField] private List<Transform> transformsOfInterstCinematic = new List<Transform>();
+    [SerializeField] private List<LookAtObject> transformsOfInterst = new List<LookAtObject>();
+    [SerializeField] private List<LookAtObject> transformsOfInterstCinematic = new List<LookAtObject>();
 
-    public List<Transform> TransformsOfInterstCinematic
+    public List<LookAtObject> TransformsOfInterstCinematic
     {
         get => transformsOfInterstCinematic;
         set => transformsOfInterstCinematic = value;
     }
 
-    public List<Transform> TransformsOfInterst
+    public List<LookAtObject> TransformsOfInterst
     {
         get => transformsOfInterst;
         set => transformsOfInterst = value;
@@ -139,18 +139,18 @@ public class InterestFinder : MonoBehaviour
     }
 
 
-    Transform[] ReturnCloseInterestsInFront(Transform[] interests)
+    Transform[] ReturnCloseInterestsInFront(LookAtObject[] interests)
     {
         closeItems.Clear();
 
         for (int i = 0; i < interests.Length; i++)
         {
-            Vector3 directionToTarget = interests[i].position - transform.position;
+            Vector3 directionToTarget = interests[i]._transform.position - transform.position;
             float dSqrToTarget = directionToTarget.sqrMagnitude;
 
-            if (dSqrToTarget < Mathf.Pow(radiusOfInterestVision, 2f))
+            if (dSqrToTarget < Mathf.Pow(interests[i]._range, 2f))
             {
-                closeItems.Add(interests[i]);
+                closeItems.Add(interests[i]._transform);
             }
         }
 
@@ -210,7 +210,7 @@ public class InterestFinder : MonoBehaviour
         return bestTarget;
     }
 
-    public void RemoveObject(Transform toRemove, bool cinematic)
+    public void RemoveObject(LookAtObject toRemove, bool cinematic)
     {
         if (cinematic)
         {
@@ -231,7 +231,7 @@ public class InterestFinder : MonoBehaviour
 
     }
     
-    public void AddObject(Transform toAdd, bool cinematic)
+    public void AddObject(LookAtObject toAdd, bool cinematic)
     {
         if (cinematic)
         {
@@ -254,6 +254,8 @@ public class InterestFinder : MonoBehaviour
     }
 
 
+
+
     private void OnDrawGizmos()
     {
         if (_debug)
@@ -263,5 +265,17 @@ public class InterestFinder : MonoBehaviour
             Gizmos.color = new Color(0, 1f, 0, 1f);
             Gizmos.DrawRay(headPos.position, headPos.up.normalized * radiusOfInterestVision);
         }
+    }
+}
+
+public struct LookAtObject
+{
+    public Transform _transform;
+    public float _range;
+
+    public LookAtObject(Transform transform, float range)
+    {
+        _transform = transform;
+        _range = range;
     }
 }
