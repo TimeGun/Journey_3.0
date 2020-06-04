@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class EmotionController : MonoBehaviour
 {
@@ -13,12 +14,17 @@ public class EmotionController : MonoBehaviour
     [SerializeField] private float _emissionIntensityLerpSpeed;
     [SerializeField] private float _colourLerpSpeed;
 
+    [SerializeField] private VisualEffect _underGlyf;
+
     private Color _oldColour;
 
     private Coroutine _coroutine = null;
 
+    public Gradient grad;
+
     void Start()
     {
+        
         StartCoroutine(AdjustEmotionSettings());
     }
 
@@ -71,6 +77,15 @@ public class EmotionController : MonoBehaviour
             if (_material.GetFloat("_emissionIntensity") != _emissionIntensity)
             {
                 _material.SetFloat("_emissionIntensity", Mathf.Lerp(_material.GetFloat("_emissionIntensity"), _emissionIntensity, _emissionIntensityLerpSpeed * Time.deltaTime));
+            }
+
+            Color oldCol = _underGlyf.GetVector4("ParticleColour");
+            
+            if (_underGlyf.GetVector4("ParticleColour") != (Vector4)_colour)
+            {
+                Color newCol = Color.Lerp(oldCol, _colour, _colourLerpSpeed * Time.deltaTime);
+                
+                _underGlyf.SetVector4("ParticleColour", newCol);
             }
             
             yield return new WaitForEndOfFrame();
