@@ -85,7 +85,7 @@ public class MenuController : MonoBehaviour
         levelSelectMenu.SetActive(false);
         if (gameStarted == false && formationUse)
         {
-            StartCoroutine(PlayOpeningCinematic.StartTimeline());
+            PlayOpeningCinematic.instance.CheckCinematic();
         }
         API.GlobalReferences.PlayerRef.GetComponent<PlayerMovement>().EnableThis();
         AudioListener.pause = false;

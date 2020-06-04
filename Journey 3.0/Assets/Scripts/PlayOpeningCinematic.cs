@@ -10,9 +10,11 @@ public class PlayOpeningCinematic : MonoBehaviour
     public PlayableDirector playableDirector;
     public static double _timelineLength;
     private bool played;
+
+    public AudioSource audioSource;
     
     public static PlayOpeningCinematic instance;
-    // Start is called before the first frame update
+    
     private void Awake()
     {
         instance = this;
@@ -22,21 +24,21 @@ public class PlayOpeningCinematic : MonoBehaviour
     {
         _timelineLength = instance.playableDirector.duration;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    void CheckCinematic()
+    
+    public void CheckCinematic()
     {
         if (played == false)
         {
             StartCoroutine(StartTimeline());
+            Invoke("StartAudio", 2.5f);
         }
     }
-    
+
+    void StartAudio()
+    {
+        audioSource.Play();
+    }
+
     public static IEnumerator StartTimeline()
     {
         LevelSelectEnabler.DisableButton();
