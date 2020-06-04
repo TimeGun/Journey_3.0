@@ -8,7 +8,7 @@ public class ObjectToLookAt : MonoBehaviour
     public float range = 15f;
     public LookAtObject lookAtObject;
 
-    public bool debug = true;
+    public bool debug = false;
     
     public void OnEnable()
     {
