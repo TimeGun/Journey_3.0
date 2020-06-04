@@ -28,14 +28,14 @@ public class CinematicObjectToLookAt : MonoBehaviour
     {
         if (debug)
         {
-            Gizmos.color = new Color(175f,238f,238f, 0.05f);
+            Gizmos.color = new Color(175f/255f,238f/255f,238f/255f, 0.05f);
             Gizmos.DrawSphere(transform.position, range);
         }
     }
     
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = new Color(175f,238f,238f, 0.3f);
+        Gizmos.color = new Color(175f/255f,238f/255f,238f/255f, 0.3f);
         Gizmos.DrawSphere(transform.position, range);
     }
 }

@@ -30,14 +30,14 @@ public class ObjectToLookAt : MonoBehaviour
     {
         if (debug)
         {
-            Gizmos.color = new Color(50f,205f,50f, 0.05f);
+            Gizmos.color = new Color(50f/255f,205f/255f,50f/255f, 0.05f);
             Gizmos.DrawSphere(transform.position, range);
         }
     }
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = new Color(50f,205f,50f, 0.3f);
+        Gizmos.color = new Color(50f/255f,205f/255f,50f/255f, 0.3f);
         Gizmos.DrawSphere(transform.position, range);
     }
 }
