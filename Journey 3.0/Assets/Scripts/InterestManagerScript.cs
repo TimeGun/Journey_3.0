@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class InterestManagerScript : MonoBehaviour
 {
-    private Queue<Transform> currentObjectsOfInterst = new Queue<Transform>();
+    private Queue<LookAtObject> currentObjectsOfInterst = new Queue<LookAtObject>();
 
     public int maximumInterestCount;
     
@@ -30,7 +30,7 @@ public class InterestManagerScript : MonoBehaviour
             {
                 for (int j = 0; j < tempObjs.Length; j++)
                 {
-                    currentObjectsOfInterst.Enqueue(tempObjs[j].transform);
+                    currentObjectsOfInterst.Enqueue(tempObjs[j].lookAtObject);
                 }
             }
         }
