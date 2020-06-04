@@ -16,6 +16,13 @@ public class InterestFinder : MonoBehaviour
     private bool newTargetFound;
 
     [SerializeField] private List<Transform> transformsOfInterst = new List<Transform>();
+    [SerializeField] private List<Transform> transformsOfInterstCinematic = new List<Transform>();
+
+    public List<Transform> TransformsOfInterstCinematic
+    {
+        get => transformsOfInterstCinematic;
+        set => transformsOfInterstCinematic = value;
+    }
 
     public List<Transform> TransformsOfInterst
     {
@@ -39,6 +46,8 @@ public class InterestFinder : MonoBehaviour
     public GameObject interactingObj;
 
     public static InterestFinder instance;
+
+    [SerializeField] private PlayerMovement _playerMovement;
     
     public bool _debug;
 
@@ -64,9 +73,17 @@ public class InterestFinder : MonoBehaviour
     {
         while (true)
         {
-            Transform[] closeTransformsInFront = ReturnCloseInterestsInFront(transformsOfInterst.ToArray());
-
-
+            Transform[] closeTransformsInFront;
+            if (_playerMovement.cinematicMoment)
+            {
+                closeTransformsInFront = ReturnCloseInterestsInFront(transformsOfInterstCinematic.ToArray());
+            }
+            else
+            {
+                closeTransformsInFront = ReturnCloseInterestsInFront(transformsOfInterst.ToArray());
+            }
+            
+            
             Transform potentialInterest = ClosestItem(closeTransformsInFront);
 
             if (potentialInterest != null)
@@ -193,23 +210,47 @@ public class InterestFinder : MonoBehaviour
         return bestTarget;
     }
 
-    public void RemoveObject(Transform toRemove)
+    public void RemoveObject(Transform toRemove, bool cinematic)
     {
-        if (transformsOfInterst.Contains(toRemove))
+        if (cinematic)
         {
-            transformsOfInterst.Remove(toRemove);
-            lockedPosition = null;
+            if (!transformsOfInterstCinematic.Contains(toRemove))
+            {
+                transformsOfInterstCinematic.Remove(toRemove);
+                lockedPosition = null;
+            }
+        }
+        else
+        {
+            if (!transformsOfInterst.Contains(toRemove))
+            {
+                transformsOfInterst.Remove(toRemove);
+                lockedPosition = null;
+            }
         }
 
     }
     
-    public void AddObject(Transform toAdd)
+    public void AddObject(Transform toAdd, bool cinematic)
     {
-        if (!transformsOfInterst.Contains(toAdd))
+        if (cinematic)
         {
-            transformsOfInterst.Add(toAdd);
-            lockedPosition = null;
+            if (!transformsOfInterstCinematic.Contains(toAdd))
+            {
+                transformsOfInterstCinematic.Add(toAdd);
+                lockedPosition = null;
+            }
         }
+        else
+        {
+            if (!transformsOfInterst.Contains(toAdd))
+            {
+                transformsOfInterst.Add(toAdd);
+                lockedPosition = null;
+            }
+        }
+
+        
     }
 
 

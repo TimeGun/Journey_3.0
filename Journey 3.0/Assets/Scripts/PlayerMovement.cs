@@ -60,7 +60,7 @@ public class PlayerMovement : MonoBehaviour
 
     private float _originalRange;
 
-    public bool pushingForward;
+    public bool cinematicMoment;
 
     public PushCollisionDetection _pushCollisionDetection;
 
@@ -317,11 +317,13 @@ public class PlayerMovement : MonoBehaviour
     {
         _objectToFollow = objToFollow;
         _remoteControl = true;
+        cinematicMoment = true;
     }
 
     public void StopRemoteControlledMovement()
     {
         _remoteControl = false;
+        cinematicMoment = false;
     }
 
     private void SetAnimation()
@@ -412,7 +414,6 @@ public class PlayerMovement : MonoBehaviour
                                           accelerationMinAmount, 1f);;
                 localPushDirection = -1f * _input.magnitude;
                 pushingBoulder = true;
-                pushingForward = false;
             }
             else if (Vector3.Angle(transform.forward, movement) < 60f && _input.magnitude > 0.1f &&
                      _anim.GetCurrentAnimatorStateInfo(0).IsName("Glyf-Pushing"))
@@ -429,7 +430,6 @@ public class PlayerMovement : MonoBehaviour
                                               accelerationMinAmount, 1f);;
                     localPushDirection = 1f * _input.magnitude;
                     pushingBoulder = true;
-                    pushingForward = true;
                 }
                 else
                 {
@@ -505,10 +505,12 @@ public class PlayerMovement : MonoBehaviour
         _walkSource.Stop();
         _anim.SetFloat("velocity", 0f);
         frozen = true;
+        cinematicMoment = true;
     }
 
     public void EnableThis()
     {
         frozen = false;
+        cinematicMoment = false;
     }
 }
