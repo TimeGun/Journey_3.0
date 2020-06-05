@@ -17,14 +17,13 @@ public class FlyTwinkleController : MonoBehaviour
 
     public void ShakeOffTwinkle()
     {
-        _twinkleVFX.SetBool("ShakeOff", true);
-
-        Invoke("EnablePickup" , 1.5f);
+        _twinkleVFX.SetBool("ShakeOff", !_twinkleVFX.GetBool("ShakeOff"));
+        _twinkleVFX.SetFloat("TwinkleCount", 0);
     }
 
     void EnablePickup()
     {
-        _twinkleVFX.SetFloat("TwinkleCount", 0);
+        
         _twinkleVFX.SetBool("ShakeOff", false);
     }
 
