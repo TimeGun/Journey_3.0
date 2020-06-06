@@ -43,7 +43,7 @@ public class PlayOpeningCinematic : MonoBehaviour
     {
         LevelSelectEnabler.DisableButton();
         instance.playableDirector.Play();
-        CinematicPlayerMoment.instance.FreezePlayer(0f, (float)_timelineLength, true);
+        CinematicPlayerMoment.instance.FreezePlayer(0f, (float)_timelineLength, false);
         yield return new WaitForSeconds((float)_timelineLength);
         LevelSelectEnabler.EnableButton();
         instance.played = true;
