@@ -53,7 +53,11 @@ public class CameraZone : MonoBehaviour
             StartCoroutine(AssignCameraObject2(Cam2Name));
         }
 
-        col = cameraTrigger.GetComponent<Collider>();
+        if (cameraTrigger != null)
+        {
+            col = cameraTrigger.GetComponent<Collider>();
+        }
+        
 
         if (targetCamera1.GetComponent<CinemachineVirtualCameraBase>() == null)
         {
@@ -167,7 +171,7 @@ public class CameraZone : MonoBehaviour
     {
 #if UNITY_EDITOR
         
-        if (Application.isPlaying && isActiveAndEnabled)
+        if (Application.isPlaying && isActiveAndEnabled )
         {
             if (playerInZone)
             {
@@ -179,13 +183,13 @@ public class CameraZone : MonoBehaviour
             }
 
 
-            if (col.GetType() == typeof(BoxCollider))
+            if (cameraTrigger != null && col.GetType() == typeof(BoxCollider))
             {
                 BoxCollider boxCol = (BoxCollider) col;
                 Gizmos.DrawCube(cameraTrigger.transform.TransformPoint(boxCol.center),
                     Vector3.Scale(boxCol.size, cameraTrigger.transform.localScale));
             }
-            else if (col.GetType() == typeof(SphereCollider))
+            else if (cameraTrigger != null && col.GetType() == typeof(SphereCollider)  )
             {
                 SphereCollider sphereCol = (SphereCollider) col;
                 Gizmos.DrawSphere(sphereCol.center, sphereCol.radius);
