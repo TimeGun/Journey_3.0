@@ -12,6 +12,8 @@ public class CheckPlate : MonoBehaviour
 
     [SerializeField] private bool player;
 
+    [SerializeField] private bool smallBoulder;
+
     [SerializeField] private UnityEvent openDoor;
 
     [SerializeField] private Animator _gateAnim;
@@ -23,30 +25,49 @@ public class CheckPlate : MonoBehaviour
     
     private void OnTriggerEnter(Collider other)
     {
-        PushObject _pushable = other.GetComponent<PushObject>();
+        ChangeSize _changeSize = other.GetComponent<ChangeSize>();
 
         PlayerMovement _movement = other.GetComponent<PlayerMovement>();
 
         
-        if (_pushable != null)
+        if (_changeSize != null && _changeSize.Small && _changeSize.name == "Boulder")
         {
-           
+            smallBoulder = true;
         }
-        
+
         if (_movement != null)
         {
             player = true;
         }
+
     }
 
     private void Update()
     {
-        if(_gateAnim.isActiveAndEnabled)
-            _gateAnim.SetBool("playerWeight", player);
-        if (_platformAnim.isActiveAndEnabled)
+        if (player || smallBoulder)
         {
-            _platformAnim.SetBool("playerWeight", player);
+            if(_gateAnim.isActiveAndEnabled)
+                _gateAnim.SetBool("playerWeight", true);
+        
+        
+            if (_platformAnim.isActiveAndEnabled)
+            {
+                _platformAnim.SetBool("playerWeight", true);
+            }
         }
+        else
+        {
+            if(_gateAnim.isActiveAndEnabled)
+                _gateAnim.SetBool("playerWeight", false);
+        
+        
+            if (_platformAnim.isActiveAndEnabled)
+            {
+                _platformAnim.SetBool("playerWeight", false);
+            }
+        }
+
+
 
 
         if (_ReturnBoulderPresent.Boulder)
@@ -90,16 +111,16 @@ public class CheckPlate : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        PushObject _pushable = other.GetComponent<PushObject>();
+        ChangeSize _changeSize = other.GetComponent<ChangeSize>();
 
         PlayerMovement _movement = other.GetComponent<PlayerMovement>();
         
-
-        if (_pushable != null)
+        if (_changeSize != null && _changeSize.Small && _changeSize.name == "Boulder")
         {
-            _boulderPresent = false;
+            smallBoulder = false;
         }
-
+        
+        
         if (_movement != null)
         {
             player = false;
