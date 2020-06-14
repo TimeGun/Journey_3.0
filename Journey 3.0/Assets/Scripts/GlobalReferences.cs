@@ -7,6 +7,7 @@ public class GlobalReferences : MonoBehaviour
     private GameObject _playerRef;
     private GameObject _mainCamera;
     private GameObject _behindPlayerSphere;
+    private GameObject _underGlyf;
 
     public GameObject BehindPlayerSphere
     {
@@ -24,5 +25,11 @@ public class GlobalReferences : MonoBehaviour
     {
         get => _mainCamera;
         set => _mainCamera = value;
+    }
+
+    public GameObject UnderGlyf
+    {
+        get => _underGlyf;
+        set => _underGlyf = value;
     }
 }
