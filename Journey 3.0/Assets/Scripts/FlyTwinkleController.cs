@@ -24,7 +24,7 @@ public class FlyTwinkleController : MonoBehaviour
     void EnablePickup()
     {
         
-        _twinkleVFX.SetBool("ShakeOff", false);
+       _twinkleVFX.SetBool("ShakeOff", false);
     }
 
     public void AddTwinkleAmount(int ammountToAdd)
