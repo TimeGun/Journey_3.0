@@ -15,7 +15,9 @@ public class ChangeTargetGroupSettings : MonoBehaviour
     public GameObject cameraTrigger1;
     public GameObject cameraTrigger2;
     private bool firstTrigger;
-    private bool secondTrigger; 
+    private bool secondTrigger;
+
+    public int rateOfChange;
     
     
     
@@ -28,7 +30,7 @@ public class ChangeTargetGroupSettings : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         firstTrigger = cameraTrigger1.GetComponent<DetectPlayer>().PlayerEntered;   //Use this to trigger when  offset decreases
         secondTrigger = cameraTrigger2.GetComponent<DetectPlayer>().PlayerEntered;  //Use this to trigger when  offset increases
@@ -37,27 +39,45 @@ public class ChangeTargetGroupSettings : MonoBehaviour
         if (firstTrigger)
         {
             afterTrigger = false;        //this is used to begin decreasing the value of the offset
+            StopAllCoroutines();
+            StartCoroutine(MoveToValue(weight1));
             
         }
         else if (secondTrigger)
         {
             afterTrigger = true;    //this is used to begin increasing the value of the offset
+            StopAllCoroutines();
+            StartCoroutine(MoveToValue(weight2));
         }
         
         if (afterTrigger)
                 {
-                    weightValue = weight2;
+                    //weightValue = weight2;
+                    
+                    
                 }
                 else
                 {
-                    weightValue = weight1;
+                    //weightValue = weight1;
+                    
                 }
         
-        TG.m_Targets[targetIndex].weight = weightValue;
+        //TG.m_Targets[targetIndex].weight = weightValue;
     }
 
-    void ChangeValues(int targetIndex)
+    IEnumerator MoveToValue(float newWeight)
     {
-        
+        Debug.Log("In Coroutine");
+
+        while ( TG.m_Targets[targetIndex].weight > newWeight + 0.01 || TG.m_Targets[targetIndex].weight < newWeight - 0.01)
+        {
+            Debug.Log(newWeight);
+            Debug.Log(TG.m_Targets[targetIndex].weight);
+            TG.m_Targets[targetIndex].weight = Mathf.MoveTowards(TG.m_Targets[targetIndex].weight, newWeight, rateOfChange/100);
+            Debug.Log(TG.m_Targets[targetIndex].weight);
+            yield return new WaitForSeconds(Time.deltaTime);
+
+        }
     }
+    
 }
