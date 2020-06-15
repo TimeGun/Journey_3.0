@@ -166,6 +166,8 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
             _frameMat.SetColor("_EmissiveColor", _emissionColour * _multiplierFrame);
             yield return new WaitForEndOfFrame();
         }
+        _vPaintingCam.Priority = 0;
+
         player.GetComponent<EmotionController>().SetTempColour(_emissionColour, 6f);
         
         while (_multiplierPlate != _maxEmissionStrength)
@@ -175,7 +177,6 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
             _plateMat.SetColor("_EmissiveColor", _emissionColour * _multiplierPlate);
             yield return new WaitForEndOfFrame();
         }
-        _vPaintingCam.Priority = 0;
         
 
         proceduralArmPlacement.pause = false;
