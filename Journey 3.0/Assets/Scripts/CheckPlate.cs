@@ -22,34 +22,33 @@ public class CheckPlate : MonoBehaviour
     public Transform boulderParent;
 
     public ReturnBoulderPresent _ReturnBoulderPresent;
-    
+
     private void OnTriggerEnter(Collider other)
     {
         ChangeSize _changeSize = other.GetComponent<ChangeSize>();
 
         PlayerMovement _movement = other.GetComponent<PlayerMovement>();
 
-        
+
         if (_changeSize != null && _changeSize.Small && _changeSize.name == "Boulder")
         {
             smallBoulder = true;
         }
 
-        if (_movement != null)
+        if (_movement != null && !other.isTrigger)
         {
             player = true;
         }
-
     }
 
     private void Update()
     {
         if (player || smallBoulder)
         {
-            if(_gateAnim.isActiveAndEnabled)
+            if (_gateAnim.isActiveAndEnabled)
                 _gateAnim.SetBool("playerWeight", true);
-        
-        
+
+
             if (_platformAnim.isActiveAndEnabled)
             {
                 _platformAnim.SetBool("playerWeight", true);
@@ -57,17 +56,15 @@ public class CheckPlate : MonoBehaviour
         }
         else
         {
-            if(_gateAnim.isActiveAndEnabled)
+            if (_gateAnim.isActiveAndEnabled)
                 _gateAnim.SetBool("playerWeight", false);
-        
-        
+
+
             if (_platformAnim.isActiveAndEnabled)
             {
                 _platformAnim.SetBool("playerWeight", false);
             }
         }
-
-
 
 
         if (_ReturnBoulderPresent.Boulder)
@@ -78,19 +75,17 @@ public class CheckPlate : MonoBehaviour
                 _ReturnBoulderPresent.pushableObj.GetComponent<Rigidbody>().velocity = Vector3.zero;
 
 
-                
-
                 InteractibleGlow _glow = API.GlobalReferences.PlayerRef.GetComponent<InteractibleGlow>();
 
                 Destroy(_glow);
-                
-                
+
+
                 openDoor.Invoke();
                 API.GlobalReferences.PlayerRef.GetComponent<InteractWithObject>().StopInteracting();
-                
+
                 opened = true;
                 Invoke("DestroyBoulder", Time.deltaTime);
-            } 
+            }
         }
     }
 
@@ -100,7 +95,8 @@ public class CheckPlate : MonoBehaviour
         Destroy(_ReturnBoulderPresent.pushableObj.GetComponent<Rigidbody>());
         Destroy(_ReturnBoulderPresent.pushableObj.GetComponent<PushObject>());
         Destroy(_ReturnBoulderPresent.pushableObj.GetComponent<SquishObject>());
-        API.GlobalReferences.PlayerRef.GetComponent<ObjectDetection>().Items.Remove(_ReturnBoulderPresent.pushableObj.gameObject);
+        API.GlobalReferences.PlayerRef.GetComponent<ObjectDetection>().Items
+            .Remove(_ReturnBoulderPresent.pushableObj.gameObject);
         Invoke("EnableGlow", 1f);
     }
 
@@ -114,13 +110,13 @@ public class CheckPlate : MonoBehaviour
         ChangeSize _changeSize = other.GetComponent<ChangeSize>();
 
         PlayerMovement _movement = other.GetComponent<PlayerMovement>();
-        
+
         if (_changeSize != null && _changeSize.Small && _changeSize.name == "Boulder")
         {
             smallBoulder = false;
         }
-        
-        
+
+
         if (_movement != null)
         {
             player = false;
