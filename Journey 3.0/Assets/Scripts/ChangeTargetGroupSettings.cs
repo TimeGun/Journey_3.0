@@ -17,7 +17,7 @@ public class ChangeTargetGroupSettings : MonoBehaviour
     private bool firstTrigger;
     private bool secondTrigger;
 
-    public int rateOfChange;
+    public float rateOfChange;
     
     
     
@@ -73,8 +73,9 @@ public class ChangeTargetGroupSettings : MonoBehaviour
         {
             Debug.Log(newWeight);
             Debug.Log(TG.m_Targets[targetIndex].weight);
-            TG.m_Targets[targetIndex].weight = Mathf.MoveTowards(TG.m_Targets[targetIndex].weight, newWeight, rateOfChange/100);
-            Debug.Log(TG.m_Targets[targetIndex].weight);
+            float tempWeight = Mathf.Lerp(TG.m_Targets[targetIndex].weight, newWeight, rateOfChange/100 * Time.deltaTime);
+            Debug.Log(tempWeight);
+            TG.m_Targets[targetIndex].weight = tempWeight;
             yield return new WaitForSeconds(Time.deltaTime);
 
         }

@@ -63,7 +63,7 @@ public class OffsetChange : MonoBehaviour
         while ( TD.m_AutoDolly.m_PositionOffset > newPositionOffset + 0.01 ||TD.m_AutoDolly.m_PositionOffset < newPositionOffset - 0.01)
         {
             //Debug.Log("In Coroutine");
-            TD.m_AutoDolly.m_PositionOffset = Mathf.Lerp(TD.m_AutoDolly.m_PositionOffset, newPositionOffset, rateOfChange/100);
+            TD.m_AutoDolly.m_PositionOffset = Mathf.Lerp(TD.m_AutoDolly.m_PositionOffset, newPositionOffset, rateOfChange/100 * Time.deltaTime);
             yield return new WaitForSeconds(Time.deltaTime);
 //            Debug.Log(TD.m_AutoDolly.m_PositionOffset);
 //            Debug.Log(newOffset);
