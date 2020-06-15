@@ -44,7 +44,7 @@ public class MenuController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (_controls.PlayerFreeMovement.StartButton.triggered)
+        if (_controls.PlayerFreeMovement.StartButton.triggered || _controls.PlayerFreeMovement.MenuBack.triggered)
         {
             if (inMenu)
             {
@@ -53,20 +53,9 @@ public class MenuController : MonoBehaviour
                     LeaveMenu();
                 }
             }
-            else
+            else if(_controls.PlayerFreeMovement.StartButton.triggered)
             {
                 OpenPauseMenu();
-            }
-        }
-
-        if (_controls.PlayerFreeMovement.MenuBack.triggered)
-        {
-            if (inMenu)
-            {
-                if (gameStarted && baseMenu.activeSelf)
-                {
-                    LeaveMenu();
-                }
             }
         }
     }
