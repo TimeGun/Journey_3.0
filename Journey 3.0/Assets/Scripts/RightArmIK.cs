@@ -50,7 +50,7 @@ public class RightArmIK : MonoBehaviour
     {
         if (debugPosition && lastIkSetting != null)
         {
-            SetIkTargetAndHint(lastIkSetting, inUseLerpPercentage);
+            SetIkTargetAndHint(lastIkSetting, inUseLerpPercentage, false);
         }
 
         if (_inUse || _tempUse)
@@ -64,8 +64,13 @@ public class RightArmIK : MonoBehaviour
     }
 
 
-    public void SetIkTargetAndHint(IKSettings _settings, float lerpPercentage)
+    public void SetIkTargetAndHint(IKSettings _settings, float lerpPercentage, bool lerpToPos)
     {
+        if (lerpToPos)
+        {
+            _ikConstraint.weight = 0.5f;
+        }
+
         inUseLerpPercentage = lerpPercentage;
         lastIkSetting = _settings;
         target.localPosition = _settings.targetPos;

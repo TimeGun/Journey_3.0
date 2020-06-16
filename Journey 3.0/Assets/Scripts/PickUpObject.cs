@@ -15,6 +15,10 @@ public class PickUpObject : MonoBehaviour, IInteractible
     private bool _carried;
 
     [SerializeField] private bool _placedDown;
+    
+
+
+    public ObjectToPickup thisObject = ObjectToPickup.boulder;
 
     public bool PlacedDown
     {
@@ -116,7 +120,15 @@ public class PickUpObject : MonoBehaviour, IInteractible
             _listOfIkSettings = _hand.root.GetComponent<PlayerIKPositions>()._settings;
         }
 
-        RightArmIK.Instance.SetIkTargetAndHint(_listOfIkSettings._premadeIKSettings[0], 0.8f);
-        
+        IKSettings thisSetting = _listOfIkSettings._premadeIKSettings.Find(x => x.thisObjectIKPosition == thisObject);
+
+        RightArmIK.Instance.SetIkTargetAndHint(thisSetting, thisSetting.lerpPercentage, false);
     }
+}
+
+public enum ObjectToPickup{
+    torch,
+    torchStretch,
+    boulder,
+    plank
 }
