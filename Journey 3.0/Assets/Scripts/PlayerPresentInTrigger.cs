@@ -11,7 +11,7 @@ public class PlayerPresentInTrigger : MonoBehaviour
     //player has entered the trigger
     private void OnTriggerStay(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !other.isTrigger)
         {
             _playerInPlacementArea.PlayerInTrigger = true;
             other.SendMessage("ChangeInPlacementBool", true);
@@ -22,7 +22,7 @@ public class PlayerPresentInTrigger : MonoBehaviour
     //Player has left the trigger
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !other.isTrigger)
         {
             _playerInPlacementArea.PlayerInTrigger = false;
             other.SendMessage("ChangeInPlacementBool", false);
