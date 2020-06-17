@@ -122,7 +122,7 @@ public class PickUpObject : MonoBehaviour, IInteractible
 
         IKSettings thisSetting = _listOfIkSettings._premadeIKSettings.Find(x => x.thisObjectIKPosition == thisObject);
 
-        RightArmIK.Instance.SetIkTargetAndHint(thisSetting, thisSetting.lerpPercentage, false);
+        RightArmIK.Instance.SetIkTargetAndHint(thisSetting, thisSetting.lerpPercentage);
     }
 }
 

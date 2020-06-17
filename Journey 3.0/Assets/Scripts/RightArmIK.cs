@@ -38,6 +38,10 @@ public class RightArmIK : MonoBehaviour
 
     private float inUseLerpPercentage;
 
+    private Coroutine _switcherCoroutine;
+
+    [SerializeField] private float _settingsLerpSpeed = 1f;
+
 
     // Start is called before the first frame update
     void Awake()
@@ -50,7 +54,7 @@ public class RightArmIK : MonoBehaviour
     {
         if (debugPosition && lastIkSetting != null)
         {
-            SetIkTargetAndHint(lastIkSetting, inUseLerpPercentage, false);
+            SetIkTargetAndHint(lastIkSetting, inUseLerpPercentage);
         }
 
         if (_inUse || _tempUse)
@@ -64,18 +68,21 @@ public class RightArmIK : MonoBehaviour
     }
 
 
-    public void SetIkTargetAndHint(IKSettings _settings, float lerpPercentage, bool lerpToPos)
+    public void SetIkTargetAndHint(IKSettings _settings, float lerpPercentage)
     {
-        if (lerpToPos)
+        if (_switcherCoroutine != null)
         {
-            _ikConstraint.weight = 0.5f;
+            StopCoroutine(_switcherCoroutine);
+            _switcherCoroutine = null;
         }
 
+        
         inUseLerpPercentage = lerpPercentage;
         lastIkSetting = _settings;
         target.localPosition = _settings.targetPos;
         target.localRotation = _settings.targetRot;
         hint.localPosition = _settings.hintPos;
+        
         _inUse = true;
     }
 
@@ -89,9 +96,43 @@ public class RightArmIK : MonoBehaviour
                         * Quaternion.AngleAxis(-90f, Vector3.up);
     }
 
+    public void SwitchIKSettings(IKSettings from, IKSettings to)
+    {
+        
+        if (_switcherCoroutine != null)
+        {
+            SetIkTargetAndHint(lastIkSetting, lastIkSetting.lerpPercentage);
+        }
+        
+        lastIkSetting = to;
+        _switcherCoroutine = StartCoroutine(LerpFromSettings(from, to));
+    }
+
     public void StopIK()
     {
         _inUse = false;
+    }
+
+    
+    private Vector3 tempPosition;
+    
+    
+    
+    public IEnumerator LerpFromSettings(IKSettings from, IKSettings to)
+    {
+        tempPosition = from.targetPos;
+        target.localRotation = to.targetRot;
+        inUseLerpPercentage = to.lerpPercentage;
+        
+        while (target.localPosition != to.targetPos)
+        {
+            tempPosition = Vector3.MoveTowards(tempPosition, to.targetPos, Time.deltaTime * _settingsLerpSpeed);
+            target.localPosition = tempPosition;
+            
+            yield return new WaitForEndOfFrame();
+        }
+
+        _switcherCoroutine = null;
     }
 }
 
