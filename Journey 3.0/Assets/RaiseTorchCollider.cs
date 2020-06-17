@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class RaiseTorchCollider : MonoBehaviour
 {
@@ -103,7 +100,7 @@ public class RaiseTorchCollider : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.green;
-        Gizmos.DrawWireCube(transform.TransformPoint(_col.center), _col.size);
+        Gizmos.DrawWireCube(transform.TransformPoint(_col.center), Vector3.Scale(_col.size, transform.localScale));
     }
 
     private void OnDisable()
