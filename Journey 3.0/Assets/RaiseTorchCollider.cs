@@ -105,7 +105,7 @@ public class RaiseTorchCollider : MonoBehaviour
 
     private void OnDisable()
     {
-        if (_objectDetection.carryingObject != null &&
+        if (_objectDetection != null && _objectDetection.carryingObject != null &&
             _objectDetection.carryingObject.GetComponent<TorchOnOff>() != null)
         {
             RightArmIK.Instance.SwitchIKSettings(_listOfIkSettings._premadeIKSettings[1],
