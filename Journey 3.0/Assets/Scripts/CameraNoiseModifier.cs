@@ -50,6 +50,7 @@ public class CameraNoiseModifier : MonoBehaviour
     {
         if (coroutineStarted == false)
         {
+            StopAllCoroutines();
             ArrayList noiseArrayList = new ArrayList();
             noiseArrayList = ParseSomething.ParseFloats(newFloatString);
             StartCoroutine(CameraShakeCoroutine( (float)noiseArrayList[0] , (float)noiseArrayList[1], (float)noiseArrayList[2], (float)noiseArrayList[3]));
