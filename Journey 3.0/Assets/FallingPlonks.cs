@@ -6,6 +6,7 @@ public class FallingPlonks : MonoBehaviour
 {
     [SerializeField] private GameObject[] fallingPlonks;
     [SerializeField] private GameObject[] interactiblePlonks;
+    [SerializeField] private GameObject crossingPlonk;
 
     void SetPlonkPosition(GameObject plonk, int index)
     {
@@ -36,8 +37,14 @@ public class FallingPlonks : MonoBehaviour
             GivePlonkSlightRotation(fallingPlonks[i]);
             interactiblePlonks[i].SetActive(false);
         }
+        Invoke("DeletePlonks", 10f);
         
-        
-        
+    }
+
+    void DeletePlonks()
+    {
+        Destroy(fallingPlonks[0]);
+        Destroy(fallingPlonks[1]);
+        Destroy(crossingPlonk);
     }
 }
