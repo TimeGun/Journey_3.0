@@ -5,19 +5,40 @@ using Cinemachine;
 
 public class FovManipulator : MonoBehaviour
 {
+    //Target Obejct for player to object Fov Lerp
     public GameObject TargetObj;
+
+    //Player
     public GameObject Player;
-    public GameObject Trigger;
+
+    //Detect player to check enter and stay
+    private DetectPlayer _detectPlayer;
+
+
+    //The camera to manipulate
     public GameObject activeCamera;
+    public CinemachineVirtualCamera activeCameraCam;
+
+
     private bool playerEnter;
     private bool playerExit;
     private bool playerInZone;
+
+
+    // Max range for camera to player 
     public float minDist;
     public float maxDist;
+
+    // Original Camera FOV
     private float _startFOV;
+
+    // Fov to map to range
     private float _currentFov;
+
+
+    //Max fov zoom set in inspector
     public float targetFov;
-    
+
 
     public enum DistanceType
     {
@@ -26,79 +47,78 @@ public class FovManipulator : MonoBehaviour
     }
 
     public DistanceType _distanceType;
-    
 
-    private float _startDist; //Get distance to targetobj when player enters collider
-    
 
-    private float currentDist;    // current dist from target obj
-   
+    private float _startDist; //Get distance to targetobj based on Collider Size
+
+
+    private float currentDist; // current dist from target obj
+    
+    
+    //speed to change Fov at
+    [SerializeField] private float lerpSpeed = 4f;
+    
     void Start()
     {
-        _startFOV = activeCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.FieldOfView;    //get initial fov of target camera
+        _startFOV = activeCamera.GetComponent<CinemachineVirtualCamera>().m_Lens
+            .FieldOfView; //get initial fov of target camera
+        
+        
         Player = API.GlobalReferences.PlayerRef;
+
+        _detectPlayer = GetComponentInChildren<DetectPlayer>();
+
+        SphereCollider col = _detectPlayer.GetComponent<SphereCollider>();
+
+
+        float[] values = new []
+        {
+            _detectPlayer.transform.localScale.x, _detectPlayer.transform.localScale.y,
+            _detectPlayer.transform.localScale.z
+        };
+
+        _startDist = col.radius * Mathf.Max(values);
+
+        activeCameraCam = activeCamera.GetComponent<CinemachineVirtualCamera>();
     }
 
-  
+
     void Update()
     {
-       
         if (_distanceType == DistanceType.CameraToPlayer)
         {
-            CameraToPlayerDist();        //Choose when fov will change based on the distance from the player to the camera
+            CameraToPlayerDist(); //Choose when fov will change based on the distance from the player to the camera
         }
         else if (_distanceType == DistanceType.ObjectToPlayer)
         {
-           ObjectToPlayerDist();        //Choose when fov will change based on distance from player to a stationary target object in the scene
+            ObjectToPlayerDist(); //Choose when fov will change based on distance from player to a stationary target object in the scene
         }
-     }
+    }
     
-    public float DistCovered()
-    {
-        if (playerEnter)
-        {
-            Debug.LogError("Player is not in zone");
-        }
 
-        float tempDist;
-        tempDist = _startDist - Vector3.Distance(Player.transform.position, TargetObj.transform.position);
-        return tempDist;   
-    }
-    
-    public float Map(float a, float b, float c, float d, float e)
-    {
-        
-        float cb = c - b;            //cb is the first range which a is a part of
-        float de = e - d;            //de is the second range which the variable assigned to this function will be mapped to based off the a variable position in the first range
-        float howFar = (a - b) / cb;
-        return d + howFar * de;
-        
-        
-        
-        
-    }
 
     void ObjectToPlayerDist()
-    {             
-            playerEnter = Trigger.GetComponent<DetectPlayer>().PlayerEntered;        //bool set true first frame player enters the  trigger collider. Set in detect player script
-            playerInZone = Trigger.GetComponent<DetectPlayer>().PlayerInCollider;        //bool set true when the player is in the trigger collider 
-            currentDist = Vector3.Distance(Player.transform.position, TargetObj.transform.position);        //current distance between player and target obj
-        
-            if (playerEnter)
-            {
-                _startDist = Vector3.Distance(Player.transform.position, TargetObj.transform.position);        //get start dist when player enters the collider
-            }
-            else if (playerInZone)
-            {
-                _currentFov = Map(currentDist, _startDist, 0, _startFOV, targetFov);     //Map Function
-                //Debug.Log(_startDist);
-                //Debug.Log(currentFov);
-                activeCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.FieldOfView = _currentFov;        //set active camera fov to currentfov value
-            }
-            else if (playerInZone == false)
-            {
-                activeCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.FieldOfView = _startFOV;        //sets fov back to initial fov when the player exits the collider
-            }
+    {
+        if (_detectPlayer.PlayerInCollider)
+        {
+            currentDist =
+                Vector3.Distance(Player.transform.position,
+                    TargetObj.transform.position); //current distance between player and target obj
+
+            _currentFov = Map(currentDist, _startDist, 0, _startFOV, targetFov); //Map Function
+
+            activeCameraCam.m_Lens.FieldOfView = Mathf.Lerp(
+                    activeCameraCam.m_Lens.FieldOfView, _currentFov,
+                    Time.deltaTime * lerpSpeed)
+                ; //set active camera fov to currentfov value
+        }
+        else if (_detectPlayer.PlayerInCollider == false)
+        {
+            activeCameraCam.m_Lens.FieldOfView = Mathf.Lerp(
+                activeCameraCam.m_Lens.FieldOfView, _startFOV,
+                Time.deltaTime * lerpSpeed);
+            //sets fov back to initial fov when the player exits the collider
+        }
     }
 
     void CameraToPlayerDist()
@@ -111,14 +131,25 @@ public class FovManipulator : MonoBehaviour
 
         currentDist = Vector3.Distance(Player.transform.position, TargetObj.transform.position);
         _currentFov = Map(currentDist, minDist, maxDist, _startFOV, targetFov);
-        if (_startFOV > targetFov)     // if you want to widen the fov as the player approaches the camera
+        if (_startFOV > targetFov) // if you want to widen the fov as the player approaches the camera
         {
             clampedFov = Mathf.Clamp(_currentFov, targetFov, _startFOV);
         }
-        else            //if you want to narrow fov as the player approaches the camera
+        else //if you want to narrow fov as the player approaches the camera
         {
             clampedFov = Mathf.Clamp(_currentFov, _startFOV, targetFov);
         }
-        activeCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.FieldOfView = clampedFov;       
+
+        activeCamera.GetComponent<CinemachineVirtualCamera>().m_Lens.FieldOfView = clampedFov;
+    }
+
+
+    public float Map(float a, float b, float c, float d, float e)
+    {
+        float cb = c - b; //cb is the first range which a is a part of
+        float
+            de = e - d; //de is the second range which the variable assigned to this function will be mapped to based off the a variable position in the first range
+        float howFar = (a - b) / cb;
+        return d + howFar * de;
     }
 }
