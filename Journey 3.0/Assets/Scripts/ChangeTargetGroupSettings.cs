@@ -53,8 +53,7 @@ public class ChangeTargetGroupSettings : MonoBehaviour
                 rateOfChange / (100f * Time.deltaTime));
             
             TG.m_Targets[targetIndex].weight = tempWeight;
-            
-            
+
             yield return new WaitForEndOfFrame();
         }
     }

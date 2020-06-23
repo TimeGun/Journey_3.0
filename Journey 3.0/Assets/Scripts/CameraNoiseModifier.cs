@@ -14,37 +14,12 @@ public class CameraNoiseModifier : MonoBehaviour
     private CinemachineVirtualCamera vcam;
     private float noiseAmp;
     private float noiseFreq;
-    //public int strongShakeTime;
-    //public int lightShakeTime;
+
     private float shakeLerpSpeed = 10;
     
-
-    //public float testAmp;
-    //public float testFreq;
-
     private bool testBool;
-
     private bool coroutineStarted;
     
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-        
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        if (testBool)
-        {
-            testBool = false;
-            //CameraShake(testAmp, testFreq, strongShakeTime, lightShakeTime);
-            //StartCoroutine(CameraShakeCoroutine(testAmp, testFreq, strongShakeTime, lightShakeTime));
-           
-        }
-    }
 
     public void CameraShake(string newFloatString)
     {
@@ -63,27 +38,28 @@ public class CameraNoiseModifier : MonoBehaviour
     
     public IEnumerator CameraShakeCoroutine(float ampChange, float freqChange, float strongShakeLength, float lightShakeLength)
     {
-        //coroutineStarted = true;
-//        Debug.Log(ampChange);
         vcam = TargetCamera.GetComponent<CinemachineVirtualCamera>();
-        vcam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = ampChange;
-        vcam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = freqChange;
-        //noiseAmp = ampChange;
-        //noiseFreq = freqChange;
+        CinemachineBasicMultiChannelPerlin shaker = vcam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+        shaker.m_AmplitudeGain = ampChange;
+        shaker.m_FrequencyGain = freqChange;
+        
+        
         yield return new WaitForSeconds(strongShakeLength);
         float timer = lightShakeLength * 30;
+        
         while (timer > 0)
         {
-            vcam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = Mathf.Lerp(
-                vcam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain, 0, shakeLerpSpeed/100);
-            vcam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = Mathf.Lerp(
-                vcam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain, 0, shakeLerpSpeed/100);
+            shaker.m_AmplitudeGain = Mathf.Lerp(
+                shaker.m_AmplitudeGain, 0, shakeLerpSpeed/100);
+            shaker.m_FrequencyGain = Mathf.Lerp(
+                shaker.m_FrequencyGain, 0, shakeLerpSpeed/100);
             timer--;
+            
             yield return new WaitForSeconds(Time.deltaTime);
             
         }
-        vcam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_AmplitudeGain = 0;
-        vcam.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>().m_FrequencyGain = 0;
+        shaker.m_AmplitudeGain = 0;
+        shaker.m_FrequencyGain = 0;
         coroutineStarted = false;
         
     }
