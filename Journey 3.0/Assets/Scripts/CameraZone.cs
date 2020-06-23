@@ -8,24 +8,30 @@ using UnityEngine.UIElements;
 
 public class CameraZone : MonoBehaviour
 {
+    //The detection trigger collider
     public GameObject cameraTrigger;
 
+    // Find the cameras in the muti-scene setup
     public bool FindCam1;
     public bool FindCam2;
 
+    //Cameras names to search for
     public string Cam1Name;
     public string Cam2Name;
 
+    //Player detection (know when to switch priorities)
     private DetectPlayer detectPlayer;
-    public int targetPriority1;
 
+    //priorities for the two cameras
+    public int targetPriority1;
     public int targetPriority2;
 
+    //Target Camera Gameobjects
     public GameObject targetCamera1;
-
     public GameObject targetCamera2;
 
 
+    //Virtual Cameras to change priorities on
     private CinemachineVirtualCameraBase targetCamera1Cam;
     private CinemachineVirtualCameraBase targetCamera2Cam;
 
@@ -39,7 +45,7 @@ public class CameraZone : MonoBehaviour
         {
             StartCoroutine(AssignCameraObject1(Cam1Name));
         }
-        else if(targetCamera1 != null)
+        else if (targetCamera1 != null)
         {
             if (targetCamera1.GetComponent<CinemachineVirtualCameraBase>() == null)
             {
@@ -49,14 +55,13 @@ public class CameraZone : MonoBehaviour
             {
                 targetCamera1Cam = targetCamera1.GetComponent<CinemachineVirtualCameraBase>();
             }
-
         }
 
         if (FindCam2)
         {
             StartCoroutine(AssignCameraObject2(Cam2Name));
         }
-        else if(targetCamera2 != null)
+        else if (targetCamera2 != null)
         {
             if (targetCamera2.GetComponent<CinemachineVirtualCameraBase>() == null)
             {
@@ -74,14 +79,7 @@ public class CameraZone : MonoBehaviour
             col = cameraTrigger.GetComponent<Collider>();
         }
 
-
-        
-
         detectPlayer = GetComponent<DetectPlayer>();
-
-        if (targetCamera1 != null)
-        {
-        }
     }
 
     IEnumerator AssignCameraObject1(string cameraObj)
@@ -118,14 +116,14 @@ public class CameraZone : MonoBehaviour
         {
             Debug.LogWarning("Target Priority for target camera 2 is not set");
         }
-        
+
         targetCamera2Cam = targetCamera2.GetComponent<CinemachineVirtualCameraBase>();
     }
 
 
     // Update is called once per frame
     void Update()
-    { 
+    {
         //if the player is within the trigger, set the new priorities 
         if (detectPlayer.PlayerInCollider)
         {
@@ -138,7 +136,6 @@ public class CameraZone : MonoBehaviour
             {
                 targetCamera2Cam.Priority = targetPriority2;
             }
-
         }
     }
 
