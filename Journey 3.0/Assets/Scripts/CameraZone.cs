@@ -79,7 +79,7 @@ public class CameraZone : MonoBehaviour
             col = cameraTrigger.GetComponent<Collider>();
         }
 
-        detectPlayer = GetComponentInChildren<DetectPlayer>();
+        detectPlayer = cameraTrigger.GetComponent<DetectPlayer>();
     }
 
     IEnumerator AssignCameraObject1(string cameraObj)
