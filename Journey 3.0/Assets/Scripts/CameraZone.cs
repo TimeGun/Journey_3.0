@@ -21,13 +21,14 @@ public class CameraZone : MonoBehaviour
 
     public int targetPriority2;
 
-    //public int targetPriority3;
     public GameObject targetCamera1;
 
     public GameObject targetCamera2;
 
 
-    // Start is called before the first frame update
+    private CinemachineVirtualCameraBase targetCamera1Cam;
+    private CinemachineVirtualCameraBase targetCamera2Cam;
+
 
     private Collider col;
 
@@ -38,31 +39,49 @@ public class CameraZone : MonoBehaviour
         {
             StartCoroutine(AssignCameraObject1(Cam1Name));
         }
+        else if(targetCamera1 != null)
+        {
+            if (targetCamera1.GetComponent<CinemachineVirtualCameraBase>() == null)
+            {
+                Debug.LogWarning(targetCamera1 + " is not a Camera Object");
+            }
+            else
+            {
+                targetCamera1Cam = targetCamera1.GetComponent<CinemachineVirtualCameraBase>();
+            }
+
+        }
 
         if (FindCam2)
         {
             StartCoroutine(AssignCameraObject2(Cam2Name));
         }
+        else if(targetCamera2 != null)
+        {
+            if (targetCamera2.GetComponent<CinemachineVirtualCameraBase>() == null)
+            {
+                Debug.LogWarning(targetCamera2 + " is not a Camera Object");
+            }
+            else
+            {
+                targetCamera2Cam = targetCamera2.GetComponent<CinemachineVirtualCameraBase>();
+            }
+        }
 
-        //zones collider
+        //zones collider for debug
         if (cameraTrigger != null)
         {
             col = cameraTrigger.GetComponent<Collider>();
         }
 
 
-        if (targetCamera1.GetComponent<CinemachineVirtualCameraBase>() == null)
-        {
-            Debug.LogWarning(targetCamera1 + " is not a Camera Object");
-        }
-
-        if (targetCamera2.GetComponent<CinemachineVirtualCameraBase>() == null)
-        {
-            Debug.LogWarning(targetCamera2 + " is not a Camera Object");
-        }
+        
 
         detectPlayer = GetComponent<DetectPlayer>();
-        //initialPriority3 = targetCamera3.GetComponent<CinemachineVirtualCameraBase>().Priority;
+
+        if (targetCamera1 != null)
+        {
+        }
     }
 
     IEnumerator AssignCameraObject1(string cameraObj)
@@ -80,6 +99,8 @@ public class CameraZone : MonoBehaviour
         {
             Debug.LogWarning("Target Priority for target camera 1 is not set");
         }
+
+        targetCamera1Cam = targetCamera1.GetComponent<CinemachineVirtualCameraBase>();
     }
 
     IEnumerator AssignCameraObject2(string cameraObj)
@@ -97,6 +118,8 @@ public class CameraZone : MonoBehaviour
         {
             Debug.LogWarning("Target Priority for target camera 2 is not set");
         }
+        
+        targetCamera2Cam = targetCamera2.GetComponent<CinemachineVirtualCameraBase>();
     }
 
 
@@ -106,14 +129,14 @@ public class CameraZone : MonoBehaviour
         //if the player is within the trigger, set the new priorities 
         if (detectPlayer.PlayerInCollider)
         {
-            if (targetCamera1 != null && targetCamera1.GetComponent<CinemachineVirtualCameraBase>().Priority != targetPriority1)
+            if (targetCamera1Cam != null && targetCamera1Cam.Priority != targetPriority1)
             {
-                targetCamera1.GetComponent<CinemachineVirtualCameraBase>().Priority = targetPriority1;
+                targetCamera1Cam.Priority = targetPriority1;
             }
 
-            if (targetCamera2 != null && targetCamera2.GetComponent<CinemachineVirtualCameraBase>().Priority != targetPriority2)
+            if (targetCamera2Cam != null && targetCamera2Cam.Priority != targetPriority2)
             {
-                targetCamera2.GetComponent<CinemachineVirtualCameraBase>().Priority = targetPriority2;
+                targetCamera2Cam.Priority = targetPriority2;
             }
 
         }
