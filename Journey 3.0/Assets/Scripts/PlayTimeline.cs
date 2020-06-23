@@ -48,7 +48,7 @@ public class PlayTimeline : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (_detectPlayer.PlayerEntered && cinematicStarted == false)
+        if (_detectPlayer != null && _detectPlayer.PlayerEntered && cinematicStarted == false)
         {
             StartCoroutine(StartTimeline());
             cinematicStarted = true;
