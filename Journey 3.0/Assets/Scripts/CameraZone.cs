@@ -16,7 +16,7 @@ public class CameraZone : MonoBehaviour
     public string Cam1Name;
     public string Cam2Name;
 
-    private bool playerInZone;
+    private DetectPlayer detectPlayer;
     public int targetPriority1;
 
     public int targetPriority2;
@@ -26,15 +26,6 @@ public class CameraZone : MonoBehaviour
 
     public GameObject targetCamera2;
 
-    //public GameObject targetCamera3;
-    public float CameraTime = 0;
-    public bool specialEvent;
-    bool timedCameraChange = true;
-    private int initialPriority1;
-
-    private int initialPriority2;
-    //private int initialPriority3;
-
 
     // Start is called before the first frame update
 
@@ -42,7 +33,7 @@ public class CameraZone : MonoBehaviour
 
     void Start()
     {
-
+        // Find Cam allows camera assignment in multi-scenes
         if (FindCam1)
         {
             StartCoroutine(AssignCameraObject1(Cam1Name));
@@ -53,11 +44,12 @@ public class CameraZone : MonoBehaviour
             StartCoroutine(AssignCameraObject2(Cam2Name));
         }
 
+        //zones collider
         if (cameraTrigger != null)
         {
             col = cameraTrigger.GetComponent<Collider>();
         }
-        
+
 
         if (targetCamera1.GetComponent<CinemachineVirtualCameraBase>() == null)
         {
@@ -69,28 +61,25 @@ public class CameraZone : MonoBehaviour
             Debug.LogWarning(targetCamera2 + " is not a Camera Object");
         }
 
+        detectPlayer = GetComponent<DetectPlayer>();
         //initialPriority3 = targetCamera3.GetComponent<CinemachineVirtualCameraBase>().Priority;
     }
 
-    IEnumerator AssignCameraObject1(string cameraObj) {
+    IEnumerator AssignCameraObject1(string cameraObj)
+    {
         yield return new WaitForEndOfFrame();
 
-        while (targetCamera1 == null) { 
+        while (targetCamera1 == null)
+        {
             targetCamera1 = GameObject.Find(Cam1Name);
             yield return new WaitForEndOfFrame();
             print("If this is printing every frame, thats fairly bad: " + gameObject.name);
         }
 
-        if (targetCamera1 != null)
+        if (targetPriority1 == 0)
         {
-            initialPriority1 = targetCamera1.GetComponent<CinemachineVirtualCameraBase>().Priority;
-            if (targetPriority1 == 0)
-            {
-                Debug.LogWarning("Target Priority for target camera 1 is not set");
-            }
+            Debug.LogWarning("Target Priority for target camera 1 is not set");
         }
-
-
     }
 
     IEnumerator AssignCameraObject2(string cameraObj)
@@ -103,66 +92,30 @@ public class CameraZone : MonoBehaviour
             yield return new WaitForEndOfFrame();
             print("If this is printing every frame, thats fairly bad: " + gameObject.name);
         }
-        
 
-        if (targetCamera2 != null)
+        if (targetPriority2 == 0)
         {
-            initialPriority2 = targetCamera2.GetComponent<CinemachineVirtualCameraBase>().Priority;
-            if (targetPriority2 == 0)
-            {
-                Debug.LogWarning("Target Priority for target camera 2 is not set");
-            }
+            Debug.LogWarning("Target Priority for target camera 2 is not set");
         }
     }
 
 
     // Update is called once per frame
     void Update()
-    {
-        playerInZone = cameraTrigger.GetComponent<DetectPlayer>().PlayerInCollider;
-//       Debug.Log(playerInZone);
-        if (playerInZone)
+    { 
+        //if the player is within the trigger, set the new priorities 
+        if (detectPlayer.PlayerInCollider)
         {
-            if (CameraTime > 0 && specialEvent)
+            if (targetCamera1 != null && targetCamera1.GetComponent<CinemachineVirtualCameraBase>().Priority != targetPriority1)
             {
-                StartCoroutine(TimedPriorityChange());
-                //return;
+                targetCamera1.GetComponent<CinemachineVirtualCameraBase>().Priority = targetPriority1;
             }
-            else if (specialEvent == false)
+
+            if (targetCamera2 != null && targetCamera2.GetComponent<CinemachineVirtualCameraBase>().Priority != targetPriority2)
             {
-                if (targetCamera1 != null)
-                {
-                    targetCamera1.GetComponent<CinemachineVirtualCameraBase>().Priority = targetPriority1;
-                }
-
-                if (targetCamera2 != null)
-                {
-                    targetCamera2.GetComponent<CinemachineVirtualCameraBase>().Priority = targetPriority2;
-                }
-
-                //targetCamera3.GetComponent<CinemachineVirtualCameraBase>().Priority = targetPriority3;
+                targetCamera2.GetComponent<CinemachineVirtualCameraBase>().Priority = targetPriority2;
             }
-        }
-    }
 
-    IEnumerator TimedPriorityChange()
-    {
-        while (timedCameraChange)
-        {
-            initialPriority1 = targetCamera1.GetComponent<CinemachineVirtualCameraBase>().Priority;
-            initialPriority2 = targetCamera2.GetComponent<CinemachineVirtualCameraBase>().Priority;
-
-            Debug.Log(initialPriority1);
-            Debug.Log(initialPriority2);
-
-            targetCamera1.GetComponent<CinemachineVirtualCameraBase>().Priority = targetPriority1;
-            targetCamera2.GetComponent<CinemachineVirtualCameraBase>().Priority = targetPriority2;
-
-            yield return new WaitForSeconds(CameraTime);
-            timedCameraChange = false;
-            targetCamera1.GetComponent<CinemachineVirtualCameraBase>().Priority = initialPriority1;
-            targetCamera2.GetComponent<CinemachineVirtualCameraBase>().Priority = initialPriority2;
-            timedCameraChange = false;
         }
     }
 
@@ -170,10 +123,10 @@ public class CameraZone : MonoBehaviour
     private void OnDrawGizmos()
     {
 #if UNITY_EDITOR
-        
-        if (Application.isPlaying && isActiveAndEnabled )
+
+        if (Application.isPlaying && isActiveAndEnabled)
         {
-            if (playerInZone)
+            if (detectPlayer.PlayerInCollider)
             {
                 Gizmos.color = new Color(1, 0, 0, 0.5f);
             }
@@ -189,13 +142,12 @@ public class CameraZone : MonoBehaviour
                 Gizmos.DrawCube(cameraTrigger.transform.TransformPoint(boxCol.center),
                     Vector3.Scale(boxCol.size, cameraTrigger.transform.localScale));
             }
-            else if (cameraTrigger != null && col.GetType() == typeof(SphereCollider)  )
+            else if (cameraTrigger != null && col.GetType() == typeof(SphereCollider))
             {
                 SphereCollider sphereCol = (SphereCollider) col;
                 Gizmos.DrawSphere(sphereCol.center, sphereCol.radius);
             }
         }
 #endif
-
     }
 }
