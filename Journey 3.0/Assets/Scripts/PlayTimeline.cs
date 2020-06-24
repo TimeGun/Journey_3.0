@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+using UnityEngine.Audio;
 using UnityEngine.Playables;
 
 public class PlayTimeline : MonoBehaviour
@@ -26,6 +27,11 @@ public class PlayTimeline : MonoBehaviour
     
     public float playerFreezeTime;
     public float timeBeforeFreeze;
+
+    public bool useCutsceneAudioSnapshot = false;
+
+    [SerializeField] private AudioMixerSnapshot normalSnapshot;
+    [SerializeField] private AudioMixerSnapshot cutsceneSnapshot;
 
     void Start()
     {
@@ -58,12 +64,24 @@ public class PlayTimeline : MonoBehaviour
 
     IEnumerator StartTimeline()
     {
+        
         LevelSelectEnabler.DisableButton();
+        if (useCutsceneAudioSnapshot)
+        {
+            cutsceneSnapshot.TransitionTo(1f);
+        }
+
         vcam.Priority = targetPriority;
         playableDirector.Play();
         CinematicPlayerMoment.instance.FreezePlayer(timeBeforeFreeze, playerFreezeTime, blackBarsEnabled);
         yield return new WaitForSeconds((float) _timelineLength);
         vcam.Priority = _startPriority;
+        if (useCutsceneAudioSnapshot)
+        {
+            normalSnapshot.TransitionTo(1f);
+        }
         LevelSelectEnabler.EnableButton();
+        
+        
     }
 }
