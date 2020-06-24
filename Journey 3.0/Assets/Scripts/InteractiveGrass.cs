@@ -28,7 +28,10 @@ public class InteractiveGrass : MonoBehaviour
             for (int i = 0; i < materials.Length; i++)
             {
                 materials[i].SetVector("_position", position);
-                radius = materials[i].GetFloat("_range");
+                if (materials[i].HasProperty("_range"))
+                {
+                    radius = materials[i].GetFloat("_range");
+                }
             }
 
             yield return null;
