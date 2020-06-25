@@ -17,7 +17,7 @@ public class ObjectDetection : MonoBehaviour
         get => _items;
     }
     
-
+    
     private void OnTriggerStay(Collider other)
     {
         if (checkForObjects)
@@ -35,6 +35,13 @@ public class ObjectDetection : MonoBehaviour
         if (_items.Contains(other.gameObject) && other.gameObject != carryingObject)
         {
             _items.Remove(other.gameObject);
+            
+            Material mat = other.GetComponentInChildren<Renderer>().material;
+
+            if (mat != null && mat.HasProperty("_interactible"))
+            {
+                mat.SetFloat("_interactible", 0);
+            }
         }
     }
 

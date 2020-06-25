@@ -91,7 +91,6 @@ public class FadeLight : MonoBehaviour
         {
             if (_multiplierPlate != _minEmissionStrength)
             {
-                print("Running");
                 _multiplierPlate = Mathf.MoveTowards(_multiplierPlate, _minEmissionStrength, Time.deltaTime * _lerpSpeed * 3f);
                 _plateMaterial.SetColor("_EmissiveColor", _emissionColour * _multiplierPlate);
                 
