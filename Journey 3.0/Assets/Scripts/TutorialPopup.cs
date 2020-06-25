@@ -52,7 +52,7 @@ public class TutorialPopup : MonoBehaviour
                         _interactionObject[1].GetComponent<Animator>().Play("HoldButton", 0, 0f);
                     }
                 }
-                else
+                else if(!objectToDisplayTutorialFor.CompareTag("Locked"))
                 {
                     if (_inputSetUp.lastInput == "Gamepad")
                     {
