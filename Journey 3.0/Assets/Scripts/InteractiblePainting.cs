@@ -76,10 +76,8 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
         
         yield return new WaitForEndOfFrame();
         movement.StartRemoteControlledMovement(_objectToFollow);
-
         
-        
-        
+         
         
         //Walk to the place to stand
         while (_objectToFollow.transform.position != _palceToStand.transform.position)
