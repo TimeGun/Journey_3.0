@@ -11,6 +11,8 @@ public class CutsceneMover : MonoBehaviour
     public float moveSpeed = 2f;
     public float turnSpeed = 10f;
 
+    public bool unfreezeOnActionComplete = false;
+
     public enum PlayerAction
     {
         TurnToFace,
@@ -81,7 +83,11 @@ public class CutsceneMover : MonoBehaviour
             LevelSelectEnabler.EnableButton();
         }
         
-        movement.StopRemoteControlledMovement();
+        if (unfreezeOnActionComplete)
+        {
+            movement.StopRemoteControlledMovement();
+        }
+        
         Debug.Log("Action Complete");
     }
     
@@ -114,8 +120,12 @@ public class CutsceneMover : MonoBehaviour
         {
             LevelSelectEnabler.EnableButton();
         }
-        
-        movement.StopRemoteControlledMovement();
+
+        if (unfreezeOnActionComplete)
+        {
+            movement.StopRemoteControlledMovement();
+        }
+
         Debug.Log("Action Complete");
     }
 }
