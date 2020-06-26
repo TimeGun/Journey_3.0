@@ -24,6 +24,12 @@ public class MenuController : MonoBehaviour
     [SerializeField] private AudioSource _click, _select;
 
     public static bool formationUse;
+
+    [SerializeField] private bool fadeAlpha = true;
+
+    [SerializeField] private float alphaValue = 0.2f;
+
+    private CanvasGroup baseGroup;
     
     
 
@@ -31,7 +37,7 @@ public class MenuController : MonoBehaviour
     void Start()
     {
         instance = this;
-        
+        baseGroup = baseMenu.GetComponent<CanvasGroup>();
         _controls = _inputSetUp.Controls;
 
         inMenu = true;
@@ -48,7 +54,7 @@ public class MenuController : MonoBehaviour
         {
             if (inMenu)
             {
-                if (gameStarted && baseMenu.activeSelf)
+                if (gameStarted && baseGroup.interactable)
                 {
                     LeaveMenu();
                 }
@@ -63,6 +69,8 @@ public class MenuController : MonoBehaviour
 
     public void OpenPauseMenu()
     {
+        _anim.Play("OpenBase");
+        
         if (gameStarted == true)
         {
             Time.timeScale = 0f;
@@ -77,16 +85,22 @@ public class MenuController : MonoBehaviour
 
     public void LeaveMenu()
     {
+        _anim.Play("CloseBase");
+
         Time.timeScale = 1f;
-        baseMenu.SetActive(false);
+        
+        //baseMenu.SetActive(false);
+        
         settingsMenu.SetActive(false);
         controlsMenu.SetActive(false);
         galleryMenu.SetActive(false);
         levelSelectMenu.SetActive(false);
+        
         if (gameStarted == false && formationUse)
         {
             PlayOpeningCinematic.instance.CheckCinematic();
         }
+        
         API.GlobalReferences.PlayerRef.GetComponent<PlayerMovement>().EnableThis();
         AudioListener.pause = false;
         inMenu = false;
@@ -96,12 +110,7 @@ public class MenuController : MonoBehaviour
         gameStarted = true;
     }
 
-
-
-    public static void FadeInMenu()
-    {
-        instance._anim.SetTrigger("FadeIn");
-    }
+    
 
     public void SetDefaultBaseSelected()
     {
@@ -198,6 +207,43 @@ public class MenuController : MonoBehaviour
         yield return new WaitForEndOfFrame();
         baseMenuFirstButton.GetComponentInChildren<TextMeshProUGUI>().text = "Start";
         SceneManagerScript.instance.StartCoroutine(SceneManagerScript.instance.StartGameLoad(_newProgressionData));
+    }
+
+    public void OpenSubMenu(GameObject subMenuToOpen)
+    {
+        _anim.Play("OpenSub");
+        subMenuToOpen.SetActive(true);
+        
+        CanvasGroup baseGroup = baseMenu.GetComponent<CanvasGroup>();
+        
+        baseGroup.interactable = false;
+        
+        if(fadeAlpha)
+            baseGroup.alpha = alphaValue;
+    }
+
+    public void CloseSubMenu()
+    {
+        _anim.Play("CloseSub");
+
+        baseGroup.interactable = true;
+        
+        if(fadeAlpha)
+            baseGroup.alpha = 1f;
+    }
+
+
+    public void TurnOffSubMenues()
+    {
+        settingsMenu.SetActive(false);
+        controlsMenu.SetActive(false);
+        galleryMenu.SetActive(false);
+        levelSelectMenu.SetActive(false);
+    }
+
+    public void CloseBaseMenu()
+    {
+        _anim.Play("CloseBase");
     }
 
     public void QuitGame()
