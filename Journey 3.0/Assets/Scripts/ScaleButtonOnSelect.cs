@@ -4,18 +4,21 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class ScaleButtonOnSelect : MonoBehaviour, ISelectHandler, IPointerEnterHandler, IPointerExitHandler, IDeselectHandler
+public class ScaleButtonOnSelect : MonoBehaviour, ISelectHandler, IPointerEnterHandler, IPointerExitHandler,
+    IDeselectHandler
 {
     [SerializeField] private float _timeToScaleFor = 0.1f;
 
     [SerializeField] private float _scaleMultiplier = 1.2f;
-    
+
     private Vector3 _startScale;
-    
+
 
     private Coroutine _upScaler;
-    
+
     private Coroutine _downScaler;
+
+    private Button button;
 
 
     [SerializeField] private AudioSource _source;
@@ -33,40 +36,47 @@ public class ScaleButtonOnSelect : MonoBehaviour, ISelectHandler, IPointerEnterH
     void Start()
     {
         _startScale = transform.localScale;
+        button = GetComponent<Button>();
     }
 
     public void OnSelect(BaseEventData eventData)
     {
-        if (_downScaler != null)
+        if (button.interactable)
         {
-            StopCoroutine(_downScaler);
-            _downScaler = null;
-        }
-        
-        if (_upScaler == null)
-        {
-            _upScaler = StartCoroutine(ScaleUp());
-        }
+            if (_downScaler != null)
+            {
+                StopCoroutine(_downScaler);
+                _downScaler = null;
+            }
 
-        PlayAudioSource();
+            if (_upScaler == null)
+            {
+                _upScaler = StartCoroutine(ScaleUp());
+            }
+
+            PlayAudioSource();
+        }
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        EventSystem.current.SetSelectedGameObject(gameObject);
-        
-        if (_downScaler != null)
+        if (button.interactable)
         {
-            StopCoroutine(_downScaler);
-            _downScaler = null;
+            EventSystem.current.SetSelectedGameObject(gameObject);
+
+            if (_downScaler != null)
+            {
+                StopCoroutine(_downScaler);
+                _downScaler = null;
+            }
+
+            if (_upScaler == null)
+            {
+                _upScaler = StartCoroutine(ScaleUp());
+            }
+
+            PlayAudioSource();
         }
-        
-        if (_upScaler == null)
-        {
-            _upScaler = StartCoroutine(ScaleUp());
-        }
-        
-        PlayAudioSource();
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -86,13 +96,13 @@ public class ScaleButtonOnSelect : MonoBehaviour, ISelectHandler, IPointerEnterH
     public void OnDeselect(BaseEventData eventData)
     {
         GetComponent<Selectable>().OnPointerExit(null);
-        
+
         if (_upScaler != null)
         {
             StopCoroutine(_upScaler);
             _upScaler = null;
         }
-        
+
         if (_downScaler == null)
         {
             _downScaler = StartCoroutine(ScaleDown());
@@ -102,35 +112,35 @@ public class ScaleButtonOnSelect : MonoBehaviour, ISelectHandler, IPointerEnterH
     private IEnumerator ScaleUp()
     {
         yield return new WaitForEndOfFrame();
-        
-        
+
+
         float timeLeft = _timeToScaleFor;
-        
+
         while (transform.localScale != _startScale * _scaleMultiplier)
         {
             transform.localScale = Vector3.Lerp(transform.localScale, _startScale * _scaleMultiplier,
                 Time.unscaledDeltaTime / timeLeft);
-            
+
             timeLeft -= Time.unscaledDeltaTime;
             yield return new WaitForEndOfFrame();
         }
 
         print("Finished Up Scale");
     }
-    
+
     private IEnumerator ScaleDown()
     {
         float timeLeft = _timeToScaleFor;
-        
+
         while (transform.localScale != _startScale)
         {
             transform.localScale = Vector3.Lerp(transform.localScale, _startScale,
                 Time.unscaledDeltaTime / timeLeft);
-            
+
             timeLeft -= Time.unscaledDeltaTime;
             yield return new WaitForEndOfFrame();
         }
-        
+
         print("Finished Down Scale");
     }
 
