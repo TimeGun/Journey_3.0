@@ -44,26 +44,26 @@ public class SettingsSave : MonoBehaviour
 
     public void SetMasterVolume(float volume)
     {
-        masterMix.SetFloat("MasterVolume", volume);
+        masterMix.SetFloat("MasterVolume", Mathf.Log10(volume) * 20f);
         masterVolume = volume;
     }
 
     public void SetAmbianceVolume(float volume)
     {
-        masterMix.SetFloat("AmbianceVolume", volume);
+        masterMix.SetFloat("AmbianceVolume", Mathf.Log10(volume) * 20f);
         ambianceVolume = volume;
     }
 
     public void SetSFXVolume(float volume)
     {
-        masterMix.SetFloat("InteractiblesVolume", volume);
-        masterMix.SetFloat("PlayerVolume", volume);
+        masterMix.SetFloat("InteractiblesVolume", Mathf.Log10(volume) * 20f);
+        masterMix.SetFloat("PlayerVolume", Mathf.Log10(volume) * 20f);
         sfxVolume = volume;
     }
 
     public void SetMusicVolume(float volume)
     {
-        masterMix.SetFloat("MusicVolume", volume);
+        masterMix.SetFloat("MusicVolume", Mathf.Log10(volume) * 20f);
         musicVolume = volume;
     }
 
