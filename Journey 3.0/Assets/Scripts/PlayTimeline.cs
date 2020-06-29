@@ -41,7 +41,7 @@ public class PlayTimeline : MonoBehaviour
 
         if (cameraTrigger != null)
         {
-            _detectPlayer = GetComponent<DetectPlayer>();
+            _detectPlayer = cameraTrigger.GetComponent<DetectPlayer>();
         }
 
         
@@ -54,9 +54,11 @@ public class PlayTimeline : MonoBehaviour
 
     void FixedUpdate()
     {
+        Debug.Log(_detectPlayer);
         if (_detectPlayer != null && _detectPlayer.PlayerEntered && cinematicStarted == false)
         {
             StartCoroutine(StartTimeline());
+            Debug.Log("Detected Player");
             cinematicStarted = true;
         }
     }
@@ -64,7 +66,7 @@ public class PlayTimeline : MonoBehaviour
 
     IEnumerator StartTimeline()
     {
-        
+        Debug.Log("In Coroutine");
         LevelSelectEnabler.DisableButton();
         if (useCutsceneAudioSnapshot)
         {
