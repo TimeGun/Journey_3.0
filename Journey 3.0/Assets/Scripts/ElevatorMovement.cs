@@ -6,6 +6,8 @@ public class ElevatorMovement : MonoBehaviour
 {
     [SerializeField] private float _elevatorMovementSpeed;
 
+    public float hardStopValue = -215.3f;
+
     public float ElevatorMovementSpeed
     {
         get => _elevatorMovementSpeed;
@@ -22,6 +24,10 @@ public class ElevatorMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        transform.Translate(-Vector3.up * _elevatorMovementSpeed * Time.deltaTime);
+        if (transform.position.y > hardStopValue)
+        {
+            transform.Translate(-Vector3.up * _elevatorMovementSpeed * Time.deltaTime);
+        }
+
     }
 }
