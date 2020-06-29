@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.Rendering.HighDefinition;
 using UnityEngine.UIElements;
 
-public class CameraZone : MonoBehaviour
+public class CameraZone : GradualLoader
 {
     //The detection trigger collider
     public GameObject cameraTrigger;
@@ -38,8 +38,10 @@ public class CameraZone : MonoBehaviour
 
     private Collider col;
 
-    void Start()
+    IEnumerator Start()
     {
+        yield return new WaitUntil(() => initialised);
+        
         // Find Cam allows camera assignment in multi-scenes
         if (FindCam1)
         {
@@ -72,7 +74,7 @@ public class CameraZone : MonoBehaviour
                 targetCamera2Cam = targetCamera2.GetComponent<CinemachineVirtualCameraBase>();
             }
         }
-
+        
         //zones collider for debug
         if (cameraTrigger != null)
         {
@@ -80,6 +82,24 @@ public class CameraZone : MonoBehaviour
         }
 
         detectPlayer = cameraTrigger.GetComponent<DetectPlayer>();
+    }
+    
+    public override void EnqueThis()
+    {
+        print("Enqued This");
+        base.EnqueThis();
+    }
+
+    public override void InitialiseThis()
+    {
+        print("Initialised This");
+        base.InitialiseThis();
+    }
+    
+    public override void Awake()
+    {
+        print("Called Awake");
+        base.Awake();
     }
 
     IEnumerator AssignCameraObject1(string cameraObj)
@@ -124,17 +144,20 @@ public class CameraZone : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //if the player is within the trigger, set the new priorities 
-        if (detectPlayer.PlayerInCollider)
+        if (update)
         {
-            if (targetCamera1Cam != null && targetCamera1Cam.Priority != targetPriority1)
+            //if the player is within the trigger, set the new priorities 
+            if (detectPlayer.PlayerInCollider)
             {
-                targetCamera1Cam.Priority = targetPriority1;
-            }
+                if (targetCamera1Cam != null && targetCamera1Cam.Priority != targetPriority1)
+                {
+                    targetCamera1Cam.Priority = targetPriority1;
+                }
 
-            if (targetCamera2Cam != null && targetCamera2Cam.Priority != targetPriority2)
-            {
-                targetCamera2Cam.Priority = targetPriority2;
+                if (targetCamera2Cam != null && targetCamera2Cam.Priority != targetPriority2)
+                {
+                    targetCamera2Cam.Priority = targetPriority2;
+                }
             }
         }
     }
