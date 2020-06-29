@@ -5,7 +5,7 @@ using Cinemachine;
 using UnityEngine.Audio;
 using UnityEngine.Playables;
 
-public class PlayTimeline : MonoBehaviour
+public class PlayTimeline : GradualLoader
 {
     public GameObject cameraTrigger;
     public GameObject targetCamera;
@@ -32,9 +32,29 @@ public class PlayTimeline : MonoBehaviour
 
     [SerializeField] private AudioMixerSnapshot normalSnapshot;
     [SerializeField] private AudioMixerSnapshot cutsceneSnapshot;
-
-    void Start()
+    
+    public override void EnqueThis()
     {
+        print("Enqued This");
+        base.EnqueThis();
+    }
+
+    public override void InitialiseThis()
+    {
+        print("Initialised This");
+        base.InitialiseThis();
+    }
+    
+    public override void Awake()
+    {
+        print("Called Awake");
+        base.Awake();
+    }
+
+    IEnumerator Start()
+    {
+        yield return new WaitUntil(() => initialised);
+        
         _timelineLength = playableDirector.duration;
         vcam = targetCamera.GetComponent<CinemachineVirtualCamera>();
         _startPriority = vcam.Priority;
@@ -54,12 +74,15 @@ public class PlayTimeline : MonoBehaviour
 
     void FixedUpdate()
     {
-        Debug.Log(_detectPlayer);
-        if (_detectPlayer != null && _detectPlayer.PlayerEntered && cinematicStarted == false)
+        if (updateReady)
         {
-            StartCoroutine(StartTimeline());
-            Debug.Log("Detected Player");
-            cinematicStarted = true;
+            Debug.Log(_detectPlayer);
+            if (_detectPlayer != null && _detectPlayer.PlayerEntered && cinematicStarted == false)
+            {
+                StartCoroutine(StartTimeline());
+                Debug.Log("Detected Player");
+                cinematicStarted = true;
+            }
         }
     }
 
@@ -83,7 +106,5 @@ public class PlayTimeline : MonoBehaviour
             normalSnapshot.TransitionTo(1f);
         }
         LevelSelectEnabler.EnableButton();
-        
-        
     }
 }

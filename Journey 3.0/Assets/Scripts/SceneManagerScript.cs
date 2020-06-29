@@ -39,7 +39,7 @@ public class SceneManagerScript : MonoBehaviour
     {
         yield return new WaitUntil(() => loading == false);
         
-
+        
         GameObject torch = GameObject.Find("InteractibleTorch - Final");
 
         if (torch != null)
@@ -186,6 +186,7 @@ public class SceneManagerScript : MonoBehaviour
 
     IEnumerator LoadSpecificSaveSection(ProgressionData data)
     {
+        GradualLoaderManager.bunchLoad = true;
         AssignMenuCamera(data.saveSectionIndex);
         MovePlayer(data.saveSectionIndex);
         SetDayOrNight(data.saveSectionIndex);
@@ -242,6 +243,8 @@ public class SceneManagerScript : MonoBehaviour
         yield return new WaitUntil(() => !_brain.IsBlending);
         FadeToBlack.instance.SetBlack(false);
         MenuController.instance.OpenPauseMenu();
+        
+        GradualLoaderManager.bunchLoad = false;
     }
 
     private void SetDayOrNight(int data)
