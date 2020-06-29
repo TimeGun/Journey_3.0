@@ -20,7 +20,9 @@ public class ScaleButtonOnSelect : MonoBehaviour, ISelectHandler, IPointerEnterH
 
     private Button button;
 
-
+    [SerializeField] private CanvasGroup buttonGroup;
+    
+    
     [SerializeField] private AudioSource _source;
     [SerializeField] private AudioClip _clip;
 
@@ -41,7 +43,7 @@ public class ScaleButtonOnSelect : MonoBehaviour, ISelectHandler, IPointerEnterH
 
     public void OnSelect(BaseEventData eventData)
     {
-        if (button.interactable)
+        if (ScaleButton())
         {
             if (_downScaler != null)
             {
@@ -60,7 +62,7 @@ public class ScaleButtonOnSelect : MonoBehaviour, ISelectHandler, IPointerEnterH
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (button.interactable)
+        if (ScaleButton())
         {
             EventSystem.current.SetSelectedGameObject(gameObject);
 
@@ -154,5 +156,20 @@ public class ScaleButtonOnSelect : MonoBehaviour, ISelectHandler, IPointerEnterH
     private void OnEnable()
     {
         _startScale = transform.localScale;
+    }
+
+    bool ScaleButton()
+    {
+        if (buttonGroup != null)
+        {
+            if (buttonGroup.interactable)
+            {
+                return button.interactable;
+            }
+            
+            return false;
+        }
+
+        return button.interactable;
     }
 }
