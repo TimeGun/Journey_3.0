@@ -105,14 +105,22 @@ public class CameraZone : GradualLoader
     IEnumerator AssignCameraObject1(string cameraObj)
     {
         yield return new WaitForEndOfFrame();
-
-        while (targetCamera1 == null)
+        
+        float timer = 0;
+        
+        while (targetCamera1 == null && timer < 1f)
         {
+            timer += Time.deltaTime;
             targetCamera1 = GameObject.Find(Cam1Name);
             yield return new WaitForEndOfFrame();
             print("If this is printing every frame, thats fairly bad: " + gameObject.name);
         }
-
+    
+        if (targetCamera1 == null)
+        {
+            yield break;
+        }
+        
         if (targetPriority1 == 0)
         {
             Debug.LogWarning("Target Priority for target camera 1 is not set");
@@ -125,12 +133,21 @@ public class CameraZone : GradualLoader
     {
         yield return new WaitForEndOfFrame();
 
-        while (targetCamera2 == null)
+        float timer = 0;
+        
+        while (targetCamera2 == null && timer < 1f)
         {
+            timer += Time.deltaTime;
             targetCamera2 = GameObject.Find(Cam2Name);
             yield return new WaitForEndOfFrame();
             print("If this is printing every frame, thats fairly bad: " + gameObject.name);
         }
+
+        if (targetCamera2 == null)
+        {
+            yield break;
+        }
+
 
         if (targetPriority2 == 0)
         {
@@ -144,7 +161,7 @@ public class CameraZone : GradualLoader
     // Update is called once per frame
     void Update()
     {
-        if (update)
+        if (updateReady)
         {
             //if the player is within the trigger, set the new priorities 
             if (detectPlayer.PlayerInCollider)

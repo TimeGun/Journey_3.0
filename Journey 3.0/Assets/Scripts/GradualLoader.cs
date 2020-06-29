@@ -6,7 +6,7 @@ using UnityEngine;
 public abstract class GradualLoader: MonoBehaviour, IGradualLoader
 {
     protected bool initialised = false;
-    protected bool update = false;
+    protected bool updateReady = false;
     
     public virtual void EnqueThis()
     {
@@ -22,7 +22,7 @@ public abstract class GradualLoader: MonoBehaviour, IGradualLoader
     public virtual IEnumerator UpdateThis()
     {
         yield return null;
-        update = true;
+        updateReady = true;
     }
 
     public virtual void Awake()
@@ -66,7 +66,7 @@ public interface IGradualLoader
     
     void Update()
     {
-        if (initialised)
+        if (update)
         {
         }
     }
