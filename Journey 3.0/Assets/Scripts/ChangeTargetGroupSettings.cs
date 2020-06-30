@@ -23,38 +23,59 @@ public class ChangeTargetGroupSettings : MonoBehaviour
 
     public float rateOfChange;
 
+    private float val;
+
 
     void Start()
     {
         _trigger1 = cameraTrigger1.GetComponent<DetectPlayer>();
         _trigger2 = cameraTrigger2.GetComponent<DetectPlayer>();
+        val = weight1;
+        StartCoroutine(MoveToValue());
     }
 
-    void FixedUpdate()
+    void Update()
     {
         if (_trigger1.PlayerEntered)
         {
-            StopAllCoroutines();
-            StartCoroutine(MoveToValue(weight1));
+            //StopAllCoroutines();
+            print("Started MoveVAl");
+            val = weight1;
         }
         else if (_trigger2.PlayerEntered)
         {
-            StopAllCoroutines();
-            StartCoroutine(MoveToValue(weight2));
+            //StopAllCoroutines();
+            print("Started MoveVAl");
+            val = weight2;
         }
     }
 
-    IEnumerator MoveToValue(float newWeight)
+    IEnumerator MoveToValue()
     {
+        while (true)
+        {
+            if (TG.m_Targets[targetIndex].weight > val + 0.01 ||
+                TG.m_Targets[targetIndex].weight < val - 0.01)
+            {
+                float tempWeight = Mathf.Lerp(TG.m_Targets[targetIndex].weight, val,
+                    (1f/rateOfChange) * Time.deltaTime);
+             
+                TG.m_Targets[targetIndex].weight = tempWeight;
+
+            }
+            yield return null;
+        }
+
+    /*
         while (TG.m_Targets[targetIndex].weight > newWeight + 0.01 ||
                TG.m_Targets[targetIndex].weight < newWeight - 0.01)
         {
             float tempWeight = Mathf.Lerp(TG.m_Targets[targetIndex].weight, newWeight,
-                rateOfChange / (100f * Time.deltaTime));
-            
+                (1f/rateOfChange) * Time.deltaTime);
+             
             TG.m_Targets[targetIndex].weight = tempWeight;
 
-            yield return new WaitForEndOfFrame();
-        }
+            yield return null;
+        }*/
     }
 }
