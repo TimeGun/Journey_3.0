@@ -17,19 +17,24 @@ public class ObjectsOnAltarPlate : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-
-        IInteractible itemToPickUp = other.GetComponent<IInteractible>();
-        if (itemToPickUp != null && !_itemsOnAltar.Contains(other.gameObject))
+        if (!other.isTrigger)
         {
-            _itemsOnAltar.Add(other.gameObject);
+            IInteractible itemToPickUp = other.GetComponent<IInteractible>();
+            if (itemToPickUp != null && !_itemsOnAltar.Contains(other.gameObject))
+            {
+                _itemsOnAltar.Add(other.gameObject);
+            }
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (_itemsOnAltar.Contains(other.gameObject))
+        if (!other.isTrigger)
         {
-            _itemsOnAltar.Remove(other.gameObject);
+            if (_itemsOnAltar.Contains(other.gameObject))
+            {
+                _itemsOnAltar.Remove(other.gameObject);
+            }
         }
     }
 }
