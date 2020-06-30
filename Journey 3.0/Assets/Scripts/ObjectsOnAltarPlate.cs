@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class ObjectsOnAltarPlate : MonoBehaviour
 {
-    [SerializeField] List <GameObject> _itemsOnAltar = new List<GameObject>();
-
+    [SerializeField] List<GameObject> _itemsOnAltar = new List<GameObject>();
 
 
     public List<GameObject> ItemsOnAltar
@@ -13,7 +12,7 @@ public class ObjectsOnAltarPlate : MonoBehaviour
         get => _itemsOnAltar;
         set => _itemsOnAltar = value;
     }
-    
+
 
     private void OnTriggerStay(Collider other)
     {
@@ -29,12 +28,9 @@ public class ObjectsOnAltarPlate : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (!other.isTrigger)
+        if (_itemsOnAltar.Contains(other.gameObject))
         {
-            if (_itemsOnAltar.Contains(other.gameObject))
-            {
-                _itemsOnAltar.Remove(other.gameObject);
-            }
+            _itemsOnAltar.Remove(other.gameObject);
         }
     }
 }
