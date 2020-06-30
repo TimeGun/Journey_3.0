@@ -96,6 +96,14 @@ public class PlayerMovement : MonoBehaviour
         set => _pushing = value;
     }
 
+    private bool pushForward;
+
+    public bool PushForward
+    {
+        get => pushForward;
+    }
+
+
     private float _timeDelta;
 
     private InputSetUp _inputSetUp;
@@ -414,6 +422,7 @@ public class PlayerMovement : MonoBehaviour
                                           accelerationMinAmount, 1f);;
                 localPushDirection = -1f * _input.magnitude;
                 pushingBoulder = true;
+                pushForward = false;
             }
             else if (Vector3.Angle(transform.forward, movement) < 60f && _input.magnitude > 0.1f &&
                      _anim.GetCurrentAnimatorStateInfo(0).IsName("Glyf-Pushing"))
@@ -430,6 +439,7 @@ public class PlayerMovement : MonoBehaviour
                                               accelerationMinAmount, 1f);;
                     localPushDirection = 1f * _input.magnitude;
                     pushingBoulder = true;
+                    pushForward = true;
                 }
                 else
                 {

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using UnityEngine;
 
 public class ChangeSize : MonoBehaviour
@@ -26,7 +27,9 @@ public class ChangeSize : MonoBehaviour
     public float _growthMultiplier = 2f;
 
     private bool changingSize;
-
+    
+    
+    public event Action<PushObject> newPushObject;
 
     private void Start()
     {
@@ -111,7 +114,11 @@ public class ChangeSize : MonoBehaviour
                         pushObject.StopInteraction();
                     }
 
-
+                    if (newPushObject != null)
+                    {
+                        newPushObject(null);
+                    }
+                    
                     Destroy(pushObject);
                     
                     ObjectDetection _detection = API.GlobalReferences.PlayerRef.GetComponent<ObjectDetection>();
@@ -138,6 +145,12 @@ public class ChangeSize : MonoBehaviour
         if (changeMode && _small == false)
         {
             PushObject pusher = gameObject.AddComponent(typeof(PushObject)) as PushObject;
+            
+            if (newPushObject != null)
+            {
+                newPushObject(pusher);
+            }
+
             GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
         }else if (changeMode && _small)
         {

@@ -39,6 +39,8 @@ public class PushObject : MonoBehaviour, IInteractible
 
     public bool forwardCast;
 
+    private PushingParticles _particles;
+
 
     public float _audioDistance = 0.02f;
 
@@ -54,6 +56,8 @@ public class PushObject : MonoBehaviour, IInteractible
 
         _col = GetComponent<Collider>();
         _source = GetComponent<AudioSource>();
+        _particles = GetComponent<PushingParticles>();
+
     }
 
     void FixedUpdate()
@@ -86,10 +90,12 @@ public class PushObject : MonoBehaviour, IInteractible
                 {
                     if (characterController.velocity.magnitude > 0.05f)
                     {
+                        _particles.SetSmoke(true, !_movement.PushForward);
                         _rb.MovePosition(_position);
                     }
                     else
                     {
+                        _particles.SetSmoke(false, !_movement.PushForward);
                         //_rb.MovePosition(Vector3.Lerp(transform.position, _position, _positionLerpSpeed));
                     }
                     
@@ -106,6 +112,7 @@ public class PushObject : MonoBehaviour, IInteractible
             }
             else
             {
+                _particles.SetSmoke(false, !_movement.PushForward);
                 _source.Stop();
                 _interactWithObject.StopInteracting();
             }
@@ -170,7 +177,7 @@ public class PushObject : MonoBehaviour, IInteractible
     {
         _pushing = false;
         _movement.Pushing = false;
-
+        _particles.SetSmoke(false, !_movement.PushForward);
         _interactWithObject.Cooldown = true;
         _interactWithObject.Invoke("ResetCooldown", 0.5f);
 
