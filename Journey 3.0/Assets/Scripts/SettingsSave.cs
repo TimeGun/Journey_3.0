@@ -46,12 +46,14 @@ public class SettingsSave : MonoBehaviour
     {
         masterMix.SetFloat("MasterVolume", Mathf.Log10(volume) * 20f);
         masterVolume = volume;
+        SaveSettings();
     }
 
     public void SetAmbianceVolume(float volume)
     {
         masterMix.SetFloat("AmbianceVolume", Mathf.Log10(volume) * 20f);
         ambianceVolume = volume;
+        SaveSettings();
     }
 
     public void SetSFXVolume(float volume)
@@ -59,12 +61,14 @@ public class SettingsSave : MonoBehaviour
         masterMix.SetFloat("InteractiblesVolume", Mathf.Log10(volume) * 20f);
         masterMix.SetFloat("PlayerVolume", Mathf.Log10(volume) * 20f);
         sfxVolume = volume;
+        SaveSettings();
     }
 
     public void SetMusicVolume(float volume)
     {
         masterMix.SetFloat("MusicVolume", Mathf.Log10(volume) * 20f);
         musicVolume = volume;
+        SaveSettings();
     }
 
     public void SetVSync(bool value)

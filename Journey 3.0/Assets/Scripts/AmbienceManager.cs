@@ -116,10 +116,7 @@ public class AmbienceManager : MonoBehaviour
         instance.StartCoroutine(instance.FadeOutMaster(-80f));
     }
     
-    public static void QuietAmbienceVolume(float quietLength)
-    {
-        instance.StartCoroutine(instance.QuietAmbienceVolumeCoroutine(PlayerPrefs.GetFloat("AmbianceVolume", 0), quietLength));
-    }
+    
 
     IEnumerator FadeInMaster(float target)
     {
@@ -145,34 +142,6 @@ public class AmbienceManager : MonoBehaviour
             currentVolume = Mathf.MoveTowards(currentVolume, target, Time.deltaTime * 50f);
             _masterMix.SetFloat("MasterVolume", currentVolume);
             _masterMix.GetFloat("MasterVolume", out currentVolume);
-            yield return new WaitForEndOfFrame();
-        }
-    }
-
-    IEnumerator QuietAmbienceVolumeCoroutine(float targetVolume, float timelineLength)
-    {
-        float startVolume;
-        
-        float currentVolume;
-        _masterMix.GetFloat("AmbianceVolume", out currentVolume);
-        _masterMix.GetFloat("AmbianceVolume", out startVolume);
-        
-        while (currentVolume > targetVolume)
-        {
-            currentVolume = Mathf.MoveTowards(currentVolume, targetVolume, Time.deltaTime * 75f);
-            _masterMix.SetFloat("AmbianceVolume", currentVolume);
-            _masterMix.GetFloat("AmbianceVolume", out currentVolume);
-            yield return new WaitForEndOfFrame();
-        }
-        
-        
-        yield return new WaitForSeconds(timelineLength);
-        
-        while (currentVolume < startVolume)
-        {
-            currentVolume = Mathf.MoveTowards(currentVolume, startVolume, Time.deltaTime * 75f);
-            _masterMix.SetFloat("AmbianceVolume", currentVolume);
-            _masterMix.GetFloat("AmbianceVolume", out currentVolume);
             yield return new WaitForEndOfFrame();
         }
     }
