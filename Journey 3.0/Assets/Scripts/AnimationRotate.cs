@@ -6,10 +6,6 @@ public class AnimationRotate : MonoBehaviour
 {
     //I'm trying a thing, stop judging me Code Boys - Robyn 
     public Vector3 speed;
-    void Start()
-    {
-        
-    }
 
     void Update()
     {
