@@ -30,10 +30,4 @@ public class AssignVirtualCamera : MonoBehaviour
             _virtualCamera.LookAt = API.GlobalReferences.PlayerRef.transform;
         }
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
