@@ -70,6 +70,7 @@ public class SceneManagerScript : MonoBehaviour
 
         if (LoadSpecificBundle)
         {
+            GradualLoaderManager.bunchLoad = true;
             StartCoroutine(LoadBundle(LoadSpecificBundle));
             yield return new WaitUntil(() => loading == false);
         }
