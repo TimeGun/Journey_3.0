@@ -10,6 +10,7 @@ public class FlowerSmokeController : MonoBehaviour
     [SerializeField] private VisualEffect _smokingFlowerVFX;
 
     private Coroutine _coroutine;
+    
     void Start()
     {
         instance = this;
