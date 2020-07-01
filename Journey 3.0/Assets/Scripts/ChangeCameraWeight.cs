@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Cinemachine;
 using UnityEngine;
 
-public class ChangeCameraWeight : MonoBehaviour
+public class ChangeCameraWeight : GradualLoader
 {
     public GameObject cameraTrigger;
     private bool playerDetected;
@@ -19,8 +19,9 @@ public class ChangeCameraWeight : MonoBehaviour
 
     
     // Start is called before the first frame update
-    void Start()
+    IEnumerator Start()
     {
+        yield return new WaitUntil(() => initialised);
         initialPriority1 = targetCamera1.GetComponent<CinemachineVirtualCameraBase>().Priority;
         initialPriority2 = targetCamera2.GetComponent<CinemachineVirtualCameraBase>().Priority;
         if (targetPriority1 == 0 )
@@ -43,30 +44,31 @@ public class ChangeCameraWeight : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        
-        playerEntered = cameraTrigger.GetComponent<DetectPlayer>().PlayerEntered;
-        Debug.Log("player entered" + playerEntered);
-        playerDetected = cameraTrigger.GetComponent<DetectPlayer>().PlayerDetected;
-        if (playerEntered)
+        if (updateReady)
         {
-            activated = true;
-        }
-        
-        
-        if (playerDetected)
-        {
-            if (activated)
+            playerEntered = cameraTrigger.GetComponent<DetectPlayer>().PlayerEntered;
+            Debug.Log("player entered" + playerEntered);
+            playerDetected = cameraTrigger.GetComponent<DetectPlayer>().PlayerDetected;
+            if (playerEntered)
             {
-                NewWeight();
-                activated = false;
+                activated = true;
             }
-            
-        }
-        else if (playerDetected == false)
-        {
-         OldWeight();
-        }
         
+        
+            if (playerDetected)
+            {
+                if (activated)
+                {
+                    NewWeight();
+                    activated = false;
+                }
+            
+            }
+            else if (playerDetected == false)
+            {
+                OldWeight();
+            }
+        }
     }
 
     void NewWeight()
