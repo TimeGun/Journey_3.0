@@ -168,10 +168,8 @@ public class ScaleButtonOnSelect : MonoBehaviour, ISelectHandler, IPointerEnterH
                 {
                     return button.interactable;
                 }
-                else
-                {
-                    return false;
-                }
+                
+                return false;
 
             }
             
