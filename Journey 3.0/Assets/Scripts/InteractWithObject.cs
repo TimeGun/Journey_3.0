@@ -647,7 +647,6 @@ public class InteractWithObject : MonoBehaviour
             }
             else
             {
-                print("This is happening, but nothing is happening");
                 holdInteractipleOnRune.ItemOnRune = null;
                 holdInteractipleOnRune.ItemOnRuneBool = false;
                 rune.GetComponent<OpenForPlayer>().ItemPresentHeightOffset = 0f;
