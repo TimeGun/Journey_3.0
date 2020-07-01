@@ -17,28 +17,24 @@ public class ChangeCameraWeight : GradualLoader
 
     private bool activated = false;
 
-    
+
     // Start is called before the first frame update
     IEnumerator Start()
     {
         yield return new WaitUntil(() => initialised);
         initialPriority1 = targetCamera1.GetComponent<CinemachineVirtualCameraBase>().Priority;
         initialPriority2 = targetCamera2.GetComponent<CinemachineVirtualCameraBase>().Priority;
-        if (targetPriority1 == 0 )
+        if (targetPriority1 == 0)
         {
             Debug.LogWarning("Target Priority for target camera 1 is not set");
             targetPriority1 = initialPriority1;
-            
         }
-        if (targetPriority2 == 0 )
+
+        if (targetPriority2 == 0)
         {
             Debug.LogWarning("Target Priority for target camera 2 is not set");
             targetPriority2 = initialPriority2;
-            
         }
-
-        
-        
     }
 
     // Update is called once per frame
@@ -53,8 +49,8 @@ public class ChangeCameraWeight : GradualLoader
             {
                 activated = true;
             }
-        
-        
+
+
             if (playerDetected)
             {
                 if (activated)
@@ -62,7 +58,6 @@ public class ChangeCameraWeight : GradualLoader
                     NewWeight();
                     activated = false;
                 }
-            
             }
             else if (playerDetected == false)
             {
@@ -73,20 +68,15 @@ public class ChangeCameraWeight : GradualLoader
 
     void NewWeight()
     {
-        
         targetCamera1.GetComponent<CinemachineVirtualCameraBase>().Priority = targetPriority1;
         Debug.Log(targetPriority1);
         targetCamera2.GetComponent<CinemachineVirtualCameraBase>().Priority = targetPriority2;
         Debug.Log(targetPriority2);
-    
-
     }
 
     void OldWeight()
     {
         targetCamera1.GetComponent<CinemachineVirtualCameraBase>().Priority = initialPriority1;
         targetCamera2.GetComponent<CinemachineVirtualCameraBase>().Priority = initialPriority2;
-        
     }
-
 }
