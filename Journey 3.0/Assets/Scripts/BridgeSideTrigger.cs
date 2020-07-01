@@ -34,6 +34,12 @@ public class BridgeSideTrigger : MonoBehaviour, IPlaceableArea
 
     [SerializeField] private GameObject _plank;
 
+    public GameObject Plank
+    {
+        get => _plank;
+        set => _plank = value;
+    }
+
 
     private void OnTriggerStay(Collider other)
     {
