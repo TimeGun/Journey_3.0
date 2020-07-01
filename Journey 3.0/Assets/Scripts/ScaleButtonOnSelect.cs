@@ -164,7 +164,15 @@ public class ScaleButtonOnSelect : MonoBehaviour, ISelectHandler, IPointerEnterH
         {
             if (buttonGroup.interactable)
             {
-                return button.interactable;
+                if (button != null)
+                {
+                    return button.interactable;
+                }
+                else
+                {
+                    return false;
+                }
+
             }
             
             return false;

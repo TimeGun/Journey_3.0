@@ -32,24 +32,6 @@ public class PlayTimeline : GradualLoader
 
     [SerializeField] private AudioMixerSnapshot normalSnapshot;
     [SerializeField] private AudioMixerSnapshot cutsceneSnapshot;
-    
-    public override void EnqueThis()
-    {
-        print("Enqued This");
-        base.EnqueThis();
-    }
-
-    public override void InitialiseThis()
-    {
-        print("Initialised This");
-        base.InitialiseThis();
-    }
-    
-    public override void Awake()
-    {
-        print("Called Awake");
-        base.Awake();
-    }
 
     IEnumerator Start()
     {

@@ -83,24 +83,6 @@ public class CameraZone : GradualLoader
 
         detectPlayer = cameraTrigger.GetComponent<DetectPlayer>();
     }
-    
-    public override void EnqueThis()
-    {
-        print("Enqued This");
-        base.EnqueThis();
-    }
-
-    public override void InitialiseThis()
-    {
-        print("Initialised This");
-        base.InitialiseThis();
-    }
-    
-    public override void Awake()
-    {
-        print("Called Awake");
-        base.Awake();
-    }
 
     IEnumerator AssignCameraObject1(string cameraObj)
     {
