@@ -5,7 +5,7 @@ using UnityEngine;
 using Cinemachine;
 using JetBrains.Annotations;
 
-public class AimOffsetChange : MonoBehaviour
+public class AimOffsetChange : GradualLoader
 {
     public enum AxisEnum
     {
@@ -46,8 +46,10 @@ public class AimOffsetChange : MonoBehaviour
     [NotNull] private DetectPlayer _trigger2;
 
     // Start is called before the first frame update
-    void Start()
+    private IEnumerator Start()
     {
+        yield return new WaitUntil(() => initialised);
+        
         vcam = targetCamera.GetComponent<CinemachineVirtualCamera>();
         TD = vcam.GetCinemachineComponent<CinemachineTrackedDolly>();
         comp = vcam.GetCinemachineComponent<CinemachineComposer>(); //Need to use this to access the LookAt target
@@ -60,26 +62,29 @@ public class AimOffsetChange : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        CheckAxis();
+        if (updateReady)
+        {
+            CheckAxis();
         
 
-        if (_trigger1.PlayerEntered)
-        {
-            afterTrigger = false; //this is used to begin decreasing the value of the offset
-        }
-        else if (_trigger2.PlayerEntered)
-        {
-            afterTrigger = true; //this is used to begin increasing the value of the offset
-        }
+            if (_trigger1.PlayerEntered)
+            {
+                afterTrigger = false; //this is used to begin decreasing the value of the offset
+            }
+            else if (_trigger2.PlayerEntered)
+            {
+                afterTrigger = true; //this is used to begin increasing the value of the offset
+            }
 
 
-        if (afterTrigger == false && firstTrigger)
-        {
-            StartCoroutine(DecreaseValue());
-        }
-        else if (afterTrigger && secondTrigger)
-        {
-            StartCoroutine(IncreaseValue());
+            if (afterTrigger == false && firstTrigger)
+            {
+                StartCoroutine(DecreaseValue());
+            }
+            else if (afterTrigger && secondTrigger)
+            {
+                StartCoroutine(IncreaseValue());
+            }
         }
     }
 

@@ -1,5 +1,8 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// Adjusts rotation on the collider that stops the player from climbing the boulder
+/// </summary>
 public class AdjustBounceRotation : MonoBehaviour
 {
     private GameObject _player;
