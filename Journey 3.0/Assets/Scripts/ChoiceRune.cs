@@ -25,18 +25,7 @@ public class ChoiceRune : MonoBehaviour, IInteractible, IRune
     [SerializeField] private AudioSource _source;
 
     [SerializeField] [Range(0, 2f)] private float delayTime = 0;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
     
     IEnumerator ChooseEnding(Transform player)
     {
