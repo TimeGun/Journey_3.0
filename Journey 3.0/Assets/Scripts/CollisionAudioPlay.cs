@@ -7,12 +7,6 @@ public class CollisionAudioPlay : MonoBehaviour
 {
     public AudioSource _source;
     public AudioClip _clip;
-    
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
     private void OnCollisionEnter(Collision other)
     {

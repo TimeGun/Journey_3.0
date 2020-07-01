@@ -12,10 +12,4 @@ public class CMTargetGroupAssigning : MonoBehaviour
     {
         _targetGroup.m_Targets[targetIndex].target = API.GlobalReferences.PlayerRef.transform;
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
