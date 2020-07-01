@@ -7,22 +7,19 @@ public class DisableObject : MonoBehaviour
     public GameObject Target;
     public GameObject cameraTrigger;
     private bool playerInZone;
-    // Start is called before the first frame update
+
+    private DetectPlayer detectPlayer;
     void Start()
     {
-        //Target = GameObject.Find("CameraTrigger6");
+        detectPlayer = cameraTrigger.GetComponent<DetectPlayer>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        playerInZone = cameraTrigger.GetComponent<DetectPlayer>().PlayerInCollider;
-        if (playerInZone && Target != null)
+        if (detectPlayer.PlayerInCollider && Target != null)
         {
-            cameraTrigger.GetComponent<DetectPlayer>().enabled = false;
+            detectPlayer.enabled = false;
             Target.gameObject.SetActive(false);
         }
-        
-       
     }
 }
