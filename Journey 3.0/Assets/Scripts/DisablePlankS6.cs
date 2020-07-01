@@ -7,8 +7,6 @@ public class DisablePlankS6 : MonoBehaviour
 {
     [SerializeField] private PlankPlacement _plankPlacement;
 
-
-
     private void Update()
     {
         if (_plankPlacement.GetPlank() != null)

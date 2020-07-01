@@ -45,8 +45,6 @@ public class EmissionSetter : MonoBehaviour
         {
             _materials[i].SetColor("_EmissiveColor", brightColor);
         }
-
-        
         
         
         if (within)

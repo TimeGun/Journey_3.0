@@ -6,15 +6,4 @@ public class EmmisionPulse : MonoBehaviour
 {
     [SerializeField] private Material _mat;
     
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //_mat.
-    }
 }
