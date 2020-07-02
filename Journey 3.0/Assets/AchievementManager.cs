@@ -1,18 +1,48 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using Steamworks;
 public class AchievementManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+
+    public AchievementSO DebugTestingAchievementSo;
+    
+    public static AchievementManager instance;
+
+    private void Awake()
     {
-        
+        instance = this;
     }
 
-    // Update is called once per frame
-    void Update()
+    public void UnlockSteamAchievement(AchievementSO achievement)
     {
+        bool unlocked;
         
+        TestSteamAchievement(achievement, out unlocked);
+
+        if (!unlocked)
+        {
+            SteamUserStats.SetAchievement(achievement.AchievementID);
+            SteamUserStats.StoreStats();
+        }
+    }
+    
+    public void DEBUG_LockSteamAchievement(AchievementSO achievement)
+    {
+        bool unlocked;
+        
+        TestSteamAchievement(achievement, out unlocked);
+
+        if (unlocked)
+        {
+            SteamUserStats.ClearAchievement(achievement.AchievementID);
+            SteamUserStats.StoreStats();
+        }
+    }
+
+    public void TestSteamAchievement(AchievementSO achievement, out bool unlockTest)
+    {
+        SteamUserStats.GetAchievement(achievement.AchievementID, out unlockTest);
     }
 }
