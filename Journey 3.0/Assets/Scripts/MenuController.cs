@@ -36,7 +36,7 @@ public class MenuController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Cursor.visible = true;
+        Cursor.visible = false;
         instance = this;
         baseGroup = baseMenu.GetComponent<CanvasGroup>();
         _controls = _inputSetUp.Controls;
@@ -72,6 +72,7 @@ public class MenuController : MonoBehaviour
     {
         _anim.Play("OpenBase");
         Cursor.visible = true;
+        
         if (gameStarted == true)
         {
             Time.timeScale = 0f;
@@ -86,6 +87,7 @@ public class MenuController : MonoBehaviour
 
     public void LeaveMenu()
     {
+        print("Left menu");
         Cursor.visible = false;
         
         _anim.Play("CloseBase");
