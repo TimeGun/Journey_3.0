@@ -58,11 +58,9 @@ public class PlayTimeline : GradualLoader
     {
         if (updateReady)
         {
-            Debug.Log(_detectPlayer);
             if (_detectPlayer != null && _detectPlayer.PlayerEntered && cinematicStarted == false)
             {
                 StartCoroutine(StartTimeline());
-                Debug.Log("Detected Player");
                 cinematicStarted = true;
             }
         }
