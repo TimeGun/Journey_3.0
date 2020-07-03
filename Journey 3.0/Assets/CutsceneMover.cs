@@ -18,14 +18,7 @@ public class CutsceneMover : MonoBehaviour
         TurnToFace,
         MoveToLocation
     }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            StartPlayerAction();
-        }
-    }
+    
 
     public PlayerAction playerAction;
 
