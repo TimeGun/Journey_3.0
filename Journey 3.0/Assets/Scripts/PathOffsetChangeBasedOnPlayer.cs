@@ -18,6 +18,8 @@ public class PathOffsetChangeBasedOnPlayer : MonoBehaviour
     public bool testScene;
     private CinemachineTrackedDolly TD;
     
+    public float rateOfChange;
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -58,7 +60,9 @@ public class PathOffsetChangeBasedOnPlayer : MonoBehaviour
                     adjustedOffset = startOffset;
                 }
                 Debug.Log(adjustedOffset);
-                TD.m_AutoDolly.m_PositionOffset = adjustedOffset;
+                float tempOffset = Mathf.Lerp(TD.m_AutoDolly.m_PositionOffset, adjustedOffset,
+                    (1f / rateOfChange) * Time.deltaTime);
+                TD.m_AutoDolly.m_PositionOffset = tempOffset;
                 
                 yield return new WaitForSeconds(1f / checksPerSecond);
 
