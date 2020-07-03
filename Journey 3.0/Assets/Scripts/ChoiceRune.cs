@@ -144,13 +144,14 @@ public class ChoiceRune : MonoBehaviour, IInteractible, IRune
     IEnumerator FadeToBlack()
     {
         yield return new WaitForSeconds(((float)_timelineToPlay.duration) - 3f);
-        Debug.Log("FADE OUT");
+        CreditsManager.StartCredits();
+        /*Debug.Log("FADE OUT");
         global::FadeToBlack.instance.SetBlack(true);
         yield return new WaitForSeconds(6f);
         
         ProgressionData _resetData = new ProgressionData(0, false);
         
         SaveSystem.SaveProgress(_resetData);
-        SceneManager.LoadScene("Manager Scene");
+        SceneManager.LoadScene("Manager Scene");*/
     }
 }
