@@ -9,6 +9,8 @@ public class AchievementManager : MonoBehaviour
     public AchievementSO DebugTestingAchievementSo;
     
     public static AchievementManager instance;
+    
+    private bool unlockTest;
 
     private void Awake()
     {
@@ -17,12 +19,11 @@ public class AchievementManager : MonoBehaviour
 
     public void UnlockSteamAchievement(AchievementSO achievement)
     {
-        bool unlocked;
-        
-        TestSteamAchievement(achievement, out unlocked);
+        TestSteamAchievement(achievement);
 
-        if (!unlocked)
+        if (!unlockTest)
         {
+            print("Unlocked: " + achievement.Name);
             SteamUserStats.SetAchievement(achievement.AchievementID);
             SteamUserStats.StoreStats();
         }
@@ -30,18 +31,17 @@ public class AchievementManager : MonoBehaviour
     
     public void DEBUG_LockSteamAchievement(AchievementSO achievement)
     {
-        bool unlocked;
-        
-        TestSteamAchievement(achievement, out unlocked);
+        TestSteamAchievement(achievement);
 
-        if (unlocked)
+        if (unlockTest)
         {
+            print("Locked: " + achievement.Name);
             SteamUserStats.ClearAchievement(achievement.AchievementID);
             SteamUserStats.StoreStats();
         }
     }
 
-    public void TestSteamAchievement(AchievementSO achievement, out bool unlockTest)
+    public void TestSteamAchievement(AchievementSO achievement)
     {
         SteamUserStats.GetAchievement(achievement.AchievementID, out unlockTest);
     }
