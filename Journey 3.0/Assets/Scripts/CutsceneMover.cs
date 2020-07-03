@@ -12,6 +12,7 @@ public class CutsceneMover : MonoBehaviour
     public float turnSpeed = 10f;
 
     public bool unfreezeOnActionComplete = false;
+    public bool useBlackBars = false;
 
     public enum PlayerAction
     {
@@ -47,6 +48,11 @@ public class CutsceneMover : MonoBehaviour
 
     IEnumerator MoveToLocation()
     {
+        if (useBlackBars)
+        {
+            BlackBarsScript.instance.SetBars(true);
+        }
+
         GameObject player = GameObject.Find("Player");
         PlayerMovement movement = player.GetComponent<PlayerMovement>();
 
@@ -79,6 +85,11 @@ public class CutsceneMover : MonoBehaviour
         if (unfreezeOnActionComplete)
         {
             movement.StopRemoteControlledMovement();
+            
+            if (useBlackBars)
+            {
+                BlackBarsScript.instance.SetBars(false);
+            }
         }
         
         Debug.Log("Action Complete");
