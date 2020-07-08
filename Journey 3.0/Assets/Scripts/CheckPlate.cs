@@ -23,6 +23,8 @@ public class CheckPlate : MonoBehaviour
 
     public ReturnBoulderPresent _ReturnBoulderPresent;
 
+    [SerializeField] private AchievementSO achievementSo;
+
     private void OnTriggerEnter(Collider other)
     {
         ChangeSize _changeSize = other.GetComponent<ChangeSize>();
@@ -84,6 +86,12 @@ public class CheckPlate : MonoBehaviour
                 API.GlobalReferences.PlayerRef.GetComponent<InteractWithObject>().StopInteracting();
 
                 opened = true;
+                
+                if (achievementSo != null)
+                {
+                    AchievementManager.instance.UnlockSteamAchievement(achievementSo);
+                }
+
                 Invoke("DestroyBoulder", Time.deltaTime);
             }
         }
