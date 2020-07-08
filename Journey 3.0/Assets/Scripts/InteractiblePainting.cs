@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Cinemachine;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
 {
@@ -8,7 +9,7 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
     [SerializeField] private Animator _paintingAnimator;
 
     private bool paintingIsPlaying;
-    
+
     [SerializeField] private Color _emissionColour;
 
     [SerializeField] private float _minEmissionStrength;
@@ -27,7 +28,7 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
     [SerializeField] private float _wallDistanceCheck = 1.5f;
 
     [SerializeField] private LayerMask _wallMask;
-    
+
     [SerializeField] private GameObject _palceToStand;
     [SerializeField] private GameObject _objectToFollow;
 
@@ -37,9 +38,15 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
     [SerializeField] private CinemachineVirtualCamera _vPaintingCam;
 
     [SerializeField] private int paintingIndex;
+
+    [SerializeField] private AudioSource _source;
     
-    
+    [SerializeField] private AudioMixerSnapshot normalSnapshot;
+    [SerializeField] private AudioMixerSnapshot cutsceneSnapshot;
+
+
     public delegate void StartPaiting();
+
     public event StartPaiting OnStart;
 
     void Start()
@@ -57,11 +64,11 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
         if (GallerySaveSystem.instance != null)
         {
             GallerySaveSystem.FoundPainting(paintingIndex);
-            if(OnStart != null)
+            if (OnStart != null)
                 OnStart();
         }
 
-        
+
         PlayerMovement movement = player.GetComponent<PlayerMovement>();
         InteractWithObject interactWithObject = player.GetComponent<InteractWithObject>();
 
@@ -73,42 +80,47 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
 
         _objectToFollow.transform.position = player.transform.position;
         _objectToFollow.transform.rotation = player.transform.rotation;
-        
+
         yield return new WaitForEndOfFrame();
         movement.StartRemoteControlledMovement(_objectToFollow);
-        
-         
-        
+
+
         //Walk to the place to stand
         while (_objectToFollow.transform.position != _palceToStand.transform.position)
         {
-            _objectToFollow.transform.position = Vector3.MoveTowards(_objectToFollow.transform.position, _palceToStand.transform.position, Time.deltaTime *2f);
+            _objectToFollow.transform.position = Vector3.MoveTowards(_objectToFollow.transform.position,
+                _palceToStand.transform.position, Time.deltaTime * 2f);
 
             if (Quaternion.Angle(_objectToFollow.transform.rotation,
-                    Quaternion.LookRotation(new Vector3(_palceToStand.transform.position.x, _objectToFollow.transform.position.y, _palceToStand.transform.position.z) - _objectToFollow.transform.position,
+                    Quaternion.LookRotation(
+                        new Vector3(_palceToStand.transform.position.x, _objectToFollow.transform.position.y,
+                            _palceToStand.transform.position.z) - _objectToFollow.transform.position,
                         Vector3.up)) > 5f)
             {
-                _objectToFollow.transform.rotation = 
+                _objectToFollow.transform.rotation =
                     Quaternion.Slerp(_objectToFollow.transform.rotation,
-                        Quaternion.LookRotation(new Vector3(_palceToStand.transform.position.x, _objectToFollow.transform.position.y, _palceToStand.transform.position.z) -_objectToFollow.transform.position, Vector3.up),
+                        Quaternion.LookRotation(
+                            new Vector3(_palceToStand.transform.position.x, _objectToFollow.transform.position.y,
+                                _palceToStand.transform.position.z) - _objectToFollow.transform.position, Vector3.up),
                         Time.deltaTime * 10f);
             }
+
             yield return new WaitForEndOfFrame();
         }
-        
-        
+
+
         Quaternion targetRotation =
             Quaternion.LookRotation(transform.position - player.transform.position, Vector3.up);
 
         targetRotation.eulerAngles =
             new Vector3(player.transform.rotation.x, targetRotation.eulerAngles.y, player.transform.rotation.z);
 
-        
 
         while (Quaternion.Angle(player.transform.rotation, targetRotation) > 10f)
         {
             print(Quaternion.Angle(player.transform.rotation, targetRotation));
-            _objectToFollow.transform.rotation = Quaternion.Slerp(_objectToFollow.transform.rotation, targetRotation, Time.deltaTime * 10f);
+            _objectToFollow.transform.rotation = Quaternion.Slerp(_objectToFollow.transform.rotation, targetRotation,
+                Time.deltaTime * 10f);
             yield return new WaitForEndOfFrame();
         }
 
@@ -122,15 +134,10 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
             {
                 print("set left arm");
                 LeftArmIK.Instance.TempUse = true;
-                
+
                 LeftArmIK.Instance.SetProceduralTargetAndHint(
                     leftRaycastHit.point + (leftRaycastHit.normal * _wallSeperationBuffer), leftRaycastHit.normal, 1f);
             }
-        }
-
-        if (_gameObjectName != null || _gameObjectName != "")
-        {
-            //GameObject.Find(_gameObjectName).SendMessage(_methodName);
         }
 
 
@@ -151,12 +158,19 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
             yield return new WaitForEndOfFrame();
         }
 
-        
+
         _paintingAnimator.SetBool("Hover", true);
+
         yield return new WaitUntil(() => !_paintingAnimator.GetCurrentAnimatorStateInfo(0).IsName("New State"));
+        
+        cutsceneSnapshot.TransitionTo(1f);
+        _source.PlayOneShot(_source.clip);
+        
         yield return new WaitUntil(() => _paintingAnimator.GetCurrentAnimatorStateInfo(0).IsName("New State"));
         
-        _paintingAnimator.SetBool("Hover", false);    
+        normalSnapshot.TransitionTo(1f);
+        
+        _paintingAnimator.SetBool("Hover", false);
         while (_multiplierFrame != _minEmissionStrength)
         {
             print("Running");
@@ -164,10 +178,11 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
             _frameMat.SetColor("_EmissiveColor", _emissionColour * _multiplierFrame);
             yield return new WaitForEndOfFrame();
         }
+
         _vPaintingCam.Priority = 0;
 
         player.GetComponent<EmotionController>().SetTempColour(_emissionColour, 6f);
-        
+
         while (_multiplierPlate != _maxEmissionStrength)
         {
             print("Running");
@@ -175,7 +190,7 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
             _plateMat.SetColor("_EmissiveColor", _emissionColour * _multiplierPlate);
             yield return new WaitForEndOfFrame();
         }
-        
+
 
         proceduralArmPlacement.pause = false;
 
