@@ -163,7 +163,7 @@ public class InteractiblePainting : MonoBehaviour, IInteractible, IRune
 
         yield return new WaitUntil(() => !_paintingAnimator.GetCurrentAnimatorStateInfo(0).IsName("New State"));
         
-        cutsceneSnapshot.TransitionTo(1f);
+        cutsceneSnapshot.TransitionTo(3f);
         _source.PlayOneShot(_source.clip);
         
         yield return new WaitUntil(() => _paintingAnimator.GetCurrentAnimatorStateInfo(0).IsName("New State"));
