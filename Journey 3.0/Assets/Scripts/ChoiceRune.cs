@@ -25,6 +25,8 @@ public class ChoiceRune : MonoBehaviour, IInteractible, IRune
     [SerializeField] private AudioSource _source;
 
     [SerializeField] [Range(0, 2f)] private float delayTime = 0;
+
+    [SerializeField] private AchievementSO achievementSo;
     
     
     IEnumerator ChooseEnding(Transform player)
@@ -144,6 +146,11 @@ public class ChoiceRune : MonoBehaviour, IInteractible, IRune
     IEnumerator FadeToBlack()
     {
         yield return new WaitForSeconds(((float)_timelineToPlay.duration) - 3f);
+        if (achievementSo != null)
+        {
+            AchievementManager.instance.UnlockSteamAchievement(achievementSo);
+        }
+
         CreditsManager.StartCredits();
         /*Debug.Log("FADE OUT");
         global::FadeToBlack.instance.SetBlack(true);
