@@ -12,6 +12,8 @@ public class GallerySaveSystem : MonoBehaviour
     private List<bool> paintingsFound = new List<bool>();
 
     public static GallerySaveSystem instance;
+
+    [SerializeField] private AchievementSO galleryAchievement;
     
     void Awake()
     {
@@ -23,9 +25,27 @@ public class GallerySaveSystem : MonoBehaviour
     public static void SaveGallery()
     {
         print("Saved Paintings");
+
+        bool allUnlocked = true;
+        
         for (int i = 0; i < instance.paintings.Count; i++)
         {
+            if (!instance.paintings[i]._found)
+            {
+                allUnlocked = false;
+            }
+
             PlayerPrefs.SetInt(instance.paintings[i]._name, (instance.paintings[i]._found ? 1 : 0));
+        }
+
+        CheckGalleryAchievement(allUnlocked);
+    }
+
+    private static void CheckGalleryAchievement(bool allFound)
+    {
+        if (allFound)
+        {
+            AchievementManager.instance.UnlockSteamAchievement(instance.galleryAchievement);
         }
     }
 
@@ -34,7 +54,6 @@ public class GallerySaveSystem : MonoBehaviour
         //Load the paintings from player prefs
         for (int i = 0; i < instance.paintings.Count; i++)
         {
-            
             print("Loaded Paintings");
             instance.paintings[i]._found = (PlayerPrefs.GetInt(instance.paintings[i]._name, 0) != 0);
         }
@@ -57,6 +76,7 @@ public class GallerySaveSystem : MonoBehaviour
     public static void FoundPainting(int paintingIndex)
     {
         instance.paintings[paintingIndex]._found = true;
+        SaveGallery();
     }
 }
 
