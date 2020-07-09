@@ -18,6 +18,8 @@ public class FireflyTrigger : MonoBehaviour
 
     private bool _flee;
 
+    private bool triggered = false;
+
     [SerializeField] private float _timeToFleeFor;
 
     private float _timeSinceFlee;
@@ -26,13 +28,18 @@ public class FireflyTrigger : MonoBehaviour
     
     private void OnTriggerEnter(Collider other)
     {
-        _system.Play(); //Gary Added 
-        StartCoroutine(Flee());
+        if (other.CompareTag("Player") && !triggered)
+        {
+            _system.Play(); //Gary Added 
+            StartCoroutine(Flee());
+            triggered = true;
+        }
     }
 
     IEnumerator Flee()
     {
         FlyTwinkleController.instance.AddTwinkleAmount(twinkleAmmountToAdd);
+        FireflyAchievement.AddFirefly();
         
         _flee = true;
         

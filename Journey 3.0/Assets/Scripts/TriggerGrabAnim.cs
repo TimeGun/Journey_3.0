@@ -32,6 +32,7 @@ public class TriggerGrabAnim : MonoBehaviour
         _animatorPlayer.SetFloat("grabSpeedMult", 0.4f);
         _animatorPlayer.SetTrigger("grab");
         _animatorFlies.SetTrigger("Flee");
+        FireflyAchievement.AddFirefly();
         
         yield return new WaitForSeconds(2f);
         //_animatorPlayer.GetComponent<InterestFinder>().RemoveObject();
