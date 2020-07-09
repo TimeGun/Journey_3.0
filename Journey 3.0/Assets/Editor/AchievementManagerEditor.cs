@@ -25,5 +25,13 @@ public class AchievementManagerEditor : Editor
         }
         
         GUILayout.EndHorizontal();
+        
+        if (GUILayout.Button("Reset All Achievements"))
+        {
+            achievementManager.DEBUG_LockAllAchievements();
+            PlayerPrefs.DeleteAll();
+        }
+        
+        
     }
 }

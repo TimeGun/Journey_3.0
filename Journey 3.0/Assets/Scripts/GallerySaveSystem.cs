@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using Steamworks;
 using UnityEngine;
 
 public class GallerySaveSystem : MonoBehaviour
@@ -75,7 +76,18 @@ public class GallerySaveSystem : MonoBehaviour
 
     public static void FoundPainting(int paintingIndex)
     {
-        instance.paintings[paintingIndex]._found = true;
+        if (!instance.paintings[paintingIndex]._found)
+        {
+            instance.paintings[paintingIndex]._found = true;
+            int numberOfPaintingsFound;
+
+            if (SteamManager.Initialized)
+            {
+                SteamUserStats.GetStat("paintings_found", out numberOfPaintingsFound);
+                SteamUserStats.SetStat("paintings_found", numberOfPaintingsFound + 1);
+            }
+        }
+
         SaveGallery();
     }
 }

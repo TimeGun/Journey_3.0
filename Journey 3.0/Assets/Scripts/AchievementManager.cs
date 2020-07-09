@@ -47,6 +47,11 @@ public class AchievementManager : MonoBehaviour
         }
     }
 
+    public void DEBUG_LockAllAchievements()
+    {
+        SteamUserStats.ResetAllStats(true);
+    }
+
     public void TestSteamAchievement(AchievementSO achievement)
     {
         SteamUserStats.GetAchievement(achievement.AchievementID, out unlockTest);
