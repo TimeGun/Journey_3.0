@@ -11,6 +11,11 @@ public class LightningAchievement : MonoBehaviour
 
     private bool hitByLightning;
 
+    private void Awake()
+    {
+        instance = this;
+    }
+
     public static void SetHit()
     {
         instance.hitByLightning = true;

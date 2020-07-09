@@ -9,9 +9,7 @@ public class GallerySaveSystem : MonoBehaviour
     [SerializeField] private List<Painting> paintings = new List<Painting>();
 
     [SerializeField] public GameObject[] uiPaintings;
-
-    private List<bool> paintingsFound = new List<bool>();
-
+    
     public static GallerySaveSystem instance;
 
     [SerializeField] private AchievementSO galleryAchievement;
@@ -79,11 +77,13 @@ public class GallerySaveSystem : MonoBehaviour
         if (!instance.paintings[paintingIndex]._found)
         {
             instance.paintings[paintingIndex]._found = true;
+            
             int numberOfPaintingsFound;
 
             if (SteamManager.Initialized)
             {
                 SteamUserStats.GetStat("paintings_found", out numberOfPaintingsFound);
+                print("The number of paintings found is: " + numberOfPaintingsFound + 1);
                 SteamUserStats.SetStat("paintings_found", numberOfPaintingsFound + 1);
             }
         }
