@@ -74,6 +74,7 @@ public class LightningStrike : MonoBehaviour
 
         if (playerInHitbox)
         {
+            LightningAchievement.SetHit();
             Ray ray = new Ray(transform.position, Vector3.down);
 
             RaycastHit hit;
