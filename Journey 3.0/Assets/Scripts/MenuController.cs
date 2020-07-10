@@ -60,7 +60,7 @@ public class MenuController : MonoBehaviour
                     LeaveMenu();
                 }
             }
-            else if(_controls.PlayerFreeMovement.StartButton.triggered && CreditsManager.instance.creditsRunning)
+            else if(_controls.PlayerFreeMovement.StartButton.triggered && !CreditsManager.instance.creditsRunning)
             {
                 OpenPauseMenu();
             }
