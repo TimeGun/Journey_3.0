@@ -12,14 +12,17 @@ public class AchievementManager : MonoBehaviour
     
     private bool unlockTest;
 
+    [SerializeField] private SteamManager steamManager;
+
     private void Awake()
     {
         instance = this;
+        
     }
 
     public void UnlockSteamAchievement(AchievementSO achievement)
     {
-        if (SteamManager.Initialized)
+        if (steamManager.gameObject.activeSelf && SteamManager.Initialized)
         {
             TestSteamAchievement(achievement);
 
@@ -34,7 +37,7 @@ public class AchievementManager : MonoBehaviour
     
     public void DEBUG_LockSteamAchievement(AchievementSO achievement)
     {
-        if (SteamManager.Initialized)
+        if (steamManager.gameObject.activeSelf && SteamManager.Initialized)
         {
             TestSteamAchievement(achievement);
 
