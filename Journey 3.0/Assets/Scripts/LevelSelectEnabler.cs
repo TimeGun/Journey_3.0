@@ -21,7 +21,7 @@ public class LevelSelectEnabler : MonoBehaviour
     {
         if (!instance.offAtStart)
         {
-            instance.levelSelect.interactable = true;
+            instance.levelSelect.interactable = LevelSelectSaveSystem.CheckGameFinished();
         }
     }
     
