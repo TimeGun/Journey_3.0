@@ -105,8 +105,12 @@ public class MenuController : MonoBehaviour
         {
             PlayOpeningCinematic.instance.CheckCinematic();
         }
-        
-        API.GlobalReferences.PlayerRef.GetComponent<PlayerMovement>().EnableThis();
+
+        if (!CinematicPlayerMoment.instance.running)
+        {
+            API.GlobalReferences.PlayerRef.GetComponent<PlayerMovement>().EnableThis();
+        }
+
         AudioListener.pause = false;
         inMenu = false;
         

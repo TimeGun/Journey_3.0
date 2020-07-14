@@ -8,7 +8,7 @@ public class CinematicPlayerMoment : MonoBehaviour
 
     public static CinematicPlayerMoment instance;
 
-    private bool running;
+    public bool running;
 
     void Start()
     {
