@@ -44,5 +44,6 @@ public class FadeAfterTimeline : MonoBehaviour
         
         SaveSystem.SaveProgress(_resetData);
         SceneManager.LoadScene("Manager Scene");
+        LevelSelectSaveSystem.CreateGameFinishedFile();
     }
 }
