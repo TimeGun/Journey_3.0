@@ -35,6 +35,7 @@ public class FadeAfterTimeline : MonoBehaviour
 
     IEnumerator FadeToBlack()
     {
+        LevelSelectSaveSystem.CreateGameFinishedFile();
         yield return new WaitForSeconds(((float)_timelineLength) - 3f);
         Debug.Log("FADE OUT");
         global::FadeToBlack.instance.SetBlack(true);
@@ -44,6 +45,5 @@ public class FadeAfterTimeline : MonoBehaviour
         
         SaveSystem.SaveProgress(_resetData);
         SceneManager.LoadScene("Manager Scene");
-        LevelSelectSaveSystem.CreateGameFinishedFile();
     }
 }

@@ -12,6 +12,7 @@ public class LevelSelectEnabler : MonoBehaviour
 
     void Start()
     {
+        instance = this;
         levelSelect.interactable = LevelSelectSaveSystem.CheckGameFinished();
     }
 
