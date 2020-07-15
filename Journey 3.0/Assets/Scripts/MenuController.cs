@@ -215,7 +215,7 @@ public class MenuController : MonoBehaviour
         API.GlobalReferences.PlayerRef.GetComponent<InteractWithObject>().StopInteracting();
         yield return new WaitForEndOfFrame();
         baseMenuFirstButton.GetComponentInChildren<TextMeshProUGUI>().text = "Start";
-        SceneManagerScript.instance.StartCoroutine(SceneManagerScript.instance.StartGameLoad(_newProgressionData));
+        SceneManagerScript.instance.StartCoroutine(SceneManagerScript.instance.StartGameLoad(_newProgressionData, false));
     }
 
     public void OpenSubMenu(GameObject subMenuToOpen)

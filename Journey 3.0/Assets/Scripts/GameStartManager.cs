@@ -25,20 +25,20 @@ public class GameStartManager : MonoBehaviour
             
                 SaveSystem.SaveProgress(_newProgressionData); //save the initial progression file
             
-                SceneManagerScript.instance.StartCoroutine(SceneManagerScript.instance.StartGameLoad(_newProgressionData)); //StartLoad of base scene and then sections 0 and 1
+                SceneManagerScript.instance.StartCoroutine(SceneManagerScript.instance.StartGameLoad(_newProgressionData, true)); //StartLoad of base scene and then sections 0 and 1
             }
             else //save data exist. Load the last savepoint menu
             {
                 SaveSystem.firstTimePlaying = false; //not the players first time playing
                 
-                SceneManagerScript.instance.StartCoroutine(SceneManagerScript.instance.StartGameLoad(_progressionData));
+                SceneManagerScript.instance.StartCoroutine(SceneManagerScript.instance.StartGameLoad(_progressionData, true));
             }
         }
         else // debug all possible versions of the save file
         {
             ProgressionData _debugProgressionData = new ProgressionData(debugInt, debugBool); 
             
-            SceneManagerScript.instance.StartCoroutine(SceneManagerScript.instance.StartGameLoad(_debugProgressionData));
+            SceneManagerScript.instance.StartCoroutine(SceneManagerScript.instance.StartGameLoad(_debugProgressionData, true));
         }
     }
 }

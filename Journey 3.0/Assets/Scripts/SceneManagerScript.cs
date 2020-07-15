@@ -35,11 +35,15 @@ public class SceneManagerScript : MonoBehaviour
         instance = this;
     }
 
-    public IEnumerator StartGameLoad(ProgressionData progressionData)
+    public IEnumerator StartGameLoad(ProgressionData progressionData, bool cleanLoad)
     {
         yield return new WaitUntil(() => loading == false);
-        
-        
+
+        if (cleanLoad)
+        {
+            baseSceneLoaded = false;
+        }
+
         GameObject torch = GameObject.Find("InteractibleTorch - Final");
 
         if (torch != null)
@@ -51,7 +55,14 @@ public class SceneManagerScript : MonoBehaviour
         {
             Scene scene = SceneManager.GetSceneAt(i);
 
-            if (scene.name != "Base Scene")
+            if (!cleanLoad)
+            {
+                if (scene.name != "Base Scene")
+                {
+                    SceneManager.UnloadSceneAsync(scene);
+                }
+            }
+            else
             {
                 SceneManager.UnloadSceneAsync(scene);
             }
