@@ -31,6 +31,12 @@ public class ChoiceRune : MonoBehaviour, IInteractible, IRune
     
     IEnumerator ChooseEnding(Transform player)
     {
+        if (!LevelSelectSaveSystem.CheckGameFinished())
+        {
+            LevelSelectSaveSystem.CreateGameFinishedFile();
+            print("Created file");
+        }
+        
         LevelSelectEnabler.DisableButton();
         PlayerMovement movement = player.GetComponent<PlayerMovement>();
         InteractWithObject interactWithObject = player.GetComponent<InteractWithObject>();

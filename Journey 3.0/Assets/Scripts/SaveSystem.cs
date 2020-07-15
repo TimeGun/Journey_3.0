@@ -59,10 +59,13 @@ public static class LevelSelectSaveSystem
         FileStream stream = new FileStream(path, FileMode.Create);
         
         GameFinishedData file = new GameFinishedData(System.DateTime.Now.ToLongDateString());
+
         
         formatter.Serialize(stream, file);
         
         stream.Close();
+        
+        Debug.Log("File Created with the Date: " + file.completionDate);
     }
 }
 
@@ -86,6 +89,7 @@ public class ProgressionData
 public class GameFinishedData
 {
     public string completionDate;
+    
     public GameFinishedData(string dateValue)
     {
         completionDate = dateValue;

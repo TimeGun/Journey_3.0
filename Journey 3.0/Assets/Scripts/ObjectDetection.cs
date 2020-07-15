@@ -32,7 +32,7 @@ public class ObjectDetection : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (_items.Contains(other.gameObject) && other.gameObject != carryingObject)
+        if (other != null && _items.Contains(other.gameObject) && other.gameObject != carryingObject)
         {
             _items.Remove(other.gameObject);
             
