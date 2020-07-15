@@ -34,6 +34,12 @@ public class SettingsSave : MonoBehaviour
 
 
     [SerializeField] private AudioMixer masterMix;
+    [SerializeField] private AudioMixer ambianceMix;
+    [SerializeField] private AudioMixer sfxMix;
+    [SerializeField] private AudioMixer musicMix;
+
+    [SerializeField] private AudioSource testSource;
+    [SerializeField] private AudioClip testClip;
 
     // Start is called before the first frame update
     void Start()
@@ -44,30 +50,42 @@ public class SettingsSave : MonoBehaviour
 
     public void SetMasterVolume(float volume)
     {
-        masterMix.SetFloat("MasterVolume", Mathf.Log10(volume) * 20f);
+        float newVolume = Mathf.Log10(volume) * 20f;
+        masterMix.SetFloat("MasterVolume", newVolume);
         masterVolume = volume;
+        testSource.outputAudioMixerGroup = masterMix.outputAudioMixerGroup;
+        testSource.PlayOneShot(testClip);
         SaveSettings();
     }
 
     public void SetAmbianceVolume(float volume)
     {
-        masterMix.SetFloat("AmbianceVolume", Mathf.Log10(volume) * 20f);
+        float newVolume = Mathf.Log10(volume) * 20f;
+        masterMix.SetFloat("AmbianceVolume", newVolume);
         ambianceVolume = volume;
+        testSource.outputAudioMixerGroup = ambianceMix.outputAudioMixerGroup;
+        testSource.PlayOneShot(testClip);
         SaveSettings();
     }
 
     public void SetSFXVolume(float volume)
     {
-        masterMix.SetFloat("InteractiblesVolume", Mathf.Log10(volume) * 20f);
-        masterMix.SetFloat("PlayerVolume", Mathf.Log10(volume) * 20f);
+        float newVolume = Mathf.Log10(volume) * 20f;
+        masterMix.SetFloat("InteractiblesVolume", newVolume);
+        masterMix.SetFloat("PlayerVolume", newVolume);
+        testSource.outputAudioMixerGroup = sfxMix.outputAudioMixerGroup;
+        testSource.PlayOneShot(testClip);
         sfxVolume = volume;
         SaveSettings();
     }
 
     public void SetMusicVolume(float volume)
     {
-        masterMix.SetFloat("MusicVolume", Mathf.Log10(volume) * 20f);
+        float newVolume = Mathf.Log10(volume) * 20f;
+        masterMix.SetFloat("MusicVolume", newVolume);
         musicVolume = volume;
+        testSource.outputAudioMixerGroup = musicMix.outputAudioMixerGroup;
+        testSource.PlayOneShot(testClip);
         SaveSettings();
     }
 
