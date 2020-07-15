@@ -108,6 +108,9 @@ public class SettingsSave : MonoBehaviour
     {
         brightness = value;
         _liftGammaGain.gain.value = new Vector4(brightness, brightness,brightness, brightness);
+        
+        testSource.outputAudioMixerGroup = masterMix.outputAudioMixerGroup;
+        testSource.PlayOneShot(testClip);
     }
 
     private void OnApplicationQuit()
