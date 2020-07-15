@@ -37,6 +37,7 @@ public class SettingsSave : MonoBehaviour
     [SerializeField] private AudioMixer ambianceMix;
     [SerializeField] private AudioMixer sfxMix;
     [SerializeField] private AudioMixer musicMix;
+    [SerializeField] private AudioMixer UIMix;
 
     [SerializeField] private AudioSource testSource;
     [SerializeField] private AudioClip testClip;
@@ -53,7 +54,7 @@ public class SettingsSave : MonoBehaviour
         float newVolume = Mathf.Log10(volume) * 20f;
         masterMix.SetFloat("MasterVolume", newVolume);
         masterVolume = volume;
-        testSource.outputAudioMixerGroup = masterMix.outputAudioMixerGroup;
+        testSource.outputAudioMixerGroup = UIMix.outputAudioMixerGroup;
         testSource.PlayOneShot(testClip);
         SaveSettings();
     }

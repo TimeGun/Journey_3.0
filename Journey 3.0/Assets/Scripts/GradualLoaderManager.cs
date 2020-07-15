@@ -28,7 +28,7 @@ public class GradualLoaderManager: MonoBehaviour
                 while (_behaviours.Count > 0)
                 {
                     GradualLoader _tempBehaviour = _behaviours.Dequeue();
-                    print("Initialise: " + _tempBehaviour + "on frame: " + Time.frameCount);
+                    //print("Initialise: " + _tempBehaviour + "on frame: " + Time.frameCount);
                     _tempBehaviour.InitialiseThis();
                 }
             }
@@ -38,7 +38,7 @@ public class GradualLoaderManager: MonoBehaviour
                 {
                 
                     GradualLoader _tempBehaviour = _behaviours.Dequeue();
-                    print("Initialise: " + _tempBehaviour + "on frame: " + Time.frameCount);
+                    //print("Initialise: " + _tempBehaviour + "on frame: " + Time.frameCount);
                     _tempBehaviour.InitialiseThis();
                 }
             }
