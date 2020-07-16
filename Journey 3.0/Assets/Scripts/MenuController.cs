@@ -329,8 +329,15 @@ public class MenuController : MonoBehaviour
 
     public void OpenSubMenu(GameObject subMenuToOpen)
     {
+        StartCoroutine(OpenSubMenuCoroutine(subMenuToOpen));
+        
+    }
+
+    IEnumerator OpenSubMenuCoroutine(GameObject subMenu)
+    {
+        yield return new WaitForSeconds(0.05f);
         _anim.Play("OpenSub");
-        subMenuToOpen.SetActive(true);
+        subMenu.SetActive(true);
 
         CanvasGroup baseGroup = baseMenu.GetComponent<CanvasGroup>();
 
@@ -342,6 +349,12 @@ public class MenuController : MonoBehaviour
 
     public void CloseSubMenu()
     {
+        StartCoroutine(CloseSubMenuCoroutine());
+    }
+
+    IEnumerator CloseSubMenuCoroutine()
+    {
+        yield return new WaitForSeconds(0.05f);
         _anim.Play("CloseSub");
 
         baseGroup.interactable = true;
@@ -349,7 +362,6 @@ public class MenuController : MonoBehaviour
         if (fadeAlpha)
             baseGroup.alpha = 1f;
     }
-
 
     public void TurnOffSubMenues()
     {
