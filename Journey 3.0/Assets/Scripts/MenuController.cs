@@ -4,17 +4,26 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MenuController : MonoBehaviour
 {
     [SerializeField] private Animator _anim;
 
-    [SerializeField] private GameObject baseMenuFirstButton, baseMenuControlsButton, baseMenuGalleryButton, baseMenuSettingsButton, baseMenuLevelButton, levelMenuFirstButton, controlsMenuFirstButton, settingsFirstButton, galleryFirstButton;
+    [SerializeField] private GameObject baseMenuFirstButton,
+        baseMenuControlsButton,
+        baseMenuGalleryButton,
+        baseMenuSettingsButton,
+        baseMenuLevelButton,
+        levelMenuFirstButton,
+        controlsMenuFirstButton,
+        settingsFirstButton,
+        galleryFirstButton;
 
     [SerializeField] private GameObject baseMenu, settingsMenu, controlsMenu, galleryMenu, levelSelectMenu;
 
     public static MenuController instance;
-    
+
     private InputMaster _controls;
 
     [SerializeField] private InputSetUp _inputSetUp;
@@ -30,8 +39,7 @@ public class MenuController : MonoBehaviour
     [SerializeField] private float alphaValue = 0.2f;
 
     private CanvasGroup baseGroup;
-    
-    
+
 
     // Start is called before the first frame update
     void Start()
@@ -60,7 +68,7 @@ public class MenuController : MonoBehaviour
                     LeaveMenu();
                 }
             }
-            else if(_controls.PlayerFreeMovement.StartButton.triggered && !CreditsManager.instance.creditsRunning)
+            else if (_controls.PlayerFreeMovement.StartButton.triggered && !CreditsManager.instance.creditsRunning)
             {
                 OpenPauseMenu();
             }
@@ -72,13 +80,13 @@ public class MenuController : MonoBehaviour
     {
         _anim.Play("OpenBase");
         Cursor.visible = true;
-        
+
         if (gameStarted == true)
         {
             Time.timeScale = 0f;
             AudioListener.pause = true;
         }
-        
+
         inMenu = true;
         API.GlobalReferences.PlayerRef.GetComponent<PlayerMovement>().DisableThis();
         baseMenu.SetActive(true);
@@ -89,18 +97,18 @@ public class MenuController : MonoBehaviour
     {
         print("Left menu");
         Cursor.visible = false;
-        
+
         _anim.Play("CloseBase");
 
         Time.timeScale = 1f;
-        
+
         //baseMenu.SetActive(false);
-        
+
         settingsMenu.SetActive(false);
         controlsMenu.SetActive(false);
         galleryMenu.SetActive(false);
         levelSelectMenu.SetActive(false);
-        
+
         if (gameStarted == false && formationUse)
         {
             PlayOpeningCinematic.instance.CheckCinematic();
@@ -113,80 +121,182 @@ public class MenuController : MonoBehaviour
 
         AudioListener.pause = false;
         inMenu = false;
-        
+
         baseMenuFirstButton.GetComponentInChildren<TextMeshProUGUI>().text = "Continue";
-        
+
         gameStarted = true;
     }
 
-    
 
     public void SetDefaultBaseSelected()
     {
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(baseMenuFirstButton);
+        EventSystem eventSystem = EventSystem.current;
+        
+        eventSystem.SetSelectedGameObject(null);
+        eventSystem.SetSelectedGameObject(baseMenuFirstButton);
+        baseMenuFirstButton.GetComponent<Selectable>().OnSelect(null);
+        baseMenuFirstButton.GetComponent<ScaleButtonOnSelect>();
     }
-    
+
     public void SetDefaultControlsSelected()
     {
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(controlsMenuFirstButton);
+        EventSystem eventSystem = EventSystem.current;
+
+        if (eventSystem.currentSelectedGameObject != null)
+        {
+            var previous = eventSystem.currentSelectedGameObject.GetComponent<Selectable>();
+            
+            if (previous != null)
+            {
+                previous.OnDeselect(null);
+            }
+        }
+        
+        StartCoroutine(ChangeSelectedUI(controlsMenuFirstButton));
     }
 
     public void SetDefaultSettingsSelected()
     {
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(settingsFirstButton);
+        EventSystem eventSystem = EventSystem.current;
+
+        if (eventSystem.currentSelectedGameObject != null)
+        {
+            var previous = eventSystem.currentSelectedGameObject.GetComponent<Selectable>();
+            
+            if (previous != null)
+            {
+                previous.OnDeselect(null);
+            }
+        }
+        
+        StartCoroutine(ChangeSelectedUI(settingsFirstButton));
     }
 
     public void SetControlsBaseSelected()
     {
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(baseMenuControlsButton);
+        EventSystem eventSystem = EventSystem.current;
+
+        if (eventSystem.currentSelectedGameObject != null)
+        {
+            var previous = eventSystem.currentSelectedGameObject.GetComponent<Selectable>();
+            
+            if (previous != null)
+            {
+                previous.OnDeselect(null);
+            }
+        }
+        
+        StartCoroutine(ChangeSelectedUI(baseMenuControlsButton));
     }
 
     public void SetSettingsBaseSelected()
     {
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(baseMenuSettingsButton);
+        EventSystem eventSystem = EventSystem.current;
+
+        if (eventSystem.currentSelectedGameObject != null)
+        {
+            var previous = eventSystem.currentSelectedGameObject.GetComponent<Selectable>();
+            
+            if (previous != null)
+            {
+                previous.OnDeselect(null);
+            }
+        }
+        
+        StartCoroutine(ChangeSelectedUI(baseMenuSettingsButton));
     }
-    
+
     public void SetDefaultLevelSelected()
     {
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(levelMenuFirstButton);
+        EventSystem eventSystem = EventSystem.current;
+
+        if (eventSystem.currentSelectedGameObject != null)
+        {
+            var previous = eventSystem.currentSelectedGameObject.GetComponent<Selectable>();
+            
+            if (previous != null)
+            {
+                previous.OnDeselect(null);
+            }
+        }
+        
+        StartCoroutine(ChangeSelectedUI(levelMenuFirstButton));
     }
 
     public void SetLevelBaseSelected()
     {
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(baseMenuLevelButton);
+        EventSystem eventSystem = EventSystem.current;
+
+        if (eventSystem.currentSelectedGameObject != null)
+        {
+            var previous = eventSystem.currentSelectedGameObject.GetComponent<Selectable>();
+            
+            if (previous != null)
+            {
+                previous.OnDeselect(null);
+            }
+        }
+        
+        StartCoroutine(ChangeSelectedUI(baseMenuLevelButton));
     }
-    
+
     public void SetGalleryBaseSelected()
     {
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(baseMenuGalleryButton);
+        EventSystem eventSystem = EventSystem.current;
+
+        if (eventSystem.currentSelectedGameObject != null)
+        {
+            var previous = eventSystem.currentSelectedGameObject.GetComponent<Selectable>();
+            
+            if (previous != null)
+            {
+                previous.OnDeselect(null);
+            }
+        }
+        
+        StartCoroutine(ChangeSelectedUI(baseMenuGalleryButton));
     }
-    
+
     public void SetDefaultGallerySelected()
     {
-        EventSystem.current.SetSelectedGameObject(null);
-        EventSystem.current.SetSelectedGameObject(galleryFirstButton);
+        EventSystem eventSystem = EventSystem.current;
+
+        if (eventSystem.currentSelectedGameObject != null)
+        {
+            var previous = eventSystem.currentSelectedGameObject.GetComponent<Selectable>();
+            
+            if (previous != null)
+            {
+                previous.OnDeselect(null);
+            }
+        }
+
+        StartCoroutine(ChangeSelectedUI(galleryFirstButton));
+    }
+
+    public IEnumerator ChangeSelectedUI(GameObject newSelected)
+    {
+        EventSystem eventSystem = EventSystem.current;
+        eventSystem.SetSelectedGameObject(null);
+        yield return new WaitForEndOfFrame();
+        eventSystem.SetSelectedGameObject(newSelected);
     }
 
     public void LoadStartZone()
     {
         StartCoroutine(ChangeZone(0, false));
     }
+
     public void LoadBridgeZone()
     {
         StartCoroutine(ChangeZone(1, false));
     }
+
     public void LoadPillarZone()
     {
         StartCoroutine(ChangeZone(2, true));
     }
+
     public void LoadPaintingZone()
     {
         StartCoroutine(ChangeZone(3, true));
@@ -204,9 +314,7 @@ public class MenuController : MonoBehaviour
         yield return new WaitForSeconds(1f);
 
 
-        
         API.GlobalReferences.PlayerRef.GetComponent<InteractWithObject>().StopInteracting();
-        
 
 
         ProgressionData _newProgressionData = new ProgressionData(zone, night);
@@ -215,19 +323,20 @@ public class MenuController : MonoBehaviour
         API.GlobalReferences.PlayerRef.GetComponent<InteractWithObject>().StopInteracting();
         yield return new WaitForEndOfFrame();
         baseMenuFirstButton.GetComponentInChildren<TextMeshProUGUI>().text = "Start";
-        SceneManagerScript.instance.StartCoroutine(SceneManagerScript.instance.StartGameLoad(_newProgressionData, false));
+        SceneManagerScript.instance.StartCoroutine(
+            SceneManagerScript.instance.StartGameLoad(_newProgressionData, false));
     }
 
     public void OpenSubMenu(GameObject subMenuToOpen)
     {
         _anim.Play("OpenSub");
         subMenuToOpen.SetActive(true);
-        
+
         CanvasGroup baseGroup = baseMenu.GetComponent<CanvasGroup>();
-        
+
         baseGroup.interactable = false;
-        
-        if(fadeAlpha)
+
+        if (fadeAlpha)
             baseGroup.alpha = alphaValue;
     }
 
@@ -236,8 +345,8 @@ public class MenuController : MonoBehaviour
         _anim.Play("CloseSub");
 
         baseGroup.interactable = true;
-        
-        if(fadeAlpha)
+
+        if (fadeAlpha)
             baseGroup.alpha = 1f;
     }
 
@@ -256,14 +365,14 @@ public class MenuController : MonoBehaviour
     }
 
     public void QuitGame()
-     {
-         // save any game data here
-         #if UNITY_EDITOR
-             // Application.Quit() does not work in the editor so
-             // UnityEditor.EditorApplication.isPlaying need to be set to false to end the game
-             UnityEditor.EditorApplication.isPlaying = false;
-         #else
+    {
+        // save any game data here
+#if UNITY_EDITOR
+        // Application.Quit() does not work in the editor so
+        // UnityEditor.EditorApplication.isPlaying need to be set to false to end the game
+        UnityEditor.EditorApplication.isPlaying = false;
+#else
              Application.Quit();
-         #endif
-     }
+#endif
+    }
 }
