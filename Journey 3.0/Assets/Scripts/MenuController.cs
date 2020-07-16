@@ -40,6 +40,8 @@ public class MenuController : MonoBehaviour
 
     private CanvasGroup baseGroup;
 
+    private bool cooldown;
+
 
     // Start is called before the first frame update
     void Start()
@@ -279,6 +281,8 @@ public class MenuController : MonoBehaviour
         EventSystem eventSystem = EventSystem.current;
         eventSystem.SetSelectedGameObject(null);
         yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForEndOfFrame();
         eventSystem.SetSelectedGameObject(newSelected);
     }
 
@@ -330,12 +334,12 @@ public class MenuController : MonoBehaviour
     public void OpenSubMenu(GameObject subMenuToOpen)
     {
         StartCoroutine(OpenSubMenuCoroutine(subMenuToOpen));
-        
     }
 
     IEnumerator OpenSubMenuCoroutine(GameObject subMenu)
     {
-        yield return new WaitForSeconds(0.05f);
+        yield return new WaitUntil(() => cooldown == false);
+        cooldown = true;
         _anim.Play("OpenSub");
         subMenu.SetActive(true);
 
@@ -345,6 +349,9 @@ public class MenuController : MonoBehaviour
 
         if (fadeAlpha)
             baseGroup.alpha = alphaValue;
+        
+        yield return new WaitForSeconds(0.08f);
+        cooldown = false;
     }
 
     public void CloseSubMenu()
@@ -354,13 +361,17 @@ public class MenuController : MonoBehaviour
 
     IEnumerator CloseSubMenuCoroutine()
     {
-        yield return new WaitForSeconds(0.05f);
+        yield return new WaitUntil(() => cooldown == false);
+        cooldown = true;
         _anim.Play("CloseSub");
 
         baseGroup.interactable = true;
 
         if (fadeAlpha)
             baseGroup.alpha = 1f;
+        
+        yield return new WaitForSeconds(0.08f);
+        cooldown = false;
     }
 
     public void TurnOffSubMenues()

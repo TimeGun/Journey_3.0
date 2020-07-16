@@ -170,7 +170,6 @@ public class ScaleButtonOnSelect : MonoBehaviour, ISelectHandler, IPointerEnterH
                 }
                 
                 return false;
-
             }
             
             return false;
