@@ -7,14 +7,22 @@ public class PlayAudioOnTrigger : MonoBehaviour
 {
     [SerializeField]private AudioSource _source;
 
-    private bool played = false;
+    public bool played = false;
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player") && other.isTrigger == false && played == false)
         {
+            PlaySoundOnce();
+        }
+    }
+
+    public void PlaySoundOnce()
+    {
+        if (!played)
+        {
             print("Playing Audio");
             _source.Play();
-            played = true;
+            played = true; 
         }
     }
 }

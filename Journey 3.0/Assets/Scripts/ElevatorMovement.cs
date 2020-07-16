@@ -8,6 +8,8 @@ public class ElevatorMovement : MonoBehaviour
 
     public float hardStopValue = -215.3f;
 
+    public PlayAudioOnTrigger _elevatorCrash;
+
     public float ElevatorMovementSpeed
     {
         get => _elevatorMovementSpeed;
@@ -19,6 +21,13 @@ public class ElevatorMovement : MonoBehaviour
         if (transform.position.y > hardStopValue)
         {
             transform.Translate(-Vector3.up * _elevatorMovementSpeed * Time.deltaTime);
+        }
+        else
+        {
+            if (!_elevatorCrash.played)
+            {
+                _elevatorCrash.PlaySoundOnce();
+            }
         }
     }
 }
