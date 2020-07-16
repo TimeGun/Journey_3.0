@@ -134,10 +134,10 @@ public class SettingsSave : MonoBehaviour
 
     private void LoadSettings()
     {
-        masterVolume = PlayerPrefs.GetFloat("MasterVolume", 0);
-        ambianceVolume = PlayerPrefs.GetFloat("AmbianceVolume", 0);
-        sfxVolume = PlayerPrefs.GetFloat("SFXVolume", 0);
-        musicVolume = PlayerPrefs.GetFloat("MusicVolume", 0);
+        masterVolume = PlayerPrefs.GetFloat("MasterVolume", 0.5f);
+        ambianceVolume = PlayerPrefs.GetFloat("AmbianceVolume", 0.25f);
+        sfxVolume = PlayerPrefs.GetFloat("SFXVolume", 0.5f);
+        musicVolume = PlayerPrefs.GetFloat("MusicVolume", 0.5f);
 
         brightness = PlayerPrefs.GetFloat("Brightness", 1);
         vsync = PlayerPrefs.GetInt("VSync", 0);
