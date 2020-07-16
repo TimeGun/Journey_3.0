@@ -21,7 +21,7 @@ public class FadeLight : MonoBehaviour
     
     private float intensityMultiplier = 1f;
 
-    [SerializeField] private float _maxEmissionStrength = 10f;
+    [SerializeField] private float _maxEmissionStrength = 5f;
     [SerializeField] private float _minEmissionStrength = 0f;
     [SerializeField] private float _minRuneEmissionStrength = 0f;
 
@@ -84,8 +84,6 @@ public class FadeLight : MonoBehaviour
             pits[1].SetBool("ColourSwitch", true);
             pitLights[0].color = Color.Lerp(pitLights[0].color, blueFire, Time.deltaTime * _lerpSpeed);
             pitLights[1].color = Color.Lerp(pitLights[1].color, blueFire, Time.deltaTime * _lerpSpeed);
-            
-            //print(_minRuneEmissionStrength);
         }
         else
         {
@@ -99,8 +97,7 @@ public class FadeLight : MonoBehaviour
             pits[1].SetBool("ColourSwitch", false);
             pitLights[0].color = Color.Lerp(pitLights[0].color, redFire, Time.deltaTime * _lerpSpeed);
             pitLights[1].color = Color.Lerp(pitLights[1].color, redFire, Time.deltaTime * _lerpSpeed);
-            
-            
+
             _minRuneEmissionStrength = Mathf.Lerp(_minRuneEmissionStrength, 0, Time.deltaTime * _lerpSpeed);
         }
     }
