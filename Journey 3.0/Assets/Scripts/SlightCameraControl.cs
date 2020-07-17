@@ -37,22 +37,25 @@ public class SlightCameraControl : MonoBehaviour
 
     private void SetVirtualCamera()
     {
-        _currentVirtualCamera =
-            _cinemachineBrain.ActiveVirtualCamera.VirtualCameraGameObject;
+        if (_cinemachineBrain != null && _cinemachineBrain.ActiveVirtualCamera != null)
+        {
+            _currentVirtualCamera =
+                _cinemachineBrain.ActiveVirtualCamera.VirtualCameraGameObject;
         
-        OffsetOptions offsetOptions = _currentVirtualCamera.GetComponent<OffsetOptions>();
+            OffsetOptions offsetOptions = _currentVirtualCamera.GetComponent<OffsetOptions>();
 
-        CinemachineCameraOffset cameraOffset = _currentVirtualCamera.GetComponent<CinemachineCameraOffset>();
+            CinemachineCameraOffset cameraOffset = _currentVirtualCamera.GetComponent<CinemachineCameraOffset>();
         
-        if (offsetOptions != null && cameraOffset != null)
-        {
-            _offsetOptions = offsetOptions;
-            _cameraOffset = cameraOffset;
-        }
-        else
-        {
-            _offsetOptions = null;
-            _cameraOffset = null;
+            if (offsetOptions != null && cameraOffset != null)
+            {
+                _offsetOptions = offsetOptions;
+                _cameraOffset = cameraOffset;
+            }
+            else
+            {
+                _offsetOptions = null;
+                _cameraOffset = null;
+            }
         }
     }
     
@@ -60,6 +63,7 @@ public class SlightCameraControl : MonoBehaviour
     IEnumerator UpdateCameraOffset()
     {
         yield return new WaitForSeconds(1f);
+        
         while (true)
         {
             if(_cinemachineBrain.IsBlending || _currentVirtualCamera == null)
