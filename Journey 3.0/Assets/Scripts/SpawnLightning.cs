@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class SpawnLightning : MonoBehaviour
 {
@@ -25,7 +26,7 @@ public class SpawnLightning : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !other.isTrigger)
         {
             withinZone = true;
             _player.GetComponent<MountainSlopeSpeed>().enabled = true;
@@ -34,7 +35,7 @@ public class SpawnLightning : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") && !other.isTrigger)
         {
             withinZone = false;
             _player.GetComponent<MountainSlopeSpeed>().enabled = false;
@@ -50,7 +51,8 @@ public class SpawnLightning : MonoBehaviour
     {
         while(true)
         {
-            yield return new WaitForSeconds(_timeBetweenStrike);
+            float ran = Random.Range(-1f, 1f);
+            yield return new WaitForSeconds(_timeBetweenStrike + ran);
             if (withinZone)
             {
                 Vector3 spawnPos = _player.transform.position;
