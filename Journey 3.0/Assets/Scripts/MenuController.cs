@@ -350,7 +350,7 @@ public class MenuController : MonoBehaviour
         if (fadeAlpha)
             baseGroup.alpha = alphaValue;
         
-        yield return new WaitForSecondsRealtime(0.08f);
+        yield return new WaitForSecondsRealtime(0.15f);
         cooldown = false;
     }
 
@@ -370,7 +370,7 @@ public class MenuController : MonoBehaviour
         if (fadeAlpha)
             baseGroup.alpha = 1f;
         
-        yield return new WaitForSecondsRealtime(0.08f);
+        yield return new WaitForSecondsRealtime(0.15f);
         cooldown = false;
     }
 
