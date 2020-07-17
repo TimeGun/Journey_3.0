@@ -25,6 +25,10 @@ public class CheckPlate : MonoBehaviour
 
     [SerializeField] private AchievementSO achievementSo;
 
+    [SerializeField] private AudioSource source;
+    [SerializeField] private AudioClip open;
+    [SerializeField] private AudioClip close;
+
     private void OnTriggerEnter(Collider other)
     {
         ChangeSize _changeSize = other.GetComponent<ChangeSize>();
@@ -47,6 +51,11 @@ public class CheckPlate : MonoBehaviour
     {
         if (player || smallBoulder)
         {
+            if (!_gateAnim.GetBool("playerWeight"))
+            {
+                source.PlayOneShot(open);
+            }
+
             if (_gateAnim.isActiveAndEnabled)
                 _gateAnim.SetBool("playerWeight", true);
 
@@ -58,6 +67,11 @@ public class CheckPlate : MonoBehaviour
         }
         else
         {
+            if (_gateAnim.GetBool("playerWeight"))
+            {
+                source.PlayOneShot(close);
+            }
+
             if (_gateAnim.isActiveAndEnabled)
                 _gateAnim.SetBool("playerWeight", false);
 
@@ -86,7 +100,7 @@ public class CheckPlate : MonoBehaviour
                 API.GlobalReferences.PlayerRef.GetComponent<InteractWithObject>().StopInteracting();
 
                 opened = true;
-                
+
                 if (achievementSo != null)
                 {
                     AchievementManager.instance.UnlockSteamAchievement(achievementSo);
