@@ -31,6 +31,8 @@ public class InteractibleGlow : MonoBehaviour
     {
         for (int i = 0; i < _objectDetection.Items.Count; i++)
         {
+            
+
             Material mat = _objectDetection.Items[i].GetComponentInChildren<Renderer>().material;
             
             if (mat != null && mat.HasProperty("_interactible"))
@@ -39,7 +41,7 @@ public class InteractibleGlow : MonoBehaviour
                 {
                     mat.SetFloat("_interactible", 0);
                 }
-                else
+                else if(!_objectDetection.Items[i].CompareTag("Locked"))
                 {
                     mat.SetFloat("_interactible", 1f);
                 }
