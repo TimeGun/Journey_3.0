@@ -33,6 +33,7 @@ public class SceneLoadTrigger : MonoBehaviour
                 ProgressionData _overwriteData = new ProgressionData(saveSection, saveSectionNight);
                 
                 SaveSystem.SaveProgress(_overwriteData);
+                UpdateLoadingBool.SaveGame();
             }
 
             Destroy(gameObject);

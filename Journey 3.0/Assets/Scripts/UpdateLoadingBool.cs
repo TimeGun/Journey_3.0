@@ -8,8 +8,11 @@ public class UpdateLoadingBool : MonoBehaviour
 {
     [SerializeField] private Animator _anim;
 
+    public static UpdateLoadingBool instance;
+
     private void Awake()
     {
+        instance = this;
         SceneManagerScript.loadingUpdate += UpdateAnimatorLoadingBool;
     }
 
@@ -32,5 +35,10 @@ public class UpdateLoadingBool : MonoBehaviour
     private void OnDisable()
     {
         SceneManagerScript.loadingUpdate -= UpdateAnimatorLoadingBool;
+    }
+
+    public static void SaveGame()
+    {
+        instance._anim.SetTrigger("SavedGame");
     }
 }
