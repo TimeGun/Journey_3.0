@@ -59,7 +59,6 @@ public class PathOffsetChangeBasedOnPlayer : MonoBehaviour
                 {
                     adjustedOffset = startOffset;
                 }
-                Debug.Log(adjustedOffset);
                 float tempOffset = Mathf.Lerp(TD.m_AutoDolly.m_PositionOffset, adjustedOffset,
                     (1f / rateOfChange) * Time.deltaTime);
                 TD.m_AutoDolly.m_PositionOffset = tempOffset;
