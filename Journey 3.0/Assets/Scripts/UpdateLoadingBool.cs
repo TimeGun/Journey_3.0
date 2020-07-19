@@ -15,10 +15,18 @@ public class UpdateLoadingBool : MonoBehaviour
 
     void UpdateAnimatorLoadingBool(bool value)
     {
-        if (SceneManager.sceneCount < 3)
+        if (value)
+        {
+            if (SceneManager.sceneCount < 3)
+            {
+                _anim.SetBool("Loading", value);
+            }
+        }
+        else
         {
             _anim.SetBool("Loading", value);
         }
+        
     }
 
     private void OnDisable()
