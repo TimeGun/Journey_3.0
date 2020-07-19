@@ -108,7 +108,7 @@ public class AmbienceManager : MonoBehaviour
 
     public static void FadeInMasterSound()
     {
-        instance.StartCoroutine(instance.FadeInMaster(PlayerPrefs.GetFloat("MasterVolume", 0)));
+        instance.StartCoroutine(instance.FadeInMaster(PlayerPrefs.GetFloat("MasterVolume", 0.5f)));
     }
     
     public static void FadeOutMasterSound()
