@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class UpdateLoadingBool : MonoBehaviour
 {
@@ -14,7 +15,10 @@ public class UpdateLoadingBool : MonoBehaviour
 
     void UpdateAnimatorLoadingBool(bool value)
     {
-        _anim.SetBool("Loading", value);
+        if (SceneManager.sceneCount < 3)
+        {
+            _anim.SetBool("Loading", value);
+        }
     }
 
     private void OnDisable()
