@@ -14,6 +14,10 @@ public class SettingsSave : MonoBehaviour
     private float ambianceVolume;
     private float sfxVolume;
     private float musicVolume;
+    private float masterVolumeSlider;
+    private float ambianceVolumeSlider;
+    private float sfxVolumeSlider;
+    private float musicVolumeSlider;
 
     private float brightness;
     private int vsync;
@@ -53,7 +57,8 @@ public class SettingsSave : MonoBehaviour
     {
         float newVolume = Mathf.Log10(volume) * 20f;
         masterMix.SetFloat("MasterVolume", newVolume);
-        masterVolume = volume;
+        masterVolume = newVolume;
+        //masterVolumeSlider = volume;
         testSource.outputAudioMixerGroup = UIMix.outputAudioMixerGroup;
         testSource.PlayOneShot(testClip);
         SaveSettings();
@@ -63,7 +68,8 @@ public class SettingsSave : MonoBehaviour
     {
         float newVolume = Mathf.Log10(volume) * 20f;
         masterMix.SetFloat("AmbianceVolume", newVolume);
-        ambianceVolume = volume;
+        ambianceVolume = newVolume;
+        //ambianceVolumeSlider = volume;
         testSource.outputAudioMixerGroup = ambianceMix.outputAudioMixerGroup;
         testSource.PlayOneShot(testClip);
         SaveSettings();
@@ -76,7 +82,8 @@ public class SettingsSave : MonoBehaviour
         masterMix.SetFloat("PlayerVolume", newVolume);
         testSource.outputAudioMixerGroup = sfxMix.outputAudioMixerGroup;
         testSource.PlayOneShot(testClip);
-        sfxVolume = volume;
+        sfxVolume = newVolume;
+        //sfxVolumeSlider = volume;
         SaveSettings();
     }
 
@@ -84,7 +91,8 @@ public class SettingsSave : MonoBehaviour
     {
         float newVolume = Mathf.Log10(volume) * 20f;
         masterMix.SetFloat("MusicVolume", newVolume);
-        musicVolume = volume;
+        musicVolume = newVolume;
+        //musicVolumeSlider = volume;
         testSource.outputAudioMixerGroup = musicMix.outputAudioMixerGroup;
         testSource.PlayOneShot(testClip);
         SaveSettings();
@@ -134,10 +142,10 @@ public class SettingsSave : MonoBehaviour
 
     private void LoadSettings()
     {
-        masterVolume = PlayerPrefs.GetFloat("MasterVolume", 0.5f);
-        ambianceVolume = PlayerPrefs.GetFloat("AmbianceVolume", 0.25f);
-        sfxVolume = PlayerPrefs.GetFloat("SFXVolume", 0.5f);
-        musicVolume = PlayerPrefs.GetFloat("MusicVolume", 0.5f);
+        masterVolume = PlayerPrefs.GetFloat("MasterVolume", Mathf.Log10(0.5f) * 20f);
+        ambianceVolume = PlayerPrefs.GetFloat("AmbianceVolume", Mathf.Log10(0.25f) * 20f);
+        sfxVolume = PlayerPrefs.GetFloat("SFXVolume", Mathf.Log10(0.5f) * 20f);
+        musicVolume = PlayerPrefs.GetFloat("MusicVolume", Mathf.Log10(0.5f) * 20f);
 
         brightness = PlayerPrefs.GetFloat("Brightness", 1);
         vsync = PlayerPrefs.GetInt("VSync", 0);
@@ -157,14 +165,32 @@ public class SettingsSave : MonoBehaviour
 
         brightnessSlider.value = brightness;
         
+        //masterMix.SetFloat("MasterVolume", masterVolume);
         masterMix.SetFloat("AmbianceVolume", ambianceVolume);
         masterMix.SetFloat("InteractiblesVolume", sfxVolume);
         masterMix.SetFloat("PlayerVolume", sfxVolume);
         masterMix.SetFloat("MusicVolume", musicVolume);
+        
+        /*masterVolumeSlider = Map(masterVolume, -80f, 0f, 0.001f, 1f);
+        ambianceVolumeSlider = Map(ambianceVolume, -80f, 0f, 0.001f, 1f);
+        sfxVolumeSlider = Map(sfxVolume, -80f, 0f, 0.001f, 1f);
+        musicVolumeSlider = Map(musicVolume, -80f, 0f, 0.001f, 1f);*/
+        
+        
+        masterVol.value = Mathf.Pow(10f, masterVolume/20f);
+        ambianceVol.value = Mathf.Pow(10f, ambianceVolume/20f);
+        sfxVol.value = Mathf.Pow(10f, sfxVolume/20f);
+        musicVol.value = Mathf.Pow(10f, musicVolume/20f);
+    }
+    
+    
+    public float Map(float a, float b, float c, float d, float e)
+    {
+        float cb = c - b;
+        float de = e - d;
+        float howFar = (a - b) / cb;
+        return d + howFar * de;
 
-        masterVol.value = masterVolume;
-        ambianceVol.value = ambianceVolume;
-        sfxVol.value = sfxVolume;
-        musicVol.value = musicVolume;
+        //float a = value you want mapped t
     }
 }

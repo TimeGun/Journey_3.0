@@ -127,7 +127,6 @@ public class ScaleButtonOnSelect : MonoBehaviour, ISelectHandler, IPointerEnterH
             yield return new WaitForEndOfFrame();
         }
 
-        print("Finished Up Scale");
     }
 
     private IEnumerator ScaleDown()
@@ -143,7 +142,6 @@ public class ScaleButtonOnSelect : MonoBehaviour, ISelectHandler, IPointerEnterH
             yield return new WaitForEndOfFrame();
         }
 
-        print("Finished Down Scale");
     }
 
 

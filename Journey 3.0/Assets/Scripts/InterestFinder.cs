@@ -241,7 +241,6 @@ public class InterestFinder : MonoBehaviour
         {
             if (!objectsOfInterst.Contains(toAdd))
             {
-                print("Added LookAt: " + gameObject.name);
                 objectsOfInterst.Add(toAdd);
                 lockedPosition = null;
             }

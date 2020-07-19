@@ -53,7 +53,6 @@ public class GallerySaveSystem : MonoBehaviour
         //Load the paintings from player prefs
         for (int i = 0; i < instance.paintings.Count; i++)
         {
-            print("Loaded Paintings");
             instance.paintings[i]._found = (PlayerPrefs.GetInt(instance.paintings[i]._name, 0) != 0);
         }
     }

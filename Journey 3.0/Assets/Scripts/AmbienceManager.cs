@@ -33,10 +33,6 @@ public class AmbienceManager : MonoBehaviour
 
     public void SetProfile(int profileIndex)
     {
-        print(_profiles[profileIndex].outsideVol);
-        print(_profiles[profileIndex].insideVol);
-        print(_profiles[profileIndex].mountainVol);
-        
         SetOutSideAmbience(_profiles[profileIndex].outsideVol);
         SetInsideAmbience(_profiles[profileIndex].insideVol);
         SetTopOfTheMountainAmbience(_profiles[profileIndex].mountainVol);
@@ -108,7 +104,8 @@ public class AmbienceManager : MonoBehaviour
 
     public static void FadeInMasterSound()
     {
-        instance.StartCoroutine(instance.FadeInMaster(PlayerPrefs.GetFloat("MasterVolume", 0.5f)));
+        float targetVol = PlayerPrefs.GetFloat("MasterVolume", Mathf.Log10(0.5f) * 20f);
+        instance.StartCoroutine(instance.FadeInMaster(targetVol));
     }
     
     public static void FadeOutMasterSound()
@@ -122,10 +119,9 @@ public class AmbienceManager : MonoBehaviour
     {
         float currentVolume;
         _masterMix.GetFloat("MasterVolume", out currentVolume);
-        
         while (currentVolume < target)
         {
-            currentVolume = Mathf.MoveTowards(currentVolume, target, Time.deltaTime * 50f);
+            currentVolume = Mathf.MoveTowards(currentVolume, target, Time.deltaTime * 10f);
             _masterMix.SetFloat("MasterVolume", currentVolume);
             _masterMix.GetFloat("MasterVolume", out currentVolume);
             yield return new WaitForEndOfFrame();
