@@ -9,7 +9,7 @@ public class UnlockAchievement : MonoBehaviour
 
     [SerializeField] private VisualEffect shower;
 
-    private bool triggered;
+    private bool triggered = false;
 
     public void UnlockAchievementSO()
     {
