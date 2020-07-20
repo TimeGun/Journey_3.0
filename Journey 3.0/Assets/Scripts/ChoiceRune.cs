@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.Playables;
 using UnityEngine.SceneManagement;
 
@@ -27,6 +28,9 @@ public class ChoiceRune : MonoBehaviour, IInteractible, IRune
     [SerializeField] [Range(0, 2f)] private float delayTime = 0;
 
     [SerializeField] private AchievementSO achievementSo;
+    
+    [SerializeField] private AudioMixerSnapshot normalSnapshot;
+    [SerializeField] private AudioMixerSnapshot cutsceneSnapshot;
     
     
     IEnumerator ChooseEnding(Transform player)
@@ -116,6 +120,7 @@ public class ChoiceRune : MonoBehaviour, IInteractible, IRune
         {
             _timelineToPlay.Play();
             _source.PlayDelayed(delayTime);
+            cutsceneSnapshot.TransitionTo(1f);
             StartCoroutine(FadeToBlack());
         }
 
@@ -156,7 +161,8 @@ public class ChoiceRune : MonoBehaviour, IInteractible, IRune
         {
             AchievementManager.instance.UnlockSteamAchievement(achievementSo);
         }
-
+        
+        normalSnapshot.TransitionTo(1f);
         CreditsManager.StartCredits();
         /*Debug.Log("FADE OUT");
         global::FadeToBlack.instance.SetBlack(true);
